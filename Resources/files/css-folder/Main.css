@@ -82,8 +82,36 @@ h6 {
   width: 48px;
 }
 
-.sticky-nav ul {
+/* .sticky-nav ul {
   text-align: right;
+} */
+
+/* .sticky-nav ul li {
+  display: inline-block;
+} */
+
+/* .sticky-nav ul li a {
+  color: rgb(255, 255, 255);
+  padding: 2em;
+  text-decoration: none;
+  font-size: 16px;
+  transition: font-size 0.3s ease; /* Specify the property to transition 
+} */
+
+/* .sticky-nav ul li a:hover {
+  font-size: 18px;
+}
+
+.sticky-nav ul li a.active {
+  color: lightgreen;
+  
+} */
+ /* nilagay ko */
+ .sticky-nav ul {
+  list-style-type: none;
+  text-align: right;
+  margin: 0;
+  padding: 0;
 }
 
 .sticky-nav ul li {
@@ -91,11 +119,11 @@ h6 {
 }
 
 .sticky-nav ul li a {
-  color: white;
+  color: rgb(255, 255, 255);
   padding: 2em;
   text-decoration: none;
   font-size: 16px;
-  transition: font-size 0.3s ease; /* Specify the property to transition */
+  transition: font-size 0.3s ease;
 }
 
 .sticky-nav ul li a:hover {
@@ -106,6 +134,60 @@ h6 {
   color: lightgreen;
 }
 
+/* Hide the checkbox */
+#menu-toggle {
+  display: none;
+}
+
+/* Hamburger menu styling, initially hidden */
+.menu-icon {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  z-index: 10;
+}
+
+/* Responsive menu for smaller screens */
+@media (max-width: 768px) {
+  /* Show the hamburger icon on small screens */
+  .menu-icon {
+    display: block;
+  }
+
+  /* Stack menu items vertically and hide by default */
+  .sticky-nav ul {
+    display: none;
+    flex-direction: column;
+    background-color: #333;
+    width: 100%;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    text-align: left;
+  }
+
+  /* Show the menu when the checkbox is checked */
+  #menu-toggle:checked + .menu-icon + ul {
+    display: flex;
+  }
+
+  /* Make the list items stack vertically */
+  .sticky-nav ul li {
+    display: block;
+    width: 100%;
+  }
+
+  /* Adjust padding and font size for mobile view */
+  .sticky-nav ul li a {
+    padding: 1em;
+    font-size: 18px;
+  }
+}
+ /* nilagay ko */
 /* 
 ********************
 SECTION 1
