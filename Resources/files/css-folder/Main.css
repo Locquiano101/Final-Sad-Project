@@ -134,12 +134,12 @@ h6 {
   color: lightgreen;
 }
 
-/* Hide the checkbox */
+
 #menu-toggle {
   display: none;
 }
 
-/* Hamburger menu styling, initially hidden */
+/* Hamburger  */
 .menu-icon {
   display: none;
   font-size: 24px;
@@ -151,14 +151,15 @@ h6 {
   z-index: 10;
 }
 
-/* Responsive menu for smaller screens */
+/* Responsive for smaller screens */
 @media (max-width: 768px) {
-  /* Show the hamburger icon on small screens */
+  
+
   .menu-icon {
     display: block;
   }
 
-  /* Stack menu items vertically and hide by default */
+ 
   .sticky-nav ul {
     display: none;
     flex-direction: column;
@@ -170,18 +171,18 @@ h6 {
     text-align: left;
   }
 
-  /* Show the menu when the checkbox is checked */
+  
   #menu-toggle:checked + .menu-icon + ul {
     display: flex;
   }
 
-  /* Make the list items stack vertically */
+  
   .sticky-nav ul li {
     display: block;
     width: 100%;
   }
 
-  /* Adjust padding and font size for mobile view */
+  /*  mobile view */
   .sticky-nav ul li a {
     padding: 1em;
     font-size: 18px;
