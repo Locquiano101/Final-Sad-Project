@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CNPNRO-FTSMS Login</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=League+Gothic&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="Resources/image/penro (0).png" type="image/png" />
+    <link rel="stylesheet" href="Resources/files/css-folder/b-login.css" />
+    <!-- SCRIPTS FOR FIREBASE  -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <!-- END OF SCRIPTS FOR FIREBASE -->
+  </head>
+  <body>
+    <section class="landing-login-container">
+      <div class="logo-section">
+        <h1>
+          CNPENR<span
+            ><img
+              src="Resources/image/cn-penro-logo.svg"
+              alt="logo"
+              style="height: 32px"
+            />-FTSMS</span
+          >
+        </h1>
+      </div>
+      <div class="form-section">
+        <a
+          href="javascript:void(0)"
+          onclick="showSection(`section2-admin-login`)"
+        >
+          <img
+            style="height: 120px"
+            src="Resources/image/admin-profile.svg"
+            alt="logo"
+          />
+          <p>Admin</p>
+        </a>
+        <a
+          href="javascript:void(0)"
+          onclick="showSection(`section3-client-login`)"
+        >
+          <img
+            style="height: 120px"
+            src="Resources/image/client-profile.svg"
+            alt="logo"
+          />
+          <p>Client</p>
+        </a>
+      </div>
+    </section>
+    <section class="login-section" id="section2-admin-login">
+      <h1>
+        CNPENR<span
+          ><img
+            src="Resources/image/cn-penro-logo.svg"
+            alt="logo"
+            style="height: 48px"
+          />-FTSMS</span
+        >
+      </h1>
+
+      <div class="login-container">
+        <h1>ADMINISTRATOR</h1>
+
+        <p>
+          Process and Monitor Applications for Sand / Gravel & Quarry Permits,
+          and Requests for Forest Tree Seedlings
+        </p>
+
+        <button
+          id="governor"
+          onclick="showSection('section2-1-admin-login', 'governor')"
+        >
+          Governor
+        </button>
+        <button
+          id="penro"
+          onclick="showSection('section2-1-admin-login', 'penro')"
+        >
+          PENRO
+        </button>
+        <button
+          id="nursery"
+          onclick="showSection('section2-1-admin-login', 'nursery')"
+        >
+          Nursery
+        </button>
+      </div>
+    </section>
+    <section class="login-section" id="section2-1-admin-login">
+      <h1>
+        CNPENR<span
+          ><img
+            src="Resources/image/cn-penro-logo.svg"
+            alt="logo"
+            style="height: 48px"
+          />-FTSMS</span
+        >
+      </h1>
+      <div class="login-container">
+        <h1 id="admin-login">ADMINISTRATOR LOGIN</h1>
+        <div class="input-field">
+          <input
+            type="email"
+            id="adminSignIn"
+            placeholder="Username"
+            required
+          />
+        </div>
+        <div class="input-field">
+          <input
+            id="adminPassword"
+            type="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+        <div class="input-field">
+          <button
+            id="adminLoginButton"
+            onclick="loginAdmin(adminRank, document.getElementById('adminSignIn').value, document.getElementById('adminPassword').value)"
+          >
+            Login
+          </button>
+        </div>
+      </div>
+    </section>
+    <section class="login-section" id="section3-client-login">
+      <h1>
+        CNPENR<span
+          ><img
+            src="Resources/image/cn-penro-logo.svg"
+            alt="logo"
+            style="height: 48px"
+          />-FTSMS</span
+        >
+      </h1>
+
+      <div class="login-container">
+        <h1>LOGIN</h1>
+
+        <div class="input-field">
+          <input
+            id="userSignInEmail"
+            type="email"
+            placeholder="Username"
+            required
+          />
+        </div>
+        <div class="input-field">
+          <input
+            id="userSignInPassword"
+            type="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+        <div class="input-field">
+          <button type="submit" onclick="userLogin()">Login</button>
+        </div>
+        <div class="input-field">
+          <button onclick="googleAuthProviderSignIn()" id="google-button">
+            Login with Google
+            <img
+              src="Resources/image/google.png"
+              alt="google-logo"
+              style="
+                width: 16px;
+                height: auto;
+                border: 1px solid black;
+                border-radius: 100%;
+                padding: 5px;
+                margin: 0;
+              "
+            />
+          </button>
+          <p>
+            <a class="no-deco" href="#section5-1-forgot-password"
+              >Forgot Password?</a
+            >
+          </p>
+        </div>
+
+        <p>
+          Don't have an Account?
+          <a class="no-deco" href="#section4-client-sign-up">Sign-up</a>
+        </p>
+      </div>
+    </section>
+    <section class="login-section" id="section4-client-sign-up">
+      <h1>
+        CNPENR<span
+          ><img
+            src="Resources/image/cn-penro-logo.svg"
+            alt="logo"
+            style="height: 48px"
+          />-FTSMS</span
+        >
+      </h1>
+      <div class="scrollable-div">
+        <div class="sign-up-container">
+          <h2>Email</h2>
+
+          <div class="input-field">
+            <input type="Email" placeholder="Email" required />
+          </div>
+
+          <h2>Password</h2>
+
+          <div class="input-field">
+            <input type="password" placeholder="Password" required />
+          </div>
+          <div class="input-field">
+            <input type="password" placeholder="Confirm Password" required />
+          </div>
+        </div>
+        <div class="sign-up-container">
+          <h2>Client Name</h2>
+
+          <div class="input-field">
+            <input type="text" placeholder="First Name" required />
+          </div>
+
+          <div class="input-field">
+            <input type="text" placeholder="Last Name" required />
+          </div>
+          <div class="input-field">
+            <input type="text" placeholder="Middle Name (Optional)" />
+            <input type="text" placeholder="Suffix (Optional)" />
+          </div>
+        </div>
+        <div class="sign-up-container">
+          <h2>Contact Info</h2>
+
+          <div class="input-field">
+            <input
+              type="number"
+              placeholder="Phone Number: (+63)9 *** *** ****"
+              required
+            />
+          </div>
+          <div class="input-field">
+            <input
+              type="email"
+              placeholder="Email/Gmail: example@test.com"
+              required
+            />
+          </div>
+          <h2>Address</h2>
+
+          <div class="input-field">
+            <select id="country" name="gender">
+              <option value="" disabled selected hidden>Country</option>
+            </select>
+          </div>
+
+          <div class="input-field">
+            <select id="gender" name="gender">
+              <option value="" disabled selected hidden>Province</option>
+            </select>
+          </div>
+          <div class="input-field">
+            <select id="gender" name="gender">
+              <option value="" disabled selected hidden>
+                City/Muncipality
+              </option>
+            </select>
+          </div>
+          <div class="input-field">
+            <select id="gender" name="gender">
+              <option value="" disabled selected hidden>Baranggay</option>
+            </select>
+            <select id="gender" name="gender">
+              <option value="" disabled selected hidden>Street/Purok</option>
+            </select>
+          </div>
+          <div class="input-field">
+            <input
+              type="number"
+              maxlength="4"
+              placeholder="Postal Code (xxxx)"
+              required
+            />
+          </div>
+        </div>
+
+        <button id="sign-up" type="submit">Sign up</button>
+
+        <p id="back-to-login">
+          Already Have an Account? <a href="#section2">LOGIN</a>
+        </p>
+      </div>
+    </section>
+    <section class="login-section" id="section5-1-forgot-password">
+      <h1>
+        CNPENR<span
+          ><img
+            src="Resources/image/cn-penro-logo.svg"
+            alt="logo"
+            style="height: 48px"
+          />-FTSMS</span
+        >
+      </h1>
+
+      <div class="container">
+        <div class="sign-up-container">
+          <h2>Forgot Password?</h2>
+          <p>No worries, we'll send you reset instructions.</p>
+          <div class="input-field">
+            <input type="email" placeholder="Enter your email" />
+          </div>
+          <div class="input-field">
+            <button>Reset Password</button>
+          </div>
+          <a href="#" class="back-to-login">Back to Login</a>
+        </div>
+        <div class="indicator">
+          <span class="active"></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </section>
+    <section class="login-section" id="section5-2-forgot-password">
+      <h1>
+        CNPENR<span
+          ><img
+            src="Resources/image/cn-penro-logo.svg"
+            alt="logo"
+            style="height: 48px"
+          />-FTSMS</span
+        >
+      </h1>
+      <div class="container">
+        <div class="sign-up-container">
+          <h2>Forgot Password?</h2>
+          <p>We have sent an otp to <strong>EXAMPLE@TEST.COM</strong></p>
+          <div class="otp">
+            <input
+              type="number"
+              id="input1"
+              min="1"
+              class="no-spinner"
+              max="1"
+              oninput="moveToNext(this, 'input2')"
+            />
+            <input
+              type="number"
+              id="input2"
+              min="1"
+              class="no-spinner"
+              max="1"
+              oninput="moveToNext(this, 'input3')"
+            />
+            <input
+              type="number"
+              id="input3"
+              min="1"
+              max="1"
+              class="no-spinner"
+              oninput="moveToNext(this, 'input4')"
+            />
+            <input
+              type="number"
+              id="input4"
+              min="1"
+              max="1"
+              class="no-spinner"
+            />
+          </div>
+          <button>Reset Password</button>
+          <a href="#" class="back-to-login">Back to Login</a>
+        </div>
+        <div class="indicator">
+          <span></span>
+          <span class="active"></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </section>
+    <section class="login-section" id="section5-3-forgot-password">
+      <div class="container">
+        <div class="sign-up-container">
+          <h2>SET NEW PASSWORD</h2>
+          <p>Must be atleast <strong>8 characters</strong></p>
+          <div class="input-field">
+            <input type="password" placeholder="New Password" required />
+            <a href="">
+              <img
+                src="Resources/image/view-password.svg"
+                alt="Icon"
+                width="16px"
+                height="16px"
+              />
+            </a>
+          </div>
+          <div class="input-field">
+            <input
+              type="password"
+              placeholder="Confirm new Password"
+              required
+            />
+            <a href="">
+              <img
+                src="Resources/image/view-password.svg"
+                alt="Icon"
+                width="16px"
+                height="16px"
+              />
+            </a>
+          </div>
+          <div class="input-field">
+            <button id="openPopup">Set new Password</button>
+          </div>
+        </div>
+        <div id="popup" class="popup">
+          <div class="popup-content">
+            <h3>CHANGE PASSWORD</h3>
+            <p>Continue changing password?</p>
+            <div class="input-field">
+              <button id="openPopup">Confirm</button>
+              <button id="openPopup">cancel</button>
+            </div>
+          </div>
+        </div>
+        <div class="indicator">
+          <span></span>
+          <span></span>
+          <span class="active"></span>
+          <span></span>
+        </div>
+      </div>
+    </section>
+    <section class="login-section" id="section5-4-forgot-password">
+      <div class="container">
+        <div class="sign-up-container">
+          <h2>ALL DONE!</h2>
+          <p>Your password has been reset</p>
+          <a href="#" class="back-to-login">Back to Login</a>
+        </div>
+        <div class="indicator">
+          <span></span>
+          <span></span>
+          <span class="active"></span>
+          <span></span>
+        </div>
+      </div>
+    </section>
+    <script src="Resources/files/javascript-folder/b-login.js"></script>
+    <script src="Resources/files/javascript-folder/b-login-firebase.js"></script>
+  </body>
+</html>

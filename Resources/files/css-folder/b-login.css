@@ -1,0 +1,221 @@
+* {
+  margin: 0;
+  padding: 0;
+  /* overflow: hidden; */
+  font-family: "League Spartan", sans-serif; /* Apply League Spartan font */
+}
+section {
+  height: 100vh;
+}
+.landing-login-container {
+  display: grid;
+  grid-template-columns: 35% 65%;
+}
+a {
+  text-decoration: none;
+  color: #115d5b;
+}
+.logo-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.logo-section h1 {
+  font-size: 48px;
+  color: #115d5b;
+}
+
+.form-section {
+  border-radius: 52px 0 0 52px;
+
+  background-color: #115d5b;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.form-section a {
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  font-size: 32px;
+  text-decoration: none;
+  color: #115d5b;
+  font-weight: 900;
+  justify-items: center;
+  background-color: #ffffff;
+  padding: 3rem 5rem;
+}
+.login-section {
+  gap: -100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #115d5b;
+}
+
+.login-section h1 {
+  font-size: 64px;
+  color: white;
+}
+.login-container {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  width: 500px;
+  background-color: white;
+  border-radius: 25px;
+  gap: 1rem;
+}
+.login-container h1 {
+  font-size: 32px;
+  color: #115d5b;
+}
+button {
+  width: 100%;
+  padding: 1rem;
+  background-color: #115d5b;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-style: bold;
+  cursor: pointer;
+}
+.input-field input,
+select {
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 12px;
+  padding: 1rem;
+}
+.input-field {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 0;
+  width: 90%;
+}
+#google-button {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  color: #115d5b;
+  background-color: white;
+  border: 2px solid #115d5b;
+}
+
+.scrollable-div {
+  overflow-y: auto;
+  max-height: 550px;
+  display: flex;
+  border-radius: 24px 24px 0 0;
+  flex-direction: column;
+  justify-content: start;
+  gap: 10px;
+  align-items: center;
+}
+#sign-up {
+  width: 50%;
+  padding: 1rem;
+  font-size: 24px;
+  background-color: white;
+  color: #115d5b;
+  border: none;
+}
+.sign-up-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  min-width: 500px;
+  background-color: white;
+  border-radius: 25px;
+  gap: 1rem;
+  text-align: center;
+}
+
+.sign-up-container h2 {
+  color: #115d5b;
+  font-size: 36px;
+  margin: 0;
+  text-align: center;
+}
+#back-to-login {
+  width: 100%;
+  text-align: center !important;
+  color: white;
+  justify-content: center;
+}
+#back-to-login a {
+  color: white;
+  font-weight: bold;
+}
+/* Style the scrollbar */
+.scrollable-div::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+/* Scrollbar track (background) */
+.scrollable-div::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Light background color for the track */
+  border-radius: 10px;
+}
+
+/* Scrollbar handle (thumb) */
+.scrollable-div::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded edges for a smooth look */
+  border: 2px solid #f1f1f1; /* Optional border around the thumb */
+}
+
+/* Scrollbar handle on hover */
+.scrollable-div::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Darker color on hover */
+}
+.otp {
+  display: flex;
+  height: 5rem;
+  gap: 2rem;
+  width: 75%;
+}
+.otp input {
+  flex: 1;
+  width: 50px;
+  padding: 0;
+  font-size: 550%;
+  background: transparent;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  border-bottom: 1px solid #004c4a;
+}
+.popup {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-color: rgba(0, 0, 0, 0.5); /* Black background with transparency */
+  z-index: 1; /* Sit on top */
+}
+
+.popup-content {
+  background-color: #fefefe;
+  gap: 1rem;
+  display: flex;
+  border-radius: 1.5rem;
+  flex-direction: column;
+  align-items: center;
+  justify-self: center;
+  margin: 15% auto; /* 15% from the top and centered */
+  width: 400px;
+  padding: 20px;
+  border: 1px solid #888;
+}
