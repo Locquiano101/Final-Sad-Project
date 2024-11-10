@@ -66,15 +66,107 @@ function userLogin() {
   const email = document.getElementById("userSignInEmail").value;
   const password = document.getElementById("userSignInPassword").value;
 
-  firebaseAuth
+  if (!email || !password) {
+    alert("Email and password are required.");
+    return;
+  }
+
+  firebase
+    .auth()
     .signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
       console.log("User signed in:", userCredential.user);
       alert("User signed in successfully!");
-      window.open("database.html", "_self");
+      window.open("c-client-dashboard.html", "_self");
     })
     .catch((error) => {
       console.error("Error signing in:", error);
-      alert("Error signing in: " + error.message);
+      if (error.code === "auth/wrong-password") {
+        alert("Incorrect password. Please try again.");
+      } else if (error.code === "auth/user-not-found") {
+        alert("No user found with this email. Please check and try again.");
+      } else if (error.code === "auth/invalid-email") {
+        alert("Invalid email format. Please enter a valid email address.");
+      } else {
+        alert("Error signing in: " + error.message);
+      }
     });
 }
+
+//SIGN UP SHIT
+document.getElementById("creatNewUser").onclick = async function () {
+  // USER NAME INFO
+  const fname = document.getElementById("userFname").value;
+  const lname = document.getElementById("userLname").value;
+  const mI = document.getElementById("userMname").value;
+  const suffix = document.getElementById("userSname").value;
+
+  let fullName = fname;
+  if (mI) {
+    fullName += ` ${mI}.`;
+  }
+  fullName += ` ${lname}`;
+  if (suffix) {
+    fullName += ` ${suffix}`;
+  }
+
+  // USER ADDRESS
+  const province = document.getElementById("Province").value;
+  const municipality = document.getElementById("municipality").value;
+  const barangay = document.getElementById("barangay").value;
+  const purok = document.getElementById("purok").value;
+  const houseNumber = document.getElementById("housenNum").value;
+  const postalCode = document.getElementById("postalCode").value;
+
+  const address = {
+    province,
+    municipality,
+    barangay,
+    purok,
+    houseNumber,
+    postalCode,
+  };
+
+  // USER CONTACT INFO
+  const email = document.getElementById("userEmailRegister").value;
+  const phoneNum = document.getElementById("userContactNum").value;
+  const password = document.getElementById("userPasswordRegister").value;
+  const confirmPassword = document.getElementById("userConfirmPassword").value;
+
+  if (password !== confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
+
+  try {
+    // Check if the email is already in use
+    const signInMethods = await firebase
+      .auth()
+      .fetchSignInMethodsForEmail(email);
+    if (signInMethods.length > 0) {
+      alert("Email is already in use!");
+      return;
+    }
+
+    // Create user with email and password
+    const userCredential = await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password);
+    console.log("User registered:", userCredential.user);
+
+    // Add new record to Firestore
+    await firebase.firestore().collection("users").add({
+      name: fullName,
+      email: email,
+      contactNumber: phoneNum,
+      address: address,
+      Account_Created: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+    console.log("User added successfully!");
+    alert("User registered successfully!");
+  } catch (error) {
+    console.error("Error registering user:", error);
+    alert("Error registering user: " + error.message);
+  }
+};

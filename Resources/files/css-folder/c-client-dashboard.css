@@ -1,0 +1,108 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+h1 {
+  color: #115d5b;
+}
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+div {
+  /* border: 1px solid black; */
+  padding: 10px;
+}
+.sidebar {
+  height: 100%;
+  padding: 20px;
+  width: 300px;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar div {
+  flex: 1;
+}
+.sidebar button {
+  display: flex; /* Enables flexbox layout */
+  justify-content: left; /* Centers text horizontally */
+  color: black;
+  padding: 16px;
+  background-color: white;
+  text-align: center; /* Ensures text is centered in the line */
+  border: none;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sidebar button:hover,
+.sidebar button.active {
+  border-radius: 5px;
+  background-color: #115d5b;
+  color: white;
+}
+
+.tablink .icon {
+  margin-right: 20px;
+  transition: filter 0.3s ease;
+}
+
+.tablink:hover .icon,
+.tablink.active .icon {
+  filter: brightness(0) invert(1);
+}
+.profile-holder {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.profile-holder p {
+  font-style: italic;
+  margin-top: 10px;
+}
+.title-holder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.tabcontent {
+  height: 100vh;
+  margin-left: 340px;
+  color: white;
+  background-color: #011b1a;
+  display: none;
+}
+.tabcontent div div {
+  background-color: #103635;
+  border-radius: 16px;
+  color: white;
+}
+.client-dashboard {
+  height: 100%;
+  display: grid;
+  padding: 0;
+  grid-template-columns: 70% auto;
+  gap: 10px;
+}
+.request-forms {
+  background-color: #011b1a !important;
+  display: flex;
+  min-height: 200px;
+  padding: 0;
+  gap: 10px;
+}
+.request-forms div {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.total-request {
+  min-height: 240px;
+}

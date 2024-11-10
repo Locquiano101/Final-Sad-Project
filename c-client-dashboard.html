@@ -3,9 +3,157 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Sidebar Navigation</title>
+    <link
+      rel="stylesheet"
+      href="Resources/files/css-folder/c-client-dashboard.css"
+    />
   </head>
   <body>
-    <h1>Client DashBoard</h1>
+    <div class="sidebar">
+      <div class="profile-holder">
+        <img
+          src="Resources/image/client-profile.svg"
+          alt="User Icon"
+          class="profile-icon"
+        />
+        <h3>John Doe</h3>
+        <p>example@gmail.com</p>
+        <p>client</p>
+      </div>
+      <div class="navigation">
+        <a class="tablink" href="#services">
+          <div class="dashboard-button">
+            <img
+              src="Resources/image/home.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            DASHBOARD
+          </div>
+        </a>
+        <a class="tablink" href="#services">
+          <div class="dashboard-button">
+            <img
+              src="Resources/image/home.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            Dashboard
+          </div>
+        </a>
+        <a class="tablink" href="#services">
+          <div class="dashboard-button">
+            <img
+              src="Resources/image/home.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            Dashboard
+          </div>
+        </a>
+        <a class="tablink" href="#services">
+          <div class="dashboard-button">
+            <img
+              src="Resources/image/home.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            Dashboard
+          </div>
+        </a>
+        <a class="tablink" href="#services">
+          <div class="dashboard-button">
+            <img
+              src="Resources/image/home.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            Dashboard
+          </div>
+        </a>
+        <a class="tablink" href="#services">
+          <div class="dashboard-button">
+            <img
+              src="Resources/image/home.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            Dashboard
+          </div>
+        </a>
+      </div>
+      <div class="title-holder">
+        <h1>
+          CNPENR<span
+            ><img
+              src="Resources/image/cn-penro-logo.svg"
+              alt="logo"
+              style="height: 24px"
+            />-FTSMS</span
+          >
+        </h1>
+      </div>
+    </div>
+    <!--------------------------
+    --------------------------
+    HOME
+    --------------------------
+    ---------------------------->
+    <div id="Home" class="tabcontent" style="display: block">
+      <div class="client-dashboard">
+        <div class="total-request">My Request sent</div>
+        <div class="top-request-seeds">Top seed Requested</div>
+        <div class="request-forms">
+          <div id="new-seed-request">
+            Request Seed Form
+            <div></div>
+          </div>
+          <div id="submit-seed-reports">
+            Submit Seed Report
+
+            <div></div>
+          </div>
+          <div id="view-request-sent">
+            View Seed Request Sent
+            <div></div>
+          </div>
+        </div>
+        <div class="request-notifactions">Notifaction</div>
+      </div>
+    </div>
+    <!--------------------------
+    --------------------------
+    REQUESTS
+    --------------------------
+    ---------------------------->
+    <div id="Services" class="tabcontent">
+      <h1>Services</h1>
+      <p>Details about our services.</p>
+    </div>
+    <!--------------------------
+    --------------------------
+    REQUESTS
+    --------------------------
+    ---------------------------->
+    <div id="About" class="tabcontent">
+      <h1>About</h1>
+      <p>Information about us.</p>
+    </div>
+    <!--------------------------
+    --------------------------
+    REQUESTS
+    --------------------------
+    ---------------------------->
+    <div id="Contact" class="tabcontent">
+      <h1>Contact</h1>
+      <p>Get in touch with us.</p>
+    </div>
+    <!--------------------------
+    --------------------------
+    REQUESTS
+    --------------------------
+    ---------------------------->
+    <script src="client-dashboard.js"></script>
   </body>
 </html>

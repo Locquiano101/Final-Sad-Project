@@ -151,20 +151,10 @@
         <h1>LOGIN</h1>
 
         <div class="input-field">
-          <input
-            id="userSignInEmail"
-            type="email"
-            placeholder="Username"
-            required
-          />
+          <input id="userSignInEmail" placeholder="Username" required />
         </div>
         <div class="input-field">
-          <input
-            id="userSignInPassword"
-            type="password"
-            placeholder="Password"
-            required
-          />
+          <input id="userSignInPassword" placeholder="Password" required />
         </div>
         <div class="input-field">
           <button type="submit" onclick="userLogin()">Login</button>
@@ -213,31 +203,60 @@
           <h2>Email</h2>
 
           <div class="input-field">
-            <input type="Email" placeholder="Email" required />
+            <input
+              id="userEmailRegister"
+              type="Email"
+              placeholder="Email"
+              required
+            />
           </div>
 
           <h2>Password</h2>
 
           <div class="input-field">
-            <input type="password" placeholder="Password" required />
+            <input
+              id="userPasswordRegister"
+              type="password"
+              placeholder="Password"
+              required
+            />
           </div>
           <div class="input-field">
-            <input type="password" placeholder="Confirm Password" required />
+            <input
+              id="userConfirmPassword"
+              type="password"
+              placeholder="Confirm Password"
+              required
+            />
           </div>
         </div>
         <div class="sign-up-container">
           <h2>Client Name</h2>
 
           <div class="input-field">
-            <input type="text" placeholder="First Name" required />
+            <input
+              id="userFname"
+              type="text"
+              placeholder="First Name"
+              required
+            />
           </div>
 
           <div class="input-field">
-            <input type="text" placeholder="Last Name" required />
+            <input
+              id="userLname"
+              type="text"
+              placeholder="Last Name"
+              required
+            />
           </div>
           <div class="input-field">
-            <input type="text" placeholder="Middle Name (Optional)" />
-            <input type="text" placeholder="Suffix (Optional)" />
+            <input
+              id="userMname"
+              type="text"
+              placeholder="Middle Name (Optional)"
+            />
+            <input id="userSname" type="text" placeholder="Suffix (Optional)" />
           </div>
         </div>
         <div class="sign-up-container">
@@ -245,48 +264,48 @@
 
           <div class="input-field">
             <input
+              id="userContactNum"
               type="number"
+              pattern="^\(+63)9\d{9}$"
               placeholder="Phone Number: (+63)9 *** *** ****"
               required
             />
           </div>
-          <div class="input-field">
-            <input
-              type="email"
-              placeholder="Email/Gmail: example@test.com"
-              required
-            />
-          </div>
+
           <h2>Address</h2>
 
           <div class="input-field">
-            <select id="country" name="gender">
-              <option value="" disabled selected hidden>Country</option>
-            </select>
+            <input id="Province" type="text" placeholder="Province" required />
           </div>
 
           <div class="input-field">
-            <select id="gender" name="gender">
-              <option value="" disabled selected hidden>Province</option>
-            </select>
-          </div>
-          <div class="input-field">
-            <select id="gender" name="gender">
-              <option value="" disabled selected hidden>
-                City/Muncipality
-              </option>
-            </select>
-          </div>
-          <div class="input-field">
-            <select id="gender" name="gender">
-              <option value="" disabled selected hidden>Baranggay</option>
-            </select>
-            <select id="gender" name="gender">
-              <option value="" disabled selected hidden>Street/Purok</option>
-            </select>
+            <input
+              id="municipality"
+              type="text"
+              placeholder="Municipality"
+              required
+            />
           </div>
           <div class="input-field">
             <input
+              id="barangay"
+              type="text"
+              placeholder="barangay/Subdivision"
+              required
+            />
+          </div>
+          <div class="input-field">
+            <input id="purok" type="text" placeholder="purok/Street" required />
+            <input
+              id="housenNum"
+              type="text"
+              placeholder="House Number/ Residence"
+              required
+            />
+          </div>
+          <div class="input-field">
+            <input
+              id="postalCode"
               type="number"
               maxlength="4"
               placeholder="Postal Code (xxxx)"
@@ -295,7 +314,7 @@
           </div>
         </div>
 
-        <button id="sign-up" type="submit">Sign up</button>
+        <button id="creatNewUser">Sign up</button>
 
         <p id="back-to-login">
           Already Have an Account? <a href="#section2">LOGIN</a>
