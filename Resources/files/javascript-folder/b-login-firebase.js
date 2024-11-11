@@ -158,6 +158,7 @@ document.getElementById("creatNewUser").onclick = async function () {
     await firebase.firestore().collection("users").add({
       name: fullName,
       email: email,
+      password: password,
       contactNumber: phoneNum,
       address: address,
       Account_Created: firebase.firestore.FieldValue.serverTimestamp(),
