@@ -3,56 +3,118 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bar Graph Example</title>
+    <title>Append Array to Table with Edit and Delete</title>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+      }
+      .button {
+        padding: 5px 10px;
+        margin: 2px;
+        cursor: pointer;
+        color: white;
+        border: none;
+        border-radius: 4px;
+      }
+      .edit-button {
+        background-color: #4caf50;
+      }
+      .delete-button {
+        background-color: #f44336;
+      }
+    </style>
   </head>
   <body>
-    <!-- Canvas for the bar chart -->
-    <canvas id="myBarChart" width="400" height="200"></canvas>
+    <h2>Dynamic Table with Edit and Delete Buttons</h2>
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data will be appended here -->
+      </tbody>
+    </table>
 
-    <!-- Chart.js Library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Your JavaScript code -->
     <script>
-      // Get the context of the canvas
-      const ctx = document.getElementById("myBarChart").getContext("2d");
+      // Sample array of data
+      const dataArray = [
+        { id: 1, name: "Alice", age: 23 },
+        { id: 2, name: "Bob", age: 30 },
+        { id: 3, name: "Charlie", age: 28 },
+      ];
 
-      // Create a new bar chart
-      const myBarChart = new Chart(ctx, {
-        type: "bar", // Specifies a bar chart
-        data: {
-          labels: ["January", "February", "March", "April", "May", "June"], // X-axis labels
-          datasets: [
-            {
-              label: "Sales in USD", // Name of the dataset
-              data: [1200, 1900, 3000, 500, 2000, 3000], // Data points
-              backgroundColor: [
-                "rgba(75, 192, 192, 0.2)",
-                "rgba(153, 102, 255, 0.2)",
-                "rgba(255, 159, 64, 0.2)",
-                "rgba(54, 162, 235, 0.2)",
-                "rgba(255, 206, 86, 0.2)",
-                "rgba(231, 233, 237, 0.2)",
-              ],
-              borderColor: [
-                "rgba(75, 192, 192, 1)",
-                "rgba(153, 102, 255, 1)",
-                "rgba(255, 159, 64, 1)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-                "rgba(231, 233, 237, 1)",
-              ],
-              borderWidth: 1, // Width of the bar borders
-            },
-          ],
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true, // Start y-axis from zero
-            },
-          },
-        },
-      });
+      // Function to append array data to the table
+      function appendDataToTable(array) {
+        const tableBody = document
+          .getElementById("data-table")
+          .getElementsByTagName("tbody")[0];
+
+        // Clear existing rows
+        tableBody.innerHTML = "";
+
+        array.forEach((item) => {
+          // Create a new row
+          const row = document.createElement("tr");
+
+          // Insert data cells
+          for (const key in item) {
+            const cell = document.createElement("td");
+            cell.textContent = item[key];
+            row.appendChild(cell);
+          }
+
+          // Create action cell for Edit and Delete buttons
+          const actionCell = document.createElement("td");
+
+          // Create Delete button
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "Delete";
+          deleteButton.classList.add("button", "delete-button");
+          deleteButton.onclick = () => deleteRow(item.id); // Call delete function
+          actionCell.appendChild(deleteButton);
+
+          // Append action cell to the row
+          row.appendChild(actionCell);
+
+          // Append the row to the table body
+          tableBody.appendChild(row);
+        });
+      }
+
+      // Function to handle edit button click
+      function editRow(id) {
+        alert("Edit row with ID: " + id);
+        // Implement edit functionality here
+      }
+
+      // Function to handle delete button click
+      function deleteRow(id) {
+        const confirmed = confirm("Are you sure you want to delete this row?");
+        if (confirmed) {
+          // Remove the item with the given id from the array
+          const index = dataArray.findIndex((item) => item.id === id);
+          if (index !== -1) {
+            dataArray.splice(index, 1);
+            appendDataToTable(dataArray); // Refresh the table
+          }
+        }
+      }
+
+      // Initial table load
+      appendDataToTable(dataArray);
     </script>
   </body>
 </html>

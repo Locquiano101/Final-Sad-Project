@@ -254,27 +254,17 @@ const ctx = document.getElementById("myBarChart").getContext("2d");
 const myBarChart = new Chart(ctx, {
   type: "bar", // Specifies a bar chart
   data: {
-    labels: ["January", "February", "March", "April", "May", "June"], // X-axis labels
+    labels: ["seed1", "seed 2", "seed 3"], // X-axis labels
     datasets: [
       {
-        label: "Sales in USD", // Name of the dataset
-        data: [1200, 1900, 3000, 500, 2000, 3000], // Data points
+        label: "Mytop Requested Seeds", // Name of the dataset
+        data: [12, 24, 65], // Data points
         backgroundColor: [
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(231, 233, 237, 0.2)",
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 1)",
         ],
-        borderColor: [
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(231, 233, 237, 1)",
-        ],
+
         borderWidth: 1, // Width of the bar borders
       },
     ],
