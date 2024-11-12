@@ -7,7 +7,35 @@ body {
   grid-template-columns: 20% 80%;
   height: 100vh;
 }
-
+.dashboard h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+}
+.side-nav h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a {
+  font-family: "Courier New", Courier, monospace;
+  font-style: none;
+}
+.side-nav p,
+a {
+  font-weight: bold;
+  color: black !important;
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Remove default blue color and inherit the color of parent element */
+  cursor: pointer; /* Optional: Change cursor to a pointer */
+}
 .side-nav {
   display: flex;
   flex-direction: column;
@@ -144,4 +172,27 @@ select {
   gap: 1rem;
   align-items: center;
   padding: 1rem 0;
+}
+
+/* table design */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #f4f4f4;
+}
+td {
+  background-color: #103635;
+  color: #f4f4f4 !important;
+}
+tr:hover {
+  background-color: #a7ffb5;
 }

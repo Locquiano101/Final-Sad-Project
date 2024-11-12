@@ -10,7 +10,7 @@
     />
   </head>
   <body>
-    <section class="side-nav">
+    <section class="side-nav" style="visibility: visible">
       <div class="profile-holder">
         <img
           src="Resources/image/client-profile.svg"
@@ -35,41 +35,41 @@
         <a class="tablink" href="#services">
           <div class="dashboard-button">
             <img
-              src="Resources/image/home.svg"
+              src="Resources/image/request.svg"
               alt="Request Icon"
               class="icon"
             />
-            <p>Dashboard</p>
+            <p>Requests</p>
           </div>
         </a>
         <a class="tablink" href="#services">
           <div class="dashboard-button">
             <img
-              src="Resources/image/home.svg"
+              src="Resources/image/notification.svg"
               alt="Request Icon"
               class="icon"
             />
-            <p>Dashboard</p>
+            <p>Notifications</p>
           </div>
         </a>
         <a class="tablink" href="#services">
           <div class="dashboard-button">
             <img
-              src="Resources/image/home.svg"
+              src="Resources/image/settings.svg"
               alt="Request Icon"
               class="icon"
             />
-            <p>Dashboard</p>
+            <p>Settings</p>
           </div>
         </a>
         <a class="tablink" href="#services">
           <div class="dashboard-button">
             <img
-              src="Resources/image/home.svg"
+              src="Resources/image/log-out.svg"
               alt="Request Icon"
               class="icon"
             />
-            <p>Dashboard</p>
+            <p>Logout</p>
           </div>
         </a>
       </div>
@@ -85,8 +85,8 @@
         </h1>
       </div>
     </section>
-    <section class="dashboard">
-      <section class="client-dashboard">
+    <section class="dashboard" style="visibility: visible">
+      <section class="client-dashboard" style="display: none">
         <div class="requests-display">
           <div class="requests">
             <div class="request-sent">
@@ -207,12 +207,32 @@
           </div>
         </div>
       </section>
-      <section class="clients-requests">
-        <div></div>
+      <section class="clients-requests" style="visibility: visible">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search by name..."
+          oninput="searchData()"
+        />
+        <button id="search-button" onclick="searchData()">Search</button>
+        <table id="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data will be appended here -->
+          </tbody>
+        </table>
       </section>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="Resources/files/javascript-folder/calculator.js"></script>
+    <script src="Resources/files/javascript-folder/c-client-dashboard.js"></script>
   </body>
 </html>
