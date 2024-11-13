@@ -7,6 +7,12 @@ body {
   grid-template-columns: 20% 80%;
   height: 100vh;
 }
+button,
+input,
+select,
+textarea {
+  padding: 1rem;
+}
 .dashboard h1,
 h2,
 h3,
@@ -71,7 +77,7 @@ a {
   gap: 1rem;
 }
 
-.client-dashboard {
+#client-dashboard {
   display: grid;
   grid-template-columns: 60% auto;
   gap: 1rem;
@@ -159,40 +165,19 @@ select {
   background-color: #103635;
 }
 
-.notifications {
-  border-radius: 2rem;
-  padding: 1rem;
-  background-color: #103635;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-.notif-container {
+#documentsContainer .document {
   display: flex;
-  gap: 1rem;
-  align-items: center;
-  padding: 1rem 0;
+  justify-content: space-around;
+  border: 1px solid;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: black;
 }
-
-/* table design */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
+#documentsContainer h3 {
+  margin: 0;
+  font-size: 1.25em;
 }
-th,
-td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-th {
-  background-color: #f4f4f4;
-}
-td {
-  background-color: #103635;
-  color: #f4f4f4 !important;
-}
-tr:hover {
-  background-color: #a7ffb5;
+#documentsContainer p {
+  margin: 5px 0 0;
 }

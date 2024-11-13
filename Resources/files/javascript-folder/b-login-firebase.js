@@ -1,21 +1,12 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyCPIdlzAlKkfZp3bu4YuI2fylSzxar1zA0",
-  authDomain: "penro-db.firebaseapp.com",
-  projectId: "penro-db",
-  storageBucket: "penro-db.appspot.com",
-  messagingSenderId: "25138598165",
-  appId: "1:25138598165:web:9c8136ef9898df7803591c",
-  measurementId: "G-8YBC8FE4XZ",
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Initialize Firestore and other services
-const firebaseAuth = firebase.auth();
-const firebaseDB = firebase.firestore();
-
+// FIREBASE
+import {
+  firebaseAuth,
+  firebaseDB,
+  userDocRef,
+  userDocumentsRef,
+} from "/Resources/files/javascript-folder/firebase-variables.js";
 //cloud firestore DATABASES
+
 const userFirebase = firebaseDB.collection("Users");
 const adminCloudBase = firebaseDB.collection("Admin");
 function loginAdmin(adminRank, inputUsername, inputPassword) {
@@ -62,7 +53,7 @@ function loginAdmin(adminRank, inputUsername, inputPassword) {
       alert("Error loading records: " + error.message);
     });
 }
-function userLogin() {
+document.getElementById("userLogin").onclick = async function () {
   const email = document.getElementById("userSignInEmail").value;
   const password = document.getElementById("userSignInPassword").value;
 
@@ -75,9 +66,14 @@ function userLogin() {
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
+      const userID = userCredential.user.uid; // Get the user's unique ID
       console.log("User signed in:", userCredential.user);
+
+      // Store userID in localStorage for access in another file
+      localStorage.setItem("userID", userID);
+
       alert("User signed in successfully!");
-      window.open("c-client-dashboard.html", "_self");
+      window.open("client-dashboard/dashboard.html", "_self"); // Redirect to dashboard
     })
     .catch((error) => {
       console.error("Error signing in:", error);
@@ -91,9 +87,9 @@ function userLogin() {
         alert("Error signing in: " + error.message);
       }
     });
-}
+};
 
-//SIGN UP SHIT
+// SIGN UP SHIT
 document.getElementById("creatNewUser").onclick = async function () {
   // USER NAME INFO
   const fname = document.getElementById("userFname").value;
@@ -139,7 +135,6 @@ document.getElementById("creatNewUser").onclick = async function () {
   }
 
   try {
-    // Check if the email is already in use
     const signInMethods = await firebase
       .auth()
       .fetchSignInMethodsForEmail(email);
@@ -152,13 +147,14 @@ document.getElementById("creatNewUser").onclick = async function () {
     const userCredential = await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password);
-    console.log("User registered:", userCredential.user);
+    const user = userCredential.user;
+    console.log("User registered:", user);
 
-    // Add new record to Firestore
-    await firebase.firestore().collection("users").add({
+    // Add new record to Firestore with a sub-collection for user documents
+    const userRef = firebase.firestore().collection("users").doc(user.uid);
+    await userRef.set({
       name: fullName,
       email: email,
-      password: password,
       contactNumber: phoneNum,
       address: address,
       Account_Created: firebase.firestore.FieldValue.serverTimestamp(),
@@ -171,3 +167,24 @@ document.getElementById("creatNewUser").onclick = async function () {
     alert("Error registering user: " + error.message);
   }
 };
+
+let userID;
+// Function to add a document to the user’s sub-collection
+async function sendDocument(userID, documentData) {
+  try {
+    // Add a new document to the user's `userDocuments` sub-collection
+    const userDocRef = firebase.firestore().collection("users").doc(userID);
+    const userDocumentsRef = userDocRef.collection("userDocuments");
+
+    await userDocumentsRef.add({
+      documentData,
+      submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+    console.log("Document added successfully!");
+    alert("Document sent successfully!");
+  } catch (error) {
+    console.error("Error sending document:", error);
+    alert("Error sending document: " + error.message);
+  }
+}

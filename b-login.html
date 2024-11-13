@@ -35,10 +35,7 @@
         </h1>
       </div>
       <div class="form-section">
-        <a
-          href="javascript:void(0)"
-          onclick="showSection(`section2-admin-login`)"
-        >
+        <a href="#section2-admin-login">
           <img
             style="height: 120px"
             src="Resources/image/admin-profile.svg"
@@ -46,10 +43,7 @@
           />
           <p>Admin</p>
         </a>
-        <a
-          href="javascript:void(0)"
-          onclick="showSection(`section3-client-login`)"
-        >
+        <a href="#section3-client-login">
           <img
             style="height: 120px"
             src="Resources/image/client-profile.svg"
@@ -78,22 +72,13 @@
           and Requests for Forest Tree Seedlings
         </p>
 
-        <button
-          id="governor"
-          onclick="showSection('section2-1-admin-login', 'governor')"
-        >
+        <button onclick="showSection('section2-1-admin-login', 'governor')">
           Governor
         </button>
-        <button
-          id="penro"
-          onclick="showSection('section2-1-admin-login', 'penro')"
-        >
+        <button onclick="showSection('section2-1-admin-login', 'penro')">
           PENRO
         </button>
-        <button
-          id="nursery"
-          onclick="showSection('section2-1-admin-login', 'nursery')"
-        >
+        <button onclick="showSection('section2-1-admin-login', 'nursery')">
           Nursery
         </button>
       </div>
@@ -157,7 +142,7 @@
           <input id="userSignInPassword" placeholder="Password" required />
         </div>
         <div class="input-field">
-          <button type="submit" onclick="userLogin()">Login</button>
+          <button id="userLogin">Login</button>
         </div>
         <div class="input-field">
           <button onclick="googleAuthProviderSignIn()" id="google-button">
@@ -478,7 +463,10 @@
         </div>
       </div>
     </section>
+    <script
+      type="module"
+      src="Resources/files/javascript-folder/b-login-firebase.js"
+    ></script>
     <script src="Resources/files/javascript-folder/b-login.js"></script>
-    <script src="Resources/files/javascript-folder/b-login-firebase.js"></script>
   </body>
 </html>

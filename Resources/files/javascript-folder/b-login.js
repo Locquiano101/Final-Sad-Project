@@ -18,19 +18,13 @@ window.onclick = function (event) {
   }
 };
 
-// Function to show a specific section and hide others
-function showSection(sectionId) {
-  // Show and scroll to the selected section
-  const sectionToShow = document.getElementById(sectionId);
-  sectionToShow.scrollIntoView();
-}
 var loginHeader, adminRank;
 //when an admin logs in
 function showSection(sectionId, buttonId) {
-  // Display the correct section
   const sectionToShow = document.getElementById(sectionId);
   sectionToShow.scrollIntoView();
-  //change the header and get the ID for the admin
+
+  // Change the header based on the buttonId
   loginHeader = document.getElementById("admin-login");
   switch (buttonId) {
     case "governor":

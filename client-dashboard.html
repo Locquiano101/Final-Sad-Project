@@ -8,6 +8,10 @@
       rel="stylesheet"
       href="Resources\files\css-folder\client-dashboard.css"
     />
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   </head>
   <body>
     <section class="side-nav" style="visibility: visible">
@@ -22,7 +26,7 @@
         <p>client</p>
       </div>
       <div class="navigation">
-        <a class="tablink" href="#services">
+        <a class="tablink" onclick="showContent(`#dashboard`)">
           <div class="dashboard-button">
             <img
               src="Resources/image/home.svg"
@@ -32,7 +36,7 @@
             <p>Dashboard</p>
           </div>
         </a>
-        <a class="tablink" href="#services">
+        <a class="tablink">
           <div class="dashboard-button">
             <img
               src="Resources/image/request.svg"
@@ -42,7 +46,7 @@
             <p>Requests</p>
           </div>
         </a>
-        <a class="tablink" href="#services">
+        <a class="tablink">
           <div class="dashboard-button">
             <img
               src="Resources/image/notification.svg"
@@ -52,17 +56,18 @@
             <p>Notifications</p>
           </div>
         </a>
-        <a class="tablink" href="#services">
+        <a class="tablink">
           <div class="dashboard-button">
             <img
               src="Resources/image/settings.svg"
               alt="Request Icon"
               class="icon"
+              onclick="showContent(`#dashboard`)"
             />
             <p>Settings</p>
           </div>
         </a>
-        <a class="tablink" href="#services">
+        <a class="tablink">
           <div class="dashboard-button">
             <img
               src="Resources/image/log-out.svg"
@@ -85,8 +90,8 @@
         </h1>
       </div>
     </section>
-    <section class="dashboard" style="visibility: visible">
-      <section class="client-dashboard" style="display: none">
+    <section class="dashboard">
+      <section id="client-dashboard" class="content">
         <div class="requests-display">
           <div class="requests">
             <div class="request-sent">
@@ -165,74 +170,16 @@
 
             <!-- Chart.js Library -->
           </div>
-          <div class="notifications">
-            <div class="notif-container">
-              <img
-                src="Resources/image/notification-bell.svg"
-                alt="Request Icon"
-                class="icon"
-                style="height: 64px; width: auto"
-              />
-              <div>
-                <h2>New Request</h2>
-                <p>John Doe sent a new seedlings request.</p>
-              </div>
-            </div>
-            <hr />
-            <div class="notif-container">
-              <img
-                src="Resources/image/notification-bell.svg"
-                alt="Request Icon"
-                class="icon"
-                style="height: 64px; width: auto"
-              />
-              <div>
-                <h2>New Request</h2>
-                <p>John Doe sent a new seedlings request.</p>
-              </div>
-            </div>
-            <hr />
-            <div class="notif-container">
-              <img
-                src="Resources/image/notification-bell.svg"
-                alt="Request Icon"
-                class="icon"
-                style="height: 64px; width: auto"
-              />
-              <div>
-                <h2>New Request</h2>
-                <p>John Doe sent a new seedlings request.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+          
       </section>
-      <section class="clients-requests" style="visibility: visible">
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Search by name..."
-          oninput="searchData()"
-        />
-        <button id="search-button" onclick="searchData()">Search</button>
-        <table id="data-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Age</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Data will be appended here -->
-          </tbody>
-        </table>
+      <section id="section2" class="content">
+        <button>send request</button>
+        <div id="documentsContainer"></div>
       </section>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="Resources/files/javascript-folder/calculator.js"></script>
-    <script src="Resources/files/javascript-folder/c-client-dashboard.js"></script>
+    <script src="Resources/files/javascript-folder/client-login-firebase.js"></script>
   </body>
 </html>
