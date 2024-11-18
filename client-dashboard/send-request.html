@@ -12,6 +12,9 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script src="https://unpkg.com/docx@7.1.0/build/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
   </head>
   <body>
     <div class="sidenav">
@@ -22,9 +25,77 @@
       <button onclick="openFileById(`Settings`)">Settings</button>
     </div>
 
-    <div class="content"></div>
+    <div class="content">
+      <form id="uploadForm" method="POST" enctype="multipart/form-data">
+        <div>
+          <label for="requestorName">Requestor's Name: </label>
+          <input type="text" id="requestorName" name="requestorName" required />
+        </div>
+      </form>
 
+      <button id="generateDocx" class="btn btn-secondary">
+        Generate Word Document and Upload
+      </button>
+    </div>
+
+    <script>
+      document
+        .getElementById("generateDocx")
+        .addEventListener("click", async () => {
+          const requestorName = document.getElementById("requestorName").value;
+
+          if (!requestorName) {
+            alert("Please enter the requestor's name.");
+            return;
+          }
+
+          // Create a new Word document
+          const doc = new docx.Document({
+            sections: [
+              {
+                properties: {},
+                children: [
+                  new docx.Paragraph({
+                    text: `NAME OF REQUESTING PERSON: ${requestorName}`,
+                  }),
+                ],
+              },
+            ],
+          });
+
+          // File name
+          const fileName = `${requestorName}_treeRequest.docx`;
+
+          // Convert document to Blob
+          docx.Packer.toBlob(doc).then((blob) => {
+            // Prepare a FormData object to upload the file
+            const formData = new FormData();
+            formData.append("file", blob, fileName); // Attach the generated file
+            formData.append("requestorName", requestorName); // Add additional data (optional)
+
+            // Send the FormData to the server
+            fetch("upload.php", {
+              method: "POST",
+              body: formData,
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  return response.text().then((text) => {
+                    throw new Error(`Error: ${text}`);
+                  });
+                }
+                return response.json();
+              })
+              .then((data) => {
+                alert("File uploaded successfully!");
+              })
+              .catch((error) => {
+                console.error("Error uploading file:", error.message);
+                alert(`File upload failed: ${error.message}`);
+              });
+          });
+        });
+    </script>
     <script src="/Resources/files/javascript-folder/navigation.js"></script>
-    <script src="/Resources/files/javascript-folder/client-dashboard-js/requests.js"></script>
   </body>
 </html>

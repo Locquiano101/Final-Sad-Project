@@ -79,20 +79,24 @@
                 <div>
                   <h2>View Requests</h2>
                   <p>View seedlings requests, and monitor its status.</p>
-                  <button>View Request</button>
+                  <button onclick="openFileById(`requests`)">
+                    View Request
+                  </button>
                 </div>
               </div>
               <div class="view-request">
                 <img
-                  src="/Resources/image/view-requests.svg"
+                  src="/Resources/image/notification-bell.svg"
                   alt="Request Icon"
                   class="icon"
                   style="height: 64px; width: auto"
                 />
                 <div>
-                  <h2>View Requests</h2>
-                  <p>View seedlings requests, and monitor its status.</p>
-                  <button>View Request</button>
+                  <h2>Request New Seed</h2>
+                  <p>Request seedlings for upcoming projects.</p>
+                  <button onclick="openFileById(`send-request`)">
+                    Request New Seed
+                  </button>
                 </div>
               </div>
             </div>
