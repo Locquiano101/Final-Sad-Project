@@ -25,4 +25,3 @@ const userDocRef = firebaseDB.collection("users").doc(userID);
 const userDocumentsRef = userDocRef.collection("userDocuments");
 
 // Export the instances and references
-export { firebaseAuth, firebaseDB, userDocRef, userDocumentsRef };

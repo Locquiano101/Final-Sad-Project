@@ -181,3 +181,182 @@ select {
 #documentsContainer p {
   margin: 5px 0 0;
 }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+.sidenav {
+  width: 20%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: 20px;
+}
+
+.sidenav button {
+  background: none;
+  color: black;
+  border: none;
+  padding: 15px;
+  justify-content: center;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+}
+
+.sidenav button:hover {
+  background-color: #575757; /* Button hover background color */
+}
+
+.content {
+  padding: 1rem;
+  width: 80%;
+  background-color: #011b1a;
+}
+
+.content-div {
+  height: 100%;
+  display: none;
+}
+
+.content-div.active {
+  display: block;
+}
+
+#content1 {
+  display: flex;
+}
+#dashboard-left {
+  padding: 10px;
+  width: 60%;
+}
+#dashboard-right {
+  padding: 10px;
+  width: 40%;
+}
+#seedling-requests-count,
+#chart-container {
+  background-color: #103635;
+  border-radius: 1rem;
+}
+#seedling-requests-count {
+  color: white;
+  height: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#seedling-requests-count div {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  color: white;
+}
+#requests-new-seedlings {
+  box-sizing: border-box;
+  display: flex;
+  height: 60%;
+}
+#requests-new-seedlings div {
+  border-radius: 1rem;
+}
+#calculator input,
+select {
+  width: 100%;
+  margin: 1rem 0;
+  padding: 1rem;
+}
+#calculator {
+  background-color: #103635;
+  width: 40%;
+  padding: 1rem;
+  gap: 1rem;
+  margin: 1rem 1rem 0 1rem;
+  color: white;
+}
+.view-requests {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.view-request {
+  display: flex;
+  background-color: #103635;
+  flex: 1;
+  margin-top: 1rem;
+  padding: 1rem;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+}
+.view-request div {
+  margin: 1rem;
+}
+button {
+  background-color: #4caf50;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+.chart-container {
+  width: 100%;
+  height: 50%;
+}
+.notifications {
+  border-radius: 2rem;
+  padding: 1rem;
+  background-color: #103635;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.notif-container {
+  display: flex;
+  color: white;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 0;
+}
+#documentsContainer .document {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #103635;
+}
+#documentsContainer h3 {
+  margin: 0;
+  font-size: 1.25em;
+}
+#documentsContainer p {
+  margin: 5px 0 0;
+}
+#documentsContainer input[type="checkbox"] {
+  /* Set the width and height to your desired size */
+  width: 25px;
+  height: 25px;
+  /* Optional: change the background color and add a border */
+  background-color: lightgray;
+  border: 2px solid #333;
+}
