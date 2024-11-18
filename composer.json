@@ -1,0 +1,13 @@
+{
+    "name": "penromis/greg",
+    "description": "final project for sad bsis 3A",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Penromis\\Greg\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {}
+}
