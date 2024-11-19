@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Sidenav</title>
+    <link
+      rel="stylesheet"
+      href="/Resources/files/css-folder/client-dashboard.css"
+    />
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  </head>
+  <body>
+    <div class="sidenav">
+      <button>My Dashbaord</button>
+      <button onclick="openFileById(`requests`)">Requests</button>
+      <button onclick="openFileById(`reports`)">Reports</button>
+      <button onclick="openFileById(`notifications`)">Notifications</button>
+      <button onclick="openFileById(`Settings`)">Settings</button>
+    </div>
+
+    <div class="content">
+      <div id="content1" class="content-div">
+        <div id="dashboard-left">
+          <div id="seedling-requests-count">
+            <h2>My Requests</h2>
+            <div class="seedling-request">
+              <h3>1</h3>
+              <h3>pending</h3>
+            </div>
+            <div>
+              <h3>1</h3>
+              <h3>pending</h3>
+            </div>
+            <div>
+              <h3>1</h3>
+              <h3>pending</h3>
+            </div>
+            <div>
+              <h3>1</h3>
+              <h3>pending</h3>
+            </div>
+          </div>
+          <div id="requests-new-seedlings">
+            <div id="calculator">
+              <h2>Select a Tree</h2>
+              <select id="treeDropdown" onchange="updateInputsBasedOnTree()">
+                <option value="" disabled selected>Select a tree</option>
+              </select>
+
+              <h2>Quantity of trees</h2>
+              <input
+                type="number"
+                id="areaInput"
+                oninput="ConvertToArea()"
+                placeholder="Quantiy of Trees"
+              />
+
+              <h2>Lot Area (Hectares)</h2>
+              <input
+                type="number"
+                id="sqMeterInput"
+                min="0"
+                placeholder="Lot Area (in Hectares)"
+                oninput="ConvertToQuantity()"
+              />
+            </div>
+            <div class="view-requests">
+              <div class="view-request">
+                <img
+                  src="/Resources/image/view-requests.svg"
+                  alt="Request Icon"
+                  class="icon"
+                  style="height: 64px; width: auto"
+                />
+                <div>
+                  <h2>View Requests</h2>
+                  <p>View seedlings requests, and monitor its status.</p>
+                  <button onclick="openFileById(`requests`)">
+                    View Request
+                  </button>
+                </div>
+              </div>
+              <div class="view-request">
+                <img
+                  src="/Resources/image/notification-bell.svg"
+                  alt="Request Icon"
+                  class="icon"
+                  style="height: 64px; width: auto"
+                />
+                <div>
+                  <h2>Request New Seed</h2>
+                  <p>Request seedlings for upcoming projects.</p>
+                  <button onclick="openFileById(`send-request`)">
+                    Request New Seed
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="dashboard-right">
+          <div id="chart-container">
+            <canvas id="myBarChart"></canvas>
+          </div>
+          <div class="notifications">
+            <div class="notif-container">
+              <img
+                src="/Resources/image/notification-bell.svg"
+                alt="Request Icon"
+                class="icon"
+                style="height: 64px; width: auto"
+              />
+              <div>
+                <h2>New Request</h2>
+                <p>John Doe sent a new seedlings request.</p>
+              </div>
+            </div>
+            <hr />
+            <div class="notif-container">
+              <img
+                src="/Resources/image/notification-bell.svg"
+                alt="Request Icon"
+                class="icon"
+                style="height: 64px; width: auto"
+              />
+              <div>
+                <h2>New Request</h2>
+                <p>John Doe sent a new seedlings request.</p>
+              </div>
+            </div>
+            <hr />
+            <div class="notif-container">
+              <img
+                src="/Resources/image/notification-bell.svg"
+                alt="Request Icon"
+                class="icon"
+                style="height: 64px; width: auto"
+              />
+              <div>
+                <h2>New Request</h2>
+                <p>John Doe sent a new seedlings request.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/Resources/files/javascript-folder/navigation.js"></script>
+    <script src="/Resources/files/javascript-folder/client-dashboard-js/dashboard.js"></script>
+  </body>
+</html>
