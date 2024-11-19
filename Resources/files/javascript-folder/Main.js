@@ -81,20 +81,24 @@ links.forEach((link) => {
     this.classList.add("active");
   });
 });
-// change background color navigation
-window.addEventListener("scroll", function () {
-  var navbar = document.getElementById("navbar");
+
+
+// // change background color navigation
+// window.addEventListener("scroll", function () {
+//   var navbar = document.getElementById("navbar");
+
+// }
 
   // Check scroll position
-  if (window.scrollY > 50) {
-    // Add a class to change background color and add a smooth transition effect
-    navbar.style.backgroundColor = "#4e7966"; // New background color
-    navbar.style.transition =
-      "background-color 0.5s ease, box-shadow 0.5s ease"; // Smooth effect
-    navbar.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; // Adding a shadow for extra effect
-  } else {
-    // Revert the background to transparent and remove shadow
-    navbar.style.backgroundColor = "transparent"; // Original background
-    navbar.style.boxShadow = "none"; // No shadow
-  }
-});
+//   if (window.scrollY > 50) {
+//     // Add a class to change background color and add a smooth transition effect
+//     navbar.style.backgroundColor = "#4e7966"; // New background color
+//     navbar.style.transition =
+//       "background-color 0.5s ease, box-shadow 0.5s ease"; // Smooth effect
+//     navbar.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; // Adding a shadow for extra effect
+//   } else {
+//     // Revert the background to transparent and remove shadow
+//     navbar.style.backgroundColor = "transparent"; // Original background
+//     navbar.style.boxShadow = "none"; // No shadow
+//   }
+// });

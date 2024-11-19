@@ -29,6 +29,10 @@ body {
   border: none;
   text-decoration: none;
 }
+#navbar {
+  background-color: #0F5D5C; /* Green background color */
+  transition: background-color 0.5s ease, box-shadow 0.5s ease; /* Smooth transition */
+}
 /* 
 ********************
 SECTIONS
@@ -109,9 +113,12 @@ h6 {
  /* nilagay ko */
  .sticky-nav ul {
   list-style-type: none;
-  text-align: right;
   margin: 0;
   padding: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: right;
 }
 
 .sticky-nav ul li {
@@ -120,7 +127,7 @@ h6 {
 
 .sticky-nav ul li a {
   color: rgb(255, 255, 255);
-  padding: 2em;
+  padding: 1em;
   text-decoration: none;
   font-size: 16px;
   transition: font-size 0.3s ease;
@@ -134,12 +141,12 @@ h6 {
   color: lightgreen;
 }
 
-
+/* Hide checkbox by default */
 #menu-toggle {
   display: none;
 }
 
-/* Hamburger  */
+/* Hamburger Menu Icon */
 .menu-icon {
   display: none;
   font-size: 24px;
@@ -151,43 +158,52 @@ h6 {
   z-index: 10;
 }
 
-/* Responsive for smaller screens */
+/* Responsive adjustments for screens under 768px */
 @media (max-width: 768px) {
-  
-
   .menu-icon {
     display: block;
   }
 
- 
   .sticky-nav ul {
-    display: none;
+    display: none; /* Initially hidden */
     flex-direction: column;
     background-color: #333;
     width: 100%;
     position: absolute;
-    top: 50px;
+    top: 60px; /* Adjusted to align under menu icon */
     left: 0;
     text-align: left;
   }
 
-  
+  /* When checkbox is checked, show the menu */
   #menu-toggle:checked + .menu-icon + ul {
-    display: flex;
+    display: flex; /* Show menu on toggle */
   }
 
-  
   .sticky-nav ul li {
     display: block;
-    width: 100%;
+    width: 100%; /* Full width on mobile */
   }
 
-  /*  mobile view */
   .sticky-nav ul li a {
     padding: 1em;
     font-size: 18px;
   }
 }
+
+/* Smooth transitions for intermediate screen sizes */
+@media (max-width: 1200px) {
+  .sticky-nav ul {
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .sticky-nav ul li a {
+    font-size: 15px;
+    padding: 0.8em;
+  }
+}
+
  /* nilagay ko */
 /* 
 ********************
@@ -245,6 +261,8 @@ SECTION 2
 }
 .about-text {
   color: #353535;
+  
+  
 }
 
 /* 
