@@ -3,8 +3,6 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// Set response header to JSON
-header('Content-Type: application/json');
 
 // Check if POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

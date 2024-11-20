@@ -4,10 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Responsive Sidenav</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+
     <link
       rel="stylesheet"
       href="/Resources/files/css-folder/client-dashboard.css"
     />
+
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -26,76 +34,155 @@
     </div>
 
     <div class="content">
-      <form id="uploadForm" method="POST" enctype="multipart/form-data">
-        <div>
-          <label for="requestorName">Requestor's Name: </label>
-          <input type="text" id="requestorName" name="requestorName" required />
-        </div>
-      </form>
+      <h2>Request Form</h2>
+      <form
+        id="projectForm"
+        action="upload.php"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <!-- Project Profile -->
+        <div class="form-section">
+          <h1>PROJECT PROFILE</h1>
+          <label for="project-location">
+            <strong>Location of Project/Planting Site:</strong>
+          </label>
+          <input
+            type="text"
+            id="project-location"
+            name="project-location"
+            placeholder="Enter Project Location"
+            required
+          />
 
-      <button id="generateDocx" class="btn btn-secondary">
-        Generate Word Document and Upload
-      </button>
+          <label><strong>Land Classification of the Property:</strong></label>
+          <div>
+            <input
+              type="radio"
+              name="land-classification"
+              value="Public"
+              id="public"
+              required
+            />
+            <label for="public">Public</label>
+            <br />
+            <input
+              type="radio"
+              name="land-classification"
+              value="Private"
+              id="private"
+            />
+            <label for="private">Private</label>
+          </div>
+
+          <div id="privateSection" class="hidden">
+            <label for="property-document">
+              <strong>If Private (Attach a Xerox Copy):</strong>
+            </label>
+            <input
+              type="file"
+              id="property-document"
+              name="property-document"
+            />
+
+            <label for="title-no">
+              <strong>Title No:</strong>
+            </label>
+            <input
+              type="text"
+              id="title-no"
+              name="title-no"
+              placeholder="Enter Title No."
+            />
+
+            <label for="tax-declaration">
+              <strong>Tax Declaration No:</strong>
+            </label>
+            <input
+              type="text"
+              id="tax-declaration"
+              name="tax-declaration"
+              placeholder="Enter Tax Declaration No."
+            />
+          </div>
+
+          <label for="activity-type">
+            <strong>Purpose / Type of Activity:</strong>
+          </label>
+          <textarea
+            id="activity-type"
+            name="activity-type"
+            cols="103"
+            rows="5"
+            placeholder="Enter Purpose or Type of Activity"
+            required
+          ></textarea>
+          <br />
+          <label for="vicinity-map">
+            <strong>Location / Vicinity Map of Planting Site:</strong>
+          </label>
+          <input
+            type="file"
+            id="vicinity-map"
+            name="vicinity-map"
+            accept="image/*"
+          />
+
+          <label for="seedlings-number">
+            <strong>No. of Seedlings Requested:</strong>
+          </label>
+          <input
+            type="number"
+            id="seedlings-number"
+            name="seedlings-number"
+            placeholder="Enter Number of Seedlings"
+            required
+            min="1"
+          />
+
+          <label for="seedlings-type">
+            <strong>Type of Seedlings:</strong>
+          </label>
+          <input
+            type="text"
+            id="seedlings-type"
+            name="seedlings-type"
+            placeholder="Enter Type of Seedlings"
+            required
+          />
+        </div>
+
+        <!-- Promissory Note -->
+        <div class="form-section">
+          <h1>PROMISSORY NOTE</h1>
+          <p>
+            I am aware that PG-PENRO staff will monitor the growth of the
+            planted seedlings. I will maintain and protect said seedlings to
+            ensure a 100% survival rate. Otherwise, I will pay for the seedlings
+            that do not survive in the amount of THIRTY PESOS (P30.00 each).
+          </p>
+          <p>
+            I am signifying through this Promissory Note my interest and
+            willingness to execute and abide by the above intentions.
+          </p>
+
+          <label for="requestor-signature">
+            <strong>Requestor's Signature:</strong>
+          </label>
+          <input
+            type="file"
+            id="requestor-signature"
+            name="requestor-signature"
+            accept="image/*"
+            required
+          />
+        </div>
+
+        <button type="submit" id="projectForm">Submit</button>
+      </form>
     </div>
 
-    <script>
-      document
-        .getElementById("generateDocx")
-        .addEventListener("click", async () => {
-          const requestorName = document.getElementById("requestorName").value;
-
-          if (!requestorName) {
-            alert("Please enter the requestor's name.");
-            return;
-          }
-
-          // Create a new Word document
-          const doc = new docx.Document({
-            sections: [
-              {
-                properties: {},
-                children: [
-                  new docx.Paragraph({
-                    text: `NAME OF REQUESTING PERSON: ${requestorName}`,
-                  }),
-                ],
-              },
-            ],
-          });
-
-          // File name
-          const fileName = `${requestorName}_treeRequest.docx`;
-
-          // Convert document to Blob
-          docx.Packer.toBlob(doc).then((blob) => {
-            // Prepare a FormData object to upload the file
-            const formData = new FormData();
-            formData.append("file", blob, fileName); // Attach the generated file
-            formData.append("requestorName", requestorName); // Add additional data (optional)
-
-            // Send the FormData to the server
-            fetch("upload.php", {
-              method: "POST",
-              body: formData,
-            })
-              .then((response) => {
-                if (!response.ok) {
-                  return response.text().then((text) => {
-                    throw new Error(`Error: ${text}`);
-                  });
-                }
-                return response.json();
-              })
-              .then((data) => {
-                alert("File uploaded successfully!");
-              })
-              .catch((error) => {
-                console.error("Error uploading file:", error.message);
-                alert(`File upload failed: ${error.message}`);
-              });
-          });
-        });
-    </script>
+    <script src="/Resources/files/javascript-folder/docx-template.js"></script>
     <script src="/Resources/files/javascript-folder/navigation.js"></script>
   </body>
 </html>
