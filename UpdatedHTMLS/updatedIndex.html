@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PENRO-MIS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-[#efe8e2] font-['League_Spartan'] text-gray-900">
+    <!-- HEADER -->
+    <header>
+      <nav id="navbar" class="fixed top-0 w-full z-50 bg-[#0F5D5C] shadow-md">
+        <div class="flex justify-between items-center px-6 py-4">
+          <!-- Logo and Title (Visible on All Screen Sizes) -->
+          <div class="flex flex-col text-white">
+            <h5 class="text-sm font-light">REPUBLIC OF THE PHILIPPINES</h5>
+            <hr class="border-t border-white" />
+            <h5 class="text-sm font-light">
+              PROVINCIAL ENVIRONMENT AND NATURAL RESOURCES OFFICE
+            </h5>
+            <h6 class="text-xs font-light">REGION V - BICOL - CAMARINES NORTE</h6>
+          </div>
+
+          <!-- Hamburger Menu Button (Visible only on Mobile and Tablet) -->
+          <div class="block md:hidden">
+            <input type="checkbox" id="menu-toggle" class="hidden" />
+            <label for="menu-toggle" class="text-white text-2xl cursor-pointer">&#9776;</label>
+          </div>
+
+          <!-- Regular Desktop Menu (Visible only on Desktop) -->
+          <ul
+            class="hidden md:flex space-x-6 text-white text-sm"
+            id="menu"
+          >
+            <li><a href="#section1" class="hover:text-green-400">Home</a></li>
+            <li><a href="#section2" class="hover:text-green-400">About</a></li>
+            <li><a href="#section3" class="hover:text-green-400">Services</a></li>
+            <li><a href="#section4" class="hover:text-green-400">PENRO Team</a></li>
+            <li><a href="#section5" class="hover:text-green-400">FAQs</a></li>
+            <button
+              class="ml-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              onclick="openFileById('b-login')"
+            >
+              LOGIN
+            </button>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- Mobile Navigation Menu (Visible only on Mobile and Tablet) -->
+      <div
+        class="fixed inset-0 bg-black bg-opacity-75 z-40 hidden transform translate-x-full transition-all duration-500"
+        id="mobile-menu"
+      >
+        <div class="flex justify-end p-6">
+          <label for="menu-toggle" class="text-white text-3xl cursor-pointer">X</label>
+        </div>
+        <ul class="space-y-6 p-6 text-white text-lg">
+          <li><a href="#section1" class="hover:text-green-400">Home</a></li>
+          <li><a href="#section2" class="hover:text-green-400">About</a></li>
+          <li><a href="#section3" class="hover:text-green-400">Services</a></li>
+          <li><a href="#section4" class="hover:text-green-400">PENRO Team</a></li>
+          <li><a href="#section5" class="hover:text-green-400">FAQs</a></li>
+          <button
+            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            onclick="openFileById('b-login')"
+          >
+            LOGIN
+          </button>
+        </ul>
+      </div>
+    </header>
+
+    <!-- JavaScript for Hamburger Menu -->
+    <script>
+      const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      // Toggle menu visibility when hamburger icon is clicked
+      menuToggle.addEventListener('change', () => {
+        if (menuToggle.checked) {
+          mobileMenu.classList.remove('hidden');
+          mobileMenu.classList.add('translate-x-0'); // Slide in from left
+        } else {
+          mobileMenu.classList.add('hidden');
+          mobileMenu.classList.remove('translate-x-0'); // Slide out
+        }
+      });
+    </script>
+  </body>
+</html>
+<!-- checkl -->
+
+
+
+
+    <!-- SECTION 1 -->
+    <div id="section1" class="relative">
+      <!-- Slideshow Container -->
+      <div class="relative">
+        <!-- Overlay Content on the Left -->
+        <div class="absolute top-1/2 left-6 transform -translate-y-1/2 text-left text-white">
+          <h2 class="text-4xl font-bold mb-4">
+            FOREST TREE SEEDLINGS MANAGEMENT SYSTEM
+          </h2>
+          <button
+            id="see-more"
+            class="bg-green-700 text-white px-6 py-4 rounded-lg font-semibold hover:bg-green-600"
+          >
+            SEE MORE
+          </button>
+        </div>
+    
+        <!-- Slideshow Images -->
+        <div id="slideshow" class="flex overflow-hidden">
+          <div class="slide">
+            <img
+              src="Resources/image/penro (1).jpg"
+              alt="Slide 1"
+              class="w-full h-screen object-cover"
+            />
+          </div>
+          <div class="slide">
+            <img
+              src="Resources/image/penro (2).jpg"
+              alt="Slide 2"
+              class="w-full h-screen object-cover"
+            />
+          </div>
+          <div class="slide">
+            <img
+              src="Resources/image/penro (3).jpg"
+              alt="Slide 3"
+              class="w-full h-screen object-cover"
+            />
+          </div>
+          <div class="slide">
+            <img
+              src="Resources/image/penro (4).jpg"
+              alt="Slide 4"
+              class="w-full h-screen object-cover"
+            />
+          </div>
+          <div class="slide">
+            <img
+              src="Resources/image/penro (5).jpg"
+              alt="Slide 5"
+              class="w-full h-screen object-cover"
+            />
+          </div>
+          <div class="slide">
+            <img
+              src="Resources/image/penro (6).jpg"
+              alt="Slide 6"
+              class="w-full h-screen object-cover"
+            />
+          </div>
+          <div class="slide">
+            <img
+              src="Resources/image/penro (7).jpg"
+              alt="Slide 7"
+              class="w-full h-screen object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 - About -->
+    <div id="section2" class="section">
+      <div id="section2" class="section2-item px-14 py-10 bg-[#efe8e2]">
+        <!-- Service Title -->
+        <div class="service-title mb-6">
+          <!-- <h1 class="text-4xl font-bold text-center text-gray-700">About PENRO</h1> -->
+        </div>
+    
+        <p class="about-text text-lg text-gray-700 leading-relaxed mb-6">
+          The Forest Tree Seedling Management System of Camarines Norte's Provincial Environment & Natural Resources Office (PENRO) is a key initiative aimed at fostering environmental sustainability and biodiversity through the reforestation and restoration of vital forest ecosystems. This system plays a crucial role in supporting the province's ecological balance by providing an efficient platform for managing requests, tracking, and distributing forest tree seedlings to various stakeholders, including local communities, government agencies, and private entities. By ensuring the proper allocation and monitoring of seedlings, the system helps promote reforestation efforts, mitigate the impacts of deforestation, and contribute to carbon sequestration, which is essential for combating climate change.
+        </p>
+    
+        <p class="about-text text-lg text-gray-700 leading-relaxed mb-6">
+          PENRO’s Forest Tree Seedling Management System engages with a wide range of stakeholders, such as Local Government Units (LGUs), Non-Governmental Organizations (NGOs), community organizations, and private businesses. This collaborative approach ensures that reforestation efforts are inclusive, well-coordinated, and aligned with both provincial and national environmental goals. Through this system, stakeholders can easily request seedlings, track the status of their requests, and access critical data on seedling availability and the number of seedlings needed per hectare for various reforestation projects.
+        </p>
+    
+        <p class="about-text text-lg text-gray-700 leading-relaxed mb-6">
+          This initiative not only addresses the immediate need for reforestation but also lays the groundwork for long-term environmental sustainability by contributing to the regeneration of forest cover in Camarines Norte. By promoting responsible forest management practices and encouraging active participation from the community, the Forest Tree Seedling Management System ensures that future generations can continue to benefit from the province’s rich natural resources while preserving its ecological integrity.
+        </p>
+      </div>
+    </div>
+    
+
+
+    
+    <!-- SECTION 3 - Services -->
+<div id="section3" class="py-10 bg-white">
+  <h1 class="text-5xl font-bold text-center text-green-600 mb-10">
+    Forest Tree Seedlings Request Process
+  </h1>
+
+  <div class="max-w-6xl mx-auto px-6 md:px-10">
+    <!-- Section Description -->
+    <div class="mb-10 text-lg text-gray-700 leading-relaxed">
+      <p class="mb-6">
+        The process for requesting forest tree seedlings is simple and efficient. Follow the steps outlined below to ensure that your request is processed quickly and correctly. Whether you are a government agency, NGO, or private entity, we are committed to providing the necessary support for reforestation efforts.
+      </p>
+    </div>
+
+    <!-- Request Process Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-300 text-left text-gray-800">
+        <thead class="bg-green-600 text-white">
+          <tr>
+            <th class="p-4">CLIENT STEPS</th>
+            <th class="p-4">AGENCY ACTION</th>
+            <th class="p-4">PROCESSING TIME</th>
+            <th class="p-4">PERSON/OFFICE RESPONSIBLE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Row 1 -->
+          <tr class="border-b border-gray-300">
+            <td class="p-4">
+              Submit Letter-Request stating species, number of seedlings, and location of planting site (Private or Public Land).
+            </td>
+            <td class="p-4">Approves request and forwards to PG-PENRO</td>
+            <td class="p-4">Depending on the availability of the signatory</td>
+            <td class="p-4">Office of the Governor / Authorized Representative</td>
+          </tr>
+
+          <!-- Row 2 -->
+          <tr class="border-b border-gray-300">
+            <td class="p-4">Follow-Up Request at PG-PENRO</td>
+            <td class="p-4">
+              Provides a short briefing on the service, studies the request, and determines the number of seedlings to be given. Provides the Promissory Note.
+            </td>
+            <td class="p-4">30 Minutes</td>
+            <td class="p-4">
+              Engr. Leopoldo P. Badiola, EnP. Donna A. Guevarra, For. Gil B. Badaguas Jr., Ms. Emerine A. San Gaspar
+            </td>
+          </tr>
+
+          <!-- Row 3 -->
+          <tr class="border-b border-gray-300">
+            <td class="p-4">Fill out the Promissory Note provided by PENRO</td>
+            <td class="p-4">
+              Recommend to the Governor the number of seedlings to be given.
+            </td>
+            <td class="p-4">15 Minutes</td>
+            <td class="p-4">Engr. Leopoldo P. Badiola</td>
+          </tr>
+
+          <!-- Row 4 -->
+          <tr class="border-b border-gray-300">
+            <td class="p-4">
+              Office of the Governor approves or disapproves the recommendation and forwards the Promissory Note to PENRO.
+            </td>
+            <td class="p-4"></td>
+            <td class="p-4">Depending on the availability of the signatory</td>
+            <td class="p-4">Office of the Governor / Authorized Representative</td>
+          </tr>
+
+          <!-- Row 5 -->
+          <tr class="border-b border-gray-300">
+            <td class="p-4">
+              Follow up the Promissory Note at PG-PENRO. If approved, receive a copy of the document.
+            </td>
+            <td class="p-4">Release a copy of the Promissory Note to the requesting individual.</td>
+            <td class="p-4">10 Minutes</td>
+            <td class="p-4">Ms. Emerine A. San Gaspar</td>
+          </tr>
+
+          <!-- Row 6 -->
+          <tr class="border-b border-gray-300">
+            <td class="p-4">
+              Proceed to Basud Nursery, present the Promissory Note, and pick up seedlings.
+            </td>
+            <td class="p-4"></td>
+            <td class="p-4"></td>
+            <td class="p-4">Mr. Nomer Encinas and other Nursery Staff</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+    
+    <!-- SECTION 4 - PENRO Team -->
+<div id="section4" class="bg-gray-100 py-10">
+  <h1 class="text-5xl font-bold text-center text-gray-700 mb-10">
+    The PENRO Team
+  </h1>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 md:px-16">
+    <!-- Team Member 1 -->
+    <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+      <img
+        src="Resources/image/man.png"
+        alt="Engr. Leopoldo P. Badiola"
+        class="w-32 h-32 mx-auto rounded-full mb-4"
+      />
+      <h3 class="text-xl font-semibold">Engr. Leopoldo P. Badiola</h3>
+      <p class="text-gray-600">PENRO Head Officer</p>
+    </div>
+
+    <!-- Team Member 2 -->
+    <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+      <img
+        src="Resources/image/man.png"
+        alt="Name of the Officer"
+        class="w-32 h-32 mx-auto rounded-full mb-4"
+      />
+      <h3 class="text-xl font-semibold">EnP. Donna A. Guevarra</h3>
+      <p class="text-gray-600">Supervising Environment Specialist</p>
+    </div>
+
+    <!-- Team Member 3 -->
+    <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+      <img
+        src="Resources/image/man.png"
+        alt="Name of the Officer"
+        class="w-32 h-32 mx-auto rounded-full mb-4"
+      />
+      <h3 class="text-xl font-semibold">For. Gil B. Badaguas Jr.</h3>
+      <p class="text-gray-600">Forest Management Specialist</p>
+    </div>
+
+    <!-- Team Member 4 -->
+    <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+      <img
+        src="Resources/image/woman.png"
+        alt="Ms. Emerine A. San Gaspar"
+        class="w-32 h-32 mx-auto rounded-full mb-4"
+      />
+      <h3 class="text-xl font-semibold">Ms. Emerine A. San Gaspar</h3>
+      <p class="text-gray-600">Administrative Officer</p>
+    </div>
+
+    <!-- Team Member 5 -->
+    <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+      <img
+        src="Resources/image/man.png"
+        alt="Mr. Nomer Encinas"
+        class="w-32 h-32 mx-auto rounded-full mb-4"
+      />
+      <h3 class="text-xl font-semibold">Mr. Nomer Encinas</h3>
+      <p class="text-gray-600">Nursery In-Charge</p>
+    </div>
+
+    <!-- Team Member 6 -->
+    <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+      <img
+        src="Resources/image/man.png"
+        alt="Additional Officer"
+        class="w-32 h-32 mx-auto rounded-full mb-4"
+      />
+      <h3 class="text-xl font-semibold">Name of the Officer</h3>
+      <p class="text-gray-600">Environment Specialist</p>
+    </div>
+  </div>
+</div>
+
+
+    
+   <!-- SECTION 5 - FAQs -->
+<div id="section5" class="py-10 bg-[#efe8e2]">
+  <h1 class="text-5xl font-bold text-center text-gray-700 mb-10">
+    Frequently Asked Questions
+  </h1>
+  <div class="max-w-3xl mx-auto space-y-6">
+    <!-- FAQ 1 -->
+    <div
+      class="bg-white shadow-md p-6 rounded-lg cursor-pointer"
+      onclick="toggleContent(this)"
+    >
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-semibold text-gray-700">
+          How to process applications for sand and gravel permits?
+        </h2>
+        <img
+          src="Resources/image/dropdown.svg"
+          alt="Dropdown Icon"
+          class="w-6 h-6"
+        />
+      </div>
+      <div class="hidden pt-4">
+        <p class="text-gray-600">
+          To process your application for sand and gravel permits, submit your
+          application form and supporting documents to the PENRO office. The
+          team will review your application and notify you about the next
+          steps.
+        </p>
+      </div>
+    </div>
+
+    <!-- FAQ 2 -->
+    <div
+      class="bg-white shadow-md p-6 rounded-lg cursor-pointer"
+      onclick="toggleContent(this)"
+    >
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-semibold text-gray-700">
+          What documents are required for tree seedling requests?
+        </h2>
+        <img
+          src="Resources/image/dropdown.svg"
+          alt="Dropdown Icon"
+          class="w-6 h-6"
+        />
+      </div>
+      <div class="hidden pt-4">
+        <p class="text-gray-600">
+          Required documents include a Letter of Request specifying the species
+          and quantity of seedlings, and proof of land ownership (if applicable).
+          Additional requirements may apply depending on the project type.
+        </p>
+      </div>
+    </div>
+
+    <!-- FAQ 3 -->
+    <div
+      class="bg-white shadow-md p-6 rounded-lg cursor-pointer"
+      onclick="toggleContent(this)"
+    >
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-semibold text-gray-700">
+          How long does it take to process a seedling request?
+        </h2>
+        <img
+          src="Resources/image/dropdown.svg"
+          alt="Dropdown Icon"
+          class="w-6 h-6"
+        />
+      </div>
+      <div class="hidden pt-4">
+        <p class="text-gray-600">
+          The processing time for a seedling request varies based on the
+          availability of the signatory and the volume of requests. Generally,
+          it takes 1-2 weeks to complete the process.
+        </p>
+      </div>
+    </div>
+
+    <!-- FAQ 4 -->
+    <div
+      class="bg-white shadow-md p-6 rounded-lg cursor-pointer"
+      onclick="toggleContent(this)"
+    >
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-semibold text-gray-700">
+          Can individuals request seedlings for private land?
+        </h2>
+        <img
+          src="Resources/image/dropdown.svg"
+          alt="Dropdown Icon"
+          class="w-6 h-6"
+        />
+      </div>
+      <div class="hidden pt-4">
+        <p class="text-gray-600">
+          Yes, individuals can request seedlings for private land. Ensure you
+          provide proof of land ownership along with the application to avoid
+          delays.
+        </p>
+      </div>
+    </div>
+
+    <!-- FAQ 5 -->
+    <div
+      class="bg-white shadow-md p-6 rounded-lg cursor-pointer"
+      onclick="toggleContent(this)"
+    >
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-semibold text-gray-700">
+          Who can avail of the services offered by PENRO?
+        </h2>
+        <img
+          src="Resources/image/dropdown.svg"
+          alt="Dropdown Icon"
+          class="w-6 h-6"
+        />
+      </div>
+      <div class="hidden pt-4">
+        <p class="text-gray-600">
+          Services offered by PENRO are available to all individuals, community
+          organizations, LGUs, NGOs, and private businesses that meet the
+          eligibility requirements.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <!-- FOOTER -->
+    <footer class="bg-black text-white py-10">
+      <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h2 class="text-2xl font-bold mb-4">Contact Us</h2>
+          <p>Email: <a href="mailto:pgpenro@gmail.com" class="underline">pgpenro@gmail.com</a></p>
+          <p>Phone: (+63) 9 *** *** ****</p>
+          <p>Address: F. Pimentel Ave, Daet, Camarines Norte Provincial Capitol</p>
+          <p>Service Availability: Monday to Friday, 8:00 AM - 5:00 PM</p>
+        </div>
+        <div>
+          <img src="Resources/image/penro-office.jpg" alt="PENRO Office" class="rounded-lg" />
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="Resources/files/javascript-folder/Main.js"></script>
+    <script src="Resources/files/javascript-folder/navigation.js"></script>
+  </body>
+</html>
