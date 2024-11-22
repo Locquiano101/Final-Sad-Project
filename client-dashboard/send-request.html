@@ -21,8 +21,22 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
+    <script
+      type="module"
+      src="/Resources/files/javascript-folder/docx-template.js"
+    ></script>
+    <script src="/Resources/files/javascript-folder/navigation.js"></script>
+
     <script src="https://unpkg.com/docx@7.1.0/build/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+    <style>
+      .hidden {
+        display: none;
+      }
+      .form-section {
+        margin-bottom: 20px;
+      }
+    </style>
   </head>
   <body>
     <div class="sidenav">
@@ -37,7 +51,7 @@
       <h2>Request Form</h2>
       <form
         id="projectForm"
-        action="upload.php"
+        action="http://127.0.0.1:5500/client-dashboard/upload.php"
         method="POST"
         enctype="multipart/form-data"
       >
@@ -182,7 +196,16 @@
       </form>
     </div>
 
-    <script src="/Resources/files/javascript-folder/docx-template.js"></script>
-    <script src="/Resources/files/javascript-folder/navigation.js"></script>
+    <script>
+      const privateRadio = document.getElementById("private");
+      const publicRadio = document.getElementById("public");
+      const privateSection = document.getElementById("privateSection");
+
+      const togglePrivateSection = () => {
+        privateSection.classList.toggle("hidden", !privateRadio.checked);
+      };
+      privateRadio.addEventListener("change", togglePrivateSection);
+      publicRadio.addEventListener("change", togglePrivateSection);
+    </script>
   </body>
 </html>

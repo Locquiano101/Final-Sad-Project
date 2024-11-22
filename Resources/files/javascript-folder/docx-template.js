@@ -11,7 +11,7 @@ import {
   fetchUserData,
 } from "./firebase-variables.js";
 
-const userID = "zjFwCBNi8lOY3U4wYf1CtySKzof1"; // Example userID
+const userID = localStorage.getItem("userID");
 
 // Mock data for demonstration purposes. Replace with actual user data.
 // Fetch user data and log it

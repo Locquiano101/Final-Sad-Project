@@ -97,8 +97,6 @@ document.getElementById("userLogin").onclick = async function () {
       }
     });
 };
-
-// SIGN UP SHIT
 document.getElementById("creatNewUser").onclick = async function () {
   // USER NAME INFO
   const fname = document.getElementById("userFname").value;

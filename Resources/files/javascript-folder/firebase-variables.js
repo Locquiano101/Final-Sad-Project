@@ -15,8 +15,9 @@ firebase.initializeApp(firebaseConfig);
 // Initialize Firestore and other services
 const firebaseDB = firebase.firestore();
 
+const userID = localStorage.getItem("userID");
 // Declare variables to export
-let userName, userEmail, userAdress, userContactNumber;
+let userName, userEmail, userContactNumber;
 let houseNumber, purok, barangay, municipality, province, postalCode;
 
 // Fetch user data
