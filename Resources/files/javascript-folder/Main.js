@@ -83,6 +83,22 @@ links.forEach((link) => {
 });
 
 
+          // Get the button and organizational chart elements
+          const button = document.getElementById("org");
+          const orgChart = document.getElementById("org-chart");
+      
+          // Add an event listener to the button
+          button.addEventListener("click", function () {
+            // Toggle visibility of the chart
+            if (orgChart.style.display === "none" || orgChart.style.display === "") {
+              orgChart.style.display = "block"; // Show the chart
+              button.textContent = "Hide Organizational Chart"; // Update button text
+            } else {
+              orgChart.style.display = "none"; // Hide the chart
+              button.textContent = "See Organizational Chart"; // Reset button text
+            }
+          });
+        
 // // change background color navigation
 // window.addEventListener("scroll", function () {
 //   var navbar = document.getElementById("navbar");

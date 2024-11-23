@@ -469,6 +469,39 @@ SECTION 4
 .cell-content {
   display: none; /* Hidden by default */
 }
+
+#specific-div { /* Use an ID or class to target only this div */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+#org {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: rem 0;
+  padding: 1.5rem 4rem;
+  width: 35%;
+  border-radius: 1rem;
+  background-color: #4e7966;
+  font-size: 18px;
+  font-weight: bold;
+  color: #eeffff;
+  border: none;
+  text-decoration: none;
+}
+#org-chart {
+  display: none; /* Chart is hidden by default */
+  padding: 1rem;
+  text-align: center;
+}
+
+#org-chart img {
+  max-width: 100%; /* Ensures the image scales properly */
+  border-radius: 10px;
+}
 /* 
 ********************
 FOOTER
