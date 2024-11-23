@@ -4,7 +4,7 @@ header("Access-Control-Allow-Methods: POST, OPTIONS"); // Allow POST and OPTIONS
 header("Access-Control-Allow-Headers: Content-Type"); // Allow Content-Type header
 header("Access-Control-Max-Age: 86400"); // Cache preflight requests for 24 hours
 
-$allowedOrigins = ['http://localhost:3000', 'https://srv1631-files.hstgr.io/721e9ce6a13b7e64/files/public_html/client-dashboard/upload.php'];
+$allowedOrigins = ['https://srv1631-files.hstgr.io/721e9ce6a13b7e64/files/public_html/client-dashboard/upload.php'];
 
 if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");

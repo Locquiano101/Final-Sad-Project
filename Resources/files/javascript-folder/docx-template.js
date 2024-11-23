@@ -408,7 +408,7 @@ document.getElementById("projectForm").addEventListener("submit", async (e) => {
       formData.append("requestorName", requestorName);
 
       fetch(
-        "https://srv1631-files.hstgr.io/721e9ce6a13b7e64/files/public_html/client-dashboard/upload.php",
+        "https://aliceblue-owl-540826.hostingersite.com//client-dashboard/upload.php",
         {
           method: "POST",
           body: formData,
