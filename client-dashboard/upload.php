@@ -1,21 +1,22 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Origin: *"); // Allow requests from all origins
+header("Access-Control-Allow-Methods: POST, OPTIONS"); // Allow POST and OPTIONS methods
+header("Access-Control-Allow-Headers: Content-Type"); // Allow Content-Type header
+header("Access-Control-Max-Age: 86400"); // Cache preflight requests for 24 hours
+
+$allowedOrigins = ['http://localhost:3000', 'https://srv1631-files.hstgr.io/721e9ce6a13b7e64/files/public_html/client-dashboard/upload.php'];
+
+if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+}
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Max-Age: 86400");
 
-
-// Enable error reporting for debugging
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-// Restrict script to run only on localhost
-$allowedHosts = ['127.0.0.1', '::1'];
-
-if (!in_array($_SERVER['REMOTE_ADDR'], $allowedHosts)) {
-    echo json_encode(["status" => "error", "message" => "Access denied. This script is restricted to localhost."]);
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
     exit;
 }
-
 // Check if POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['file']) && isset($_POST['requestorName'])) {

@@ -30,7 +30,7 @@ body {
   text-decoration: none;
 }
 #navbar {
-  background-color: #0F5D5C; /* Green background color */
+  background-color: #0f5d5c; /* Green background color */
   transition: background-color 0.5s ease, box-shadow 0.5s ease; /* Smooth transition */
 }
 /* 
@@ -81,37 +81,40 @@ h6 {
   padding: 0;
   gap: 2px;
 }
+div {
+  border: 1px solid black;
+}
 .camarines-norte-seal {
   height: auto;
   width: 48px;
 }
 
-/* .sticky-nav ul {
+.sticky-nav ul {
   text-align: right;
-} */
-
-/* .sticky-nav ul li {
+}
+.sticky-nav ul li {
   display: inline-block;
-} */
+}
 
-/* .sticky-nav ul li a {
+.sticky-nav ul li a {
   color: rgb(255, 255, 255);
   padding: 2em;
   text-decoration: none;
   font-size: 16px;
-  transition: font-size 0.3s ease; /* Specify the property to transition 
-} */
-
-/* .sticky-nav ul li a:hover {
-  font-size: 18px;
+  transition: font-size 0.3s ease;
 }
 
+.sticky-nav ul li a:hover {
+  font-size: 18px;
+}
+button:hover {
+  color: lightgreen;
+}
 .sticky-nav ul li a.active {
   color: lightgreen;
-  
-} */
- /* nilagay ko */
- .sticky-nav ul {
+}
+/* nilagay ko */
+.sticky-nav ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -204,7 +207,7 @@ h6 {
   }
 }
 
- /* nilagay ko */
+/* nilagay ko */
 /* 
 ********************
 SECTION 1
@@ -261,8 +264,6 @@ SECTION 2
 }
 .about-text {
   color: #353535;
-  
-  
 }
 
 /* 

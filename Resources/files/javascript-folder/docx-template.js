@@ -13,19 +13,6 @@ import {
 
 const userID = localStorage.getItem("userID");
 
-// Mock data for demonstration purposes. Replace with actual user data.
-// Fetch user data and log it
-let user, userNum, address;
-fetchUserData(userID).then(() => {
-  console.log("USER DATA RETREIVED SUCCESFULLY");
-  user = userName;
-  userNum = userContactNumber;
-  address = [houseNumber, purok, barangay, municipality, province, postalCode]
-    .filter(Boolean) // Filters out any falsy values (null, undefined, empty strings)
-    .join(", ");
-  console.log(userName);
-});
-
 const privateRadio = document.getElementById("private");
 const publicRadio = document.getElementById("public");
 const privateSection = document.getElementById("privateSection");
@@ -36,186 +23,429 @@ const togglePrivateSection = () => {
 privateRadio.addEventListener("change", togglePrivateSection);
 publicRadio.addEventListener("change", togglePrivateSection);
 
-document.getElementById("projectForm").addEventListener("submit", (e) => {
+let user, userNum, address;
+fetchUserData(userID).then(() => {
+  console.log("User data retrieved successfully.");
+  user = userName;
+  userNum = userContactNumber;
+  address = [houseNumber, purok, barangay, municipality, province, postalCode]
+    .filter(Boolean) // Filters out any falsy values (null, undefined, empty strings)
+    .join(", ");
+});
+
+const documentData = {
+  Document_Title: "Seedling Request Form", // Title of the document
+  Condition: "Pending Approval", // Default condition/status of the document
+};
+
+async function sendDocument(userID, documentData) {
+  try {
+    const userDocRef = firebase.firestore().collection("users").doc(userID);
+    const userDocumentsRef = userDocRef.collection("userDocuments");
+
+    // Retrieve all documents to determine the next sequential number
+    const documentsSnapshot = await userDocumentsRef.get();
+    const documentCount = documentsSnapshot.size; // Number of existing documents
+
+    // Define the new document ID as the next sequential number
+    const newDocumentID = (documentCount + 1).toString();
+
+    await userDocumentsRef.doc(newDocumentID).set({
+      ...documentData,
+      submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+    console.log("Document added successfully with ID:", newDocumentID);
+    alert("Document sent successfully with ID: " + newDocumentID);
+  } catch (error) {
+    console.error("Error sending document:", error);
+    alert("Error sending document: " + error.message);
+  }
+}
+
+const readFileAsArrayBuffer = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+    reader.readAsArrayBuffer(file);
+  });
+
+document.getElementById("projectForm").addEventListener("submit", async (e) => {
   e.preventDefault(); // Prevent form submission
 
-  // Get the current date
-  const currentDate = new Date();
+  const submitButton = document.querySelector(
+    "#projectForm button[type='submit']"
+  );
 
-  // Get parts of the date
-  const day = currentDate.getDate();
-  const month = currentDate.toLocaleString("en-US", { month: "long" });
-  const year = currentDate.getFullYear();
+  submitButton.disabled = true;
+  submitButton.textContent = "Uploading...";
 
-  // Format the date
-  const formattedDate = `${day} day of ${month}, 20${year
-    .toString()
-    .slice(-2)}.`;
-  // Retrieve form data
-  const formData = new FormData(e.target);
+  try {
+    const currentDate = new Date();
+    const day = currentDate.getDate();
+    const month = currentDate.toLocaleString("en-US", { month: "long" });
+    const year = currentDate.getFullYear();
+    const formattedDate = `of ${month} ${day}, ${year}`;
 
-  const projectLocation = formData.get("project-location");
-  const landClassification = formData.get("land-classification");
-  const propertyDocument = formData.get("property-document"); // File input
-  const titleNo = formData.get("title-no");
-  const taxDeclaration = formData.get("tax-declaration");
-  const activityType = formData.get("activity-type");
-  const vicinityMap = formData.get("vicinity-map"); // File input
-  const seedlingsNumber = formData.get("seedlings-number");
-  const seedlingsType = formData.get("seedlings-type");
-  const requestorSignature = formData.get("requestor-signature"); // File input
+    const formData = new FormData(e.target);
+    const projectLocation = formData.get("project-location");
+    const landClassification = formData.get("land-classification");
+    const propertyDocument = formData.get("property-document");
+    const titleNo = formData.get("title-no");
+    const taxDeclaration = formData.get("tax-declaration");
+    const activityType = formData.get("activity-type");
+    const vicinityMap = formData.get("vicinity-map");
+    const seedlingsNumber = formData.get("seedlings-number");
+    const seedlingsType = formData.get("seedlings-type");
+    const requestorSignature = formData.get("requestor-signature");
 
-  // Make private fields null if land is public
-  const isPublicLand = landClassification === "Public";
-  const privateFields = {
-    propertyDocument: isPublicLand ? null : propertyDocument,
-    titleNo: isPublicLand ? null : titleNo,
-    taxDeclaration: isPublicLand ? null : taxDeclaration,
-  };
+    const isPublicLand = landClassification === "Public";
+    const privateFields = {
+      propertyDocument: isPublicLand ? null : propertyDocument,
+      titleNo: isPublicLand ? null : titleNo,
+      taxDeclaration: isPublicLand ? null : taxDeclaration,
+    };
 
-  // Consolidated form data
-  const formValues = {
-    projectLocation,
-    landClassification,
-    ...privateFields,
-    activityType,
-    vicinityMap,
-    seedlingsNumber,
-    seedlingsType,
-    requestorSignature,
-  };
-  const requestorName = user;
-  const requestorsNumber = userNum;
-  const requestorAddress = address;
-  if (!requestorName) {
-    alert("Please enter the requestor's name.");
-    return;
-  }
+    const documentDetails = {
+      ...documentData,
+      Project_Location: projectLocation || "Not specified",
+      Land_Classification: landClassification || "Not specified",
+      Activity_Type: activityType || "Not specified",
+      Seedlings_Number: seedlingsNumber || 0,
+      Seedlings_Type: seedlingsType || "Not specified",
+      ...privateFields,
+    };
 
-  // Create Word document
-  const doc = new docx.Document({
-    sections: [
-      {
-        properties: {},
-        children: [
-          // Recipient's Profile
-          new docx.Paragraph({
-            text: "RECIPIENT’S PROFILE",
-            heading: docx.HeadingLevel.HEADING_1,
-            alignment: docx.AlignmentType.CENTER,
-          }),
-          new docx.Paragraph({
-            text: `NAME OF REQUESTING PERSON: ${requestorName} \t\t\t TEL.No/CPNo. ${requestorsNumber}`,
-          }),
-          new docx.Paragraph({
-            text: `ADDRESS: ${address}`,
-          }),
+    if (!user) {
+      alert("User information is missing. Please refresh and try again.");
+      return;
+    }
 
-          // Project Profile
-          new docx.Paragraph({
-            text: "PROJECT PROFILE",
-            heading: docx.HeadingLevel.HEADING_1,
-            alignment: docx.AlignmentType.CENTER,
-          }),
-          new docx.Paragraph({
-            text: `LOCATION PROJECT/PLANTING SITE : ${projectLocation} `,
-          }),
+    await sendDocument(userID, documentDetails);
 
-          new docx.Paragraph({
-            text: `LAND CLASSIFICATION OF THE PROPERTY:  ${landClassification} `,
-          }),
-          new docx.Paragraph({
-            text: `IF PRIVATE (Pls. attached Xerox copy )`,
-          }),
-          new docx.Paragraph({
-            text: `TITLE NO:        ____________`,
-          }),
-          new docx.Paragraph({
-            text: `TAX DECLARATION: ____________`,
-          }),
-          new docx.Paragraph({
-            text: `PURPOSE / TYPE OF ACTIVITY: \n\t${activityType} `,
-          }),
-          new docx.Paragraph({
-            text: `LOCATION / VICINITY MAP OF PLANTING SITE:  ${vicinityMap} `,
-          }),
-          new docx.Paragraph({
-            text: `NO. OF SEEDLINGS REQUESTED:  ${seedlingsNumber}\t\t\t TYPE OF SEEDLINGS:  ${seedlingsType} `,
-          }),
+    alert("Form submitted successfully!");
+    const requestorName = user;
+    if (!requestorName) {
+      alert("Please enter the requestor's name.");
+      return;
+    }
 
-          // Promissory Note
-          new docx.Paragraph({
-            text: "PROMISSORY NOTE",
-            heading: docx.HeadingLevel.HEADING_1,
-            alignment: docx.AlignmentType.CENTER,
-          }),
-          new docx.Paragraph({
-            text: `I am aware that PG-PENRO staff will monitor the growth of the planted seedlings. 
-            I will maintain and protect said seedlings to ensure a 100% survival rate. Otherwise, 
-            I will pay for the seedlings that do not survive in the amount of THIRTY PESOS (P30.00 each).`,
-          }),
-          new docx.Paragraph({
-            text: `I am signifying through this Promissory Note my interest and willingness to execute and abide by the above intentions.`,
-          }),
-          new docx.Paragraph({
-            text: `Signed this ${formattedDate} `,
-          }),
-          new docx.Paragraph({
-            alignment: docx.AlignmentType.CENTER,
-            text: `${requestorName}`,
-          }),
-          new docx.Paragraph({
-            alignment: docx.AlignmentType.CENTER,
-            text: "(Name and Signature of the Requesting Person)",
-          }),
+    const doc = new docx.Document({
+      sections: [
+        {
+          properties: {},
+          children: [
+            // Recipient's Profile
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: "RECIPIENT’S PROFILE",
+                  bold: true,
+                  font: "Arial",
+                  size: 24, // Font size is set in half-points, so 24 means 16pt
+                }),
+              ],
+              spacing: { after: 150 },
+              alignment: docx.AlignmentType.CENTER,
+            }),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `Requestor's Name: ${user} \t\t\t TEL No. / CP # ${userNum}`,
+                  font: "Arial",
+                }),
+              ],
+              spacing: { after: 150 },
+            }),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `ADDRESS: ${address}`,
+                  font: "Arial",
+                }),
+              ],
+              spacing: { after: 150 },
+            }),
 
-          // Recommending Approval and Approved By
-          new docx.Paragraph({
-            text: `Recommending Approval:`,
-          }),
-          new docx.Paragraph({
-            text: `APPROVED BY:`,
-          }),
-          new docx.Paragraph({
-            text: `LEOPOLDO P. BADIOLA\nProv’l Environmental and Natural Resources Officer`,
-          }),
-          new docx.Paragraph({
-            text: `HON. RICARTE R. PADILLA\nGovernor`,
-          }),
-        ],
-        font: "Arial", // Set font for entire paragraph
-      },
-    ],
-  });
+            // Project Profile
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: "PROJECT PROFILE",
+                  bold: true,
+                  size: 24, // Font size is set in half-points, so 24 means 16pt
+                  font: "Arial",
+                }),
+              ],
+              alignment: docx.AlignmentType.CENTER,
+              spacing: { after: 150 },
+            }),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `LOCATION PROJECT/PLANTING SITE : ${projectLocation}`,
+                  font: "Arial",
+                }),
+              ],
+              spacing: { after: 150 },
+            }),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `LAND CLASSIFICATION OF THE PROPERTY: ${landClassification}`,
+                  font: "Arial",
+                }),
+              ],
+              spacing: { after: 150 },
+            }),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `IF PRIVATE (Pls. attach Xerox copy)`,
+                  font: "Arial",
+                }),
+              ],
+              spacing: { after: 150 },
+            }),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `TITLE NO: ____________`,
+                  font: "Arial",
+                }),
+              ],
+              spacing: { after: 150 },
+            }),
+            new docx.Paragraph({
+              spacing: { after: 150 },
+              children: [
+                new docx.TextRun({
+                  text: `TAX DECLARATION: ____________`,
+                  font: "Arial",
+                }),
+              ],
+            }),
+            new docx.Paragraph({
+              spacing: { after: 150 },
+              children: [
+                new docx.TextRun({
+                  text: `Purpose of the Activity:`,
+                  font: "Arial",
+                }),
+              ],
+            }),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `\t${activityType}`,
+                  font: "Arial",
+                }),
+              ],
+              spacing: { after: 150 },
+              font: "Arial",
+              size: 24,
+            }),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: ` LOCATION / VICINITY MAP OF PLANTING SITE: `,
+                  font: "Arial",
+                }),
+              ],
+              spacing: { after: 150 },
+            }),
+            ...(vicinityMap
+              ? [
+                  new docx.Paragraph({
+                    spacing: { after: 150 },
+                    alignment: docx.AlignmentType.CENTER,
+                    children: [
+                      new docx.ImageRun({
+                        data: vicinityMap,
+                        transformation: { width: 500, height: 150 }, // Adjust dimensions as needed
+                      }),
+                    ],
+                  }),
+                ]
+              : []),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `Total Number of Seeds: ${seedlingsNumber}\t\t\tSeedling Type: ${seedlingsType}`,
+                  font: "Arial",
+                }),
+              ],
+              spacing: { after: 150 },
+            }),
 
-  // Generate file name in the format: documents/{user}__treeRequest.docx
-  const fileName = `${requestorName}__treeRequest.docx`;
+            // Promissory Note
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: "PROMISSORY NOTE",
+                  bold: true,
+                  font: "Arial",
+                  size: 24, // Font size is set in half-points, so 24 means 16pt
+                }),
+              ],
+              spacing: { after: 150 },
+              alignment: docx.AlignmentType.CENTER,
+            }),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `I am aware that PG-PENRO staff will monitor the growth of the planted seedlings. I will maintain and protect said seedlings to ensure a 150% survival rate. Otherwise, I will pay for the seedlings that do not survive in the amount of THIRTY PESOS (P30.00 each).`,
+                  font: "Arial",
+                }),
+              ],
+              alignment: docx.AlignmentType.JUSTIFY,
+              spacing: { after: 150 },
+            }),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `\tI am signifying through this Promissory Note my interest and willingness to execute and abide by the above intentions.`,
+                  font: "Arial",
+                }),
+              ],
+              alignment: docx.AlignmentType.JUSTIFY,
+              spacing: { after: 150 },
+            }),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `\tSigned this ${formattedDate}`,
+                  font: "Arial",
+                }),
+              ],
+              spacing: { after: 150 },
+            }),
+            ...(requestorSignature
+              ? [
+                  new docx.Paragraph({
+                    alignment: docx.AlignmentType.CENTER,
+                    children: [
+                      new docx.ImageRun({
+                        data: requestorSignature,
+                        transformation: { width: 150, height: 100 }, // Adjust dimensions as needed
+                      }),
+                    ],
+                  }),
+                ]
+              : []),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `${user}`,
+                  font: "Arial",
+                }),
+              ],
+              alignment: docx.AlignmentType.CENTER,
+              spacing: { after: 150 },
+            }),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: "(Name and Signature of the Requesting Person)",
+                  font: "Arial",
+                }),
+              ],
+              alignment: docx.AlignmentType.CENTER,
+              spacing: { after: 300 },
+            }),
+            new docx.Paragraph({}),
 
-  // Convert the document to Blob
-  docx.Packer.toBlob(doc).then((blob) => {
-    const formData = new FormData();
-    formData.append("file", blob, fileName); // Append the file with the correct name
-    formData.append("requestorName", requestorName);
+            // Recommending Approval and Approved By
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `Recommending Approval: \t\t\t\t\t APPROVED BY:`,
+                  font: "Arial",
+                }),
+              ],
+              spacing: { after: 150 },
+              font: "Arial",
+              size: 24,
+            }),
+            new docx.Paragraph({}),
+            new docx.Paragraph({}),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `LEOPOLDO P. BADIOLA \t\t\t\t\t HON. RICARTE R. PADILLA`,
+                  font: "Arial",
+                }),
+              ],
+              spacing: { after: 150 },
+              font: "Arial",
+              size: 24,
+            }),
+            new docx.Paragraph({
+              children: [
+                new docx.TextRun({
+                  text: `Prov’l Environmental and Natural Resources Officer \t\t Governor`,
+                  font: "Arial",
+                }),
+              ],
+              spacing: { after: 150 },
+              font: "Arial",
+              size: 24,
+            }),
+          ],
+        },
+      ],
+    });
 
-    // Debugging fetch request
-    fetch("upload.php", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.text()) // Get response as text
-      .then((text) => {
-        // Directly display the uploaded message
-        if (text.includes("uploaded")) {
-          // Check if the text includes 'uploaded'
-          alert(text);
-        } else {
-          console.error("Server response:", text);
-          alert("Error: " + text);
+    // Generate file name in the format: documents/{user}__treeRequest.docx
+    const sanitizedRequestorName = requestorName.replace(/[\/\\:*?"<>|]/g, "_");
+    const fileName = `${sanitizedRequestorName}__tree_request.docx`;
+
+    // Convert the document to Blob
+    docx.Packer.toBlob(doc).then((blob) => {
+      const formData = new FormData();
+      formData.append("file", blob, fileName); // Append the file with the correct name
+      formData.append("requestorName", requestorName);
+
+      fetch(
+        "https://srv1631-files.hstgr.io/721e9ce6a13b7e64/files/public_html/client-dashboard/upload.php",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            // No additional headers needed unless authentication is required
+          },
+          mode: "cors", // Enable CORS
+          credentials: "omit", // Do not include credentials unless needed
         }
-      })
-      .catch((error) => {
-        console.error("Upload failed:", error);
-        alert("An error occurred during file upload.");
-      });
-  });
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              "Network response was not ok: " + response.statusText
+            );
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.status === "success") {
+            alert(data.message);
+          } else {
+            console.error("Upload failed:", data.message);
+            alert("Error: " + data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Upload error:", error);
+          alert("An error occurred: " + error.message);
+        });
+    });
+  } catch (error) {
+    console.error("Upload failed:", error);
+    alert("An error occurred during file upload.");
+  } finally {
+    // Re-enable the button and reset text
+    submitButton.disabled = false;
+    submitButton.textContent = "Submit";
+  }
 });

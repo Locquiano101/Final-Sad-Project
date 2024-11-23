@@ -19,21 +19,31 @@ const firebaseDB = firebase.firestore();
 const userFirebase = firebaseDB.collection("Users");
 const adminCloudBase = firebaseDB.collection("Admin");
 function loginAdmin(adminRank, inputUsername, inputPassword) {
-  // Reference to the Firestore collection for admin credentials
   adminCloudBase
     .get()
     .then((snapshot) => {
       let foundAdmin = false;
 
-      // Loop through each document in the snapshot
       snapshot.forEach((doc) => {
         const data = doc.data();
 
-        // Convert adminRank to lowercase for a case-insensitive comparison
+        // Log data for debugging
+        console.log("Admin data:", data);
+
+        // Check for required fields
         if (
-          data.adminPassword &&
-          data.adminLoginInfo &&
-          data.adminRank &&
+          !data.adminPassword ||
+          !data.adminLoginInfo ||
+          !data.adminRank ||
+          typeof inputUsername !== "string" ||
+          typeof inputPassword !== "string" ||
+          typeof adminRank !== "string"
+        ) {
+          console.warn("Incomplete or invalid admin data:", data);
+          return; // Skip this admin
+        }
+
+        if (
           inputUsername.toLowerCase() === data.adminLoginInfo.toLowerCase() &&
           inputPassword === data.adminPassword &&
           adminRank.toLowerCase() === data.adminRank.toLowerCase()
@@ -41,18 +51,17 @@ function loginAdmin(adminRank, inputUsername, inputPassword) {
           foundAdmin = true;
           alert("Login successful!");
 
-          // Redirect to the appropriate dashboard based on admin rank
+          // Redirect based on admin rank
           if (adminRank === "Governor") {
-            window.open("d-gov-dashboard.html", "_self");
+            window.open("admin-dashboard/dashboard.html", "_self");
           } else if (adminRank === "PENRO") {
-            window.open("e-penro-dashboard.html", "_self");
+            window.open("e-penro-dashboard.ht ml", "_self");
           } else if (adminRank === "Nursery") {
             window.open("f-nursery-dashboard.html", "_self");
           }
         }
       });
 
-      // If no matching admin credentials were found, display an error
       if (!foundAdmin) {
         alert("Invalid username or password.");
       }
@@ -62,6 +71,7 @@ function loginAdmin(adminRank, inputUsername, inputPassword) {
       alert("Error loading records: " + error.message);
     });
 }
+
 document.getElementById("userLogin").onclick = async function () {
   const email = document.getElementById("userSignInEmail").value;
   const password = document.getElementById("userSignInPassword").value;

@@ -1,4 +1,3 @@
-// russian Roulette function for picture
 let currentSlide = 0;
 const slideshow = document.getElementById("slideshow");
 const slides = document.querySelectorAll(".slide");
@@ -9,7 +8,7 @@ const firstSlideClone = slides[0].cloneNode(true);
 slideshow.appendChild(firstSlideClone);
 
 // Function to move the slides
-function moveSlide(TimeInterval) {
+function moveSlide() {
   currentSlide++;
 
   slideshow.style.transition = "transform 0.5s ease"; // Enable transition for sliding effect
@@ -27,8 +26,8 @@ function moveSlide(TimeInterval) {
 
 // Auto slide every 3 seconds
 setInterval(() => {
-  moveSlide(1);
-}, 1000);
+  moveSlide();
+}, 3000);
 
 /*
  *************** SCROLLING ANIMATION ***************
@@ -41,7 +40,7 @@ document.querySelectorAll(".sticky-nav a").forEach((anchor) => {
     const targetSection = document.querySelector(targetID);
     const targetPosition = targetSection.offsetTop;
 
-    slowScrollTo(targetPosition, 500); // 2000ms = 2 seconds
+    slowScrollTo(targetPosition, 500); // 500ms = 0.5 seconds
   });
 });
 
@@ -69,9 +68,10 @@ function slowScrollTo(targetPosition, duration) {
 
   requestAnimationFrame(animation);
 }
+
+// Add 'active' class to clicked navigation links
 const links = document.querySelectorAll(".nav-link");
 
-// Add click event listener to each link
 links.forEach((link) => {
   link.addEventListener("click", function () {
     // Remove 'active' class from all links
@@ -82,23 +82,27 @@ links.forEach((link) => {
   });
 });
 
-
-// // change background color navigation
-// window.addEventListener("scroll", function () {
-//   var navbar = document.getElementById("navbar");
-
-// }
+// Change background color of the navigation bar on scroll
+window.addEventListener("scroll", function () {
+  const navbar = document.getElementById("navbar");
 
   // Check scroll position
-//   if (window.scrollY > 50) {
-//     // Add a class to change background color and add a smooth transition effect
-//     navbar.style.backgroundColor = "#4e7966"; // New background color
-//     navbar.style.transition =
-//       "background-color 0.5s ease, box-shadow 0.5s ease"; // Smooth effect
-//     navbar.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; // Adding a shadow for extra effect
-//   } else {
-//     // Revert the background to transparent and remove shadow
-//     navbar.style.backgroundColor = "transparent"; // Original background
-//     navbar.style.boxShadow = "none"; // No shadow
-//   }
-// });
+  if (window.scrollY > 50) {
+    // Add a class to change background color and add a smooth transition effect
+    navbar.style.backgroundColor = "#4e7966"; // New background color
+    navbar.style.transition =
+      "background-color 0.5s ease, box-shadow 0.5s ease"; // Smooth effect
+    navbar.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; // Adding a shadow for extra effect
+  } else {
+    // Revert the background to transparent and remove shadow
+    navbar.style.backgroundColor = "transparent"; // Original background
+    navbar.style.boxShadow = "none"; // No shadow
+  }
+});
+
+function openFileById(id) {
+  // Construct the file path using the id
+  const filePath = `${id}.html`; // e.g., if id is "page2", it will open "page2.html"
+
+  window.open(filePath, "_self");
+}
