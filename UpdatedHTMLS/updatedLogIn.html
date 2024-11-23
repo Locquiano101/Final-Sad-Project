@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CNPNRO-FTSMS Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=League+Gothic&display=swap" rel="stylesheet" />
+  <link rel="icon" href="Resources/image/penro (0).png" type="image/png" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { font-family: "League Spartan", sans-serif; }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body class="font-spartan">
+  <section class="h-screen grid grid-cols-2">
+    <div class="flex justify-center items-center">
+      <h1 class="text-4xl text-[#115d5b] font-bold">
+        CNPENR<span><img src="Resources/image/cn-penro-logo.svg" alt="logo" class="inline h-8 ml-2" />-FTSMS</span>
+      </h1>
+    </div>
+    <div class="rounded-l-[52px] bg-[#115d5b] flex justify-evenly items-center">
+      <a href="#section2-admin-login" class="rounded-[24px] flex flex-col items-center gap-8 text-2xl no-underline text-[#115d5b] font-black justify-center bg-white py-12 px-20">
+        <img src="Resources/image/admin-profile.svg" alt="Admin profile logo" class="h-[120px]" />
+        <p>Admin</p>
+      </a>
+      <a href="#section3-client-login" class="rounded-[24px] flex flex-col items-center gap-8 text-2xl no-underline text-[#115d5b] font-black justify-center bg-white py-12 px-20">
+        <img src="Resources/image/client-profile.svg" alt="Client profile logo" class="h-[120px]" />
+        <p>Client</p>
+      </a>
+    </div>
+  </section>
+  <section class="flex flex-col justify-center items-center h-screen bg-[#115d5b]" id="section2-admin-login">
+    <h1 class="text-4xl font-bold mb-4 text-white">
+      CNPENR<span><img src="Resources/image/cn-penro-logo.svg" alt="logo" class="inline h-12 ml-2" />-FTSMS</span>
+    </h1>
+    <div class="text-center bg-white p-8 rounded-[25px] w-[500px] flex flex-col items-center gap-4">
+      <h1 class="text-3xl font-semibold text-[#115d5b] mb-6">ADMINISTRATOR LOGIN</h1>
+      <p class="text-lg mb-6 text-[#115d5b]">
+        Process and Monitor Applications for Sand / Gravel & Quarry Permits,
+        and Requests for Forest Tree Seedlings
+      </p>
+      <div class="flex flex-col space-y-4 w-full">
+        <button class="bg-blue-500 text-white py-2 px-4 rounded" onclick="showSection('section2-1-admin-login', 'governor')">Governor</button>
+        <button class="bg-blue-500 text-white py-2 px-4 rounded" onclick="showSection('section2-1-admin-login', 'penro')">PENRO</button>
+        <button class="bg-blue-500 text-white py-2 px-4 rounded" onclick="showSection('section2-1-admin-login', 'nursery')">Nursery</button>
+      </div>
+    </div>
+  </section>
+  <section class="flex flex-col justify-center items-center h-screen bg-[#115d5b]" id="section2-1-admin-login">
+    <h1 class="text-6xl text-white">
+      CNPENR<span><img src="Resources/image/cn-penro-logo.svg" alt="logo" class="inline h-12 ml-2" />-FTSMS</span>
+    </h1>
+    <div class="bg-white p-8 rounded-[25px] w-[500px] flex flex-col items-center gap-4">
+      <h1 class="text-2xl text-[#115d5b]">ADMINISTRATOR LOGIN</h1>
+      <div class="input-field flex gap-2 items-center w-[90%]">
+        <input type="email" id="adminSignIn" placeholder="Username" required class="w-full p-4 border rounded-[12px]" />
+      </div>
+      <div class="input-field flex gap-2 items-center w-[90%]">
+        <input id="adminPassword" type="password" placeholder="Password" required class="w-full p-4 border rounded-[12px]" />
+      </div>
+      <div class="input-field flex gap-2 items-center w-[90%]">
+        <button id="adminLoginButton" onclick="loginAdmin(adminRank, document.getElementById('adminSignIn').value, document.getElementById('adminPassword').value)" class="w-full p-4 bg-[#115d5b] text-white font-bold rounded-lg">Login</button>
+      </div>
+    </div>
+  </section>
+  <section class="flex flex-col justify-center items-center h-screen bg-gray-100" id="section3-client-login">
+    <h1 class="text-4xl font-bold mb-4">
+      CNPENR<span><img src="Resources/image/cn-penro-logo.svg" alt="logo" class="inline h-12 ml-2" />-FTSMS</span>
+    </h1>
+    <div class="text-center bg-white p-8 rounded-[25px] w-[500px] flex flex-col items-center gap-4">
+      <h1 class="text-3xl font-semibold text-[#115d5b] mb-6">LOGIN</h1>
+      <div class="input-field flex gap-2 items-center w-[90%]">
+        <input id="userSignInEmail" placeholder="Username" required class="w-full p-4 border rounded-[12px]" />
+      </div>
+      <div class="input-field flex gap-2 items-center w-[90%]">
+        <input id="userSignInPassword" placeholder="Password" required class="w-full p-4 border rounded-[12px]" />
+      </div>
+      <div class="input-field flex gap-2 items-center w-[90%]">
+        <button id="userLogin" class="w-full p-4 bg-[#115d5b] text-white font-bold rounded-lg">Login</button>
+      </div>
+      <div class="input-field flex gap-2 items-center w-[90%]">
+        <button onclick="googleAuthProviderSignIn()" id="google-button" class="w-full p-4 bg-white border-2 border-[#115d5b] text-[#115d5b] flex justify-between items-center rounded-lg">
+          Login with Google
+          <img src="Resources/image/google.png" alt="google-logo" class="w-4 h-4 rounded-full p-1 border border-black" />
+        </button>
+        <p class="mt-2">
+          <a class="text-blue-500 no-underline" href="#section5-1-forgot-password">Forgot Password?</a>
+        </p>
+      </div>
+      <p class="mt-4">
+        Don't have an Account? 
+        <a class="text-blue-500 no-underline" href="#section4-client-sign-up">Sign-up</a>
+      </p>
+    </div>
+  </section>
+  <section class="flex flex-col justify-center items-center h-screen bg-white" id="section4-client-sign-up">
+    <h1 class="text-4xl font-bold mb-4">
+      CNPENR<span><img src="Resources/image/cn-penro-logo.svg" alt="logo" class="inline h-12 ml-2" />-FTSMS</span>
+    </h1>
+    <div class="scrollable-div max-h-screen overflow-y-auto w-full px-4">
+      <div class="sign-up-container mb-6">
+        <h2 class="text-2xl font-semibold mb-2">Email</h2>
+        <div class="input-field mb-4">
+          <input id="userEmailRegister" type="email" placeholder="Email" required class="w-full px-4 py-2[_{{{CITATION{{{_1{](https://github.com/lzh-yi/Web-Fork-/tree/024b3e55587afdf9f05a677613a75f24e3d1803e/03-CSS%E8%BF%9B%E9%98%B6%2F04-%E5%A6%82%E4%BD%95%E8%AE%A9%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0%E6%B0%B4%E5%B9%B3%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD%EF%BC%9F.md)[_{{{CITATION{{{_2{](https://github.com/qolbudr/huniaja/tree/dfffc3911a0f8482d668f6ac884f7ca81dbe151b/laravel%2Fresources%2Fviews%2Fmaster.blade.php)[_{{{CITATION{{{_3{](https://github.com/FilipMedrala/SEPA/tree/1209b8c03f0cf2a31b0a469b9ffb6253a829f130/Frontend%2Fjobhistory.php)[_{{{CITATION{{{_4{](https://github.com/Daruk32/Attable-Xampp/tree/373bf1056945d5335fcbb264074977ad3d04ae7c/admin.php)[_{{{CITATION{{{_5{](https://github.com/FirebaseExtended/firebase-dart/tree/5d162cb716dbb3bb016e97001b36bf665cca6ee1/firebase%2FREADME.md)        class="w-full px-4 py-2 border rounded" />
+        </div>
+        <h2 class="text-2xl font-semibold mb-2">Password</h2>
+        <div class="input-field mb-4">
+          <input id="userPasswordRegister" type="password" placeholder="Password" required class="w-full px-4 py-2 border rounded" />
+        </div>
+        <div class="input-field mb-4">
+          <input id="userConfirmPassword" type="password" placeholder="Confirm Password" required class="w-full px-4 py-2 border rounded" />
+        </div>
+      </div>
+      <div class="sign-up-container mb-6">
+        <h2 class="text-2xl font-semibold mb-2">Client Name</h2>
+        <div class="input-field mb-4">
+          <input id="userFname" type="text" placeholder="First Name" required class="w-full px-4 py-2 border rounded" />
+        </div>
+        <div class="input-field mb-4">
+          <input id="userLname" type="text" placeholder="Last Name" required class="w-full px-4 py-2 border rounded" />
+        </div>
+        <div class="input-field mb-4 flex flex-col md:flex-row md:space-x-4">
+          <input id="userMname" type="text" placeholder="Middle Name (Optional)" class="w-full px-4 py-2 border rounded mb-4 md:mb-0" />
+          <input id="userSname" type="text" placeholder="Suffix (Optional)" class="w-full px-4 py-2 border rounded" />
+        </div>
+      </div>
+      <div class="sign-up-container mb-6">
+        <h2 class="text-2xl font-semibold mb-2">Contact Info</h2>
+        <div class="input-field mb-4">
+          <input id="userContactNum" type="tel" pattern="^\(+63)9\d{9}$" placeholder="Phone Number: (+63)9 *** *** ****" required class="w-full px-4 py-2 border rounded" />
+        </div>
+        <h2 class="text-2xl font-semibold mb-2">Address</h2>
+        <div class="input-field mb-4">
+          <input id="Province" type="text" placeholder="Province" required class="w-full px-4 py-2 border rounded" />
+        </div>
+        <div class="input-field mb-4">
+          <input id="municipality" type="text" placeholder="Municipality" required class="w-full px-4 py-2 border rounded" />
+        </div>
+        <div class="input-field mb-4">
+          <input id="barangay" type="text" placeholder="barangay/Subdivision" required class="w-full px-4 py-2 border rounded" />
+        </div>
+        <div class="input-field mb-4 flex flex-col md:flex-row md:space-x-4">
+          <input id="purok" type="text" placeholder="purok/Street" required class="w-full px-4 py-2 border rounded mb-4 md:mb-0" />
+          <input id="housenNum" type="text" placeholder="House Number/ Residence" required class="w-full px-4 py-2 border rounded" />
+        </div>
+        <div class="input-field mb-4">
+          <input id="postalCode" type="number" maxlength="4" placeholder="Postal Code (xxxx)" required class="w-full px-4 py-2 border rounded" />
+        </div>
+        <button id="creatNewUser" class="bg-green-500 text-white py-2 px-4 rounded">Sign up</button>
+        <p id="back-to-login" class="mt-4">
+          Already Have an Account? <a href="#section2" class="text-blue-500 no-underline">LOGIN</a>
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="flex flex-col justify-center items-center h-screen bg-gray-100" id="section5-1-forgot-password">
+    <h1 class="text-4xl font-bold mb-4">
+      CNPENR<span><img src="Resources/image/cn-penro-logo.svg" alt="logo" class="inline h-12 ml-2" />-FTSMS</span>
+    </h1>
+    <div class="container text-center">
+      <div class="sign-up-container mb-6">
+        <h2 class="text-3xl font-semibold mb-2">Forgot Password?</h2>
+        <p class="mb-4">No worries, we'll send you reset instructions.</p>
+        <div class="input-field mb-4">
+          <input type="email" placeholder="Enter your email" class="w-full px-4 py-2 border rounded" />
+        </div>
+        <div class="input-field mb-4">
+          <button class="bg-blue-500 text-white py-2 px-4 rounded">Reset Password</button>
+        </div>
+        <a href="#" class="text-blue-500 no-underline">Back to Login</a>
+      </div>
+      <div class="indicator flex justify-center space-x-2">
+        <span class="h-2 w-2 rounded-full bg-blue-500"></span>
+        <span class="h-2 w-2 rounded-full bg-gray-500"></span>
+        <span class="h-2 w-2 rounded-full bg-gray-500"></span>
+        <span class="h-2 w-2 rounded-full bg-gray-500"></span>
+      </div>
+    </div>
+  </section>
+  <section class="flex flex-col justify-center items-center h-screen bg-white" id="section5-2-forgot-password">
+    <h1 class="text-4xl font-bold mb-4">
+      CNPENR<span><img src="Resources/image/cn-penro-logo.svg" alt="logo" class="inline h-12 ml-2" />-FTSMS</span>
+    </h1>
+    <div class="container text-center">
+      <div class="sign-up-container mb-6">
+        <h2 class="text-3xl font-semibold mb-2">Forgot Password?</h2>
+        <p class="mb-4">We have sent an OTP to <strong>EXAMPLE@TEST.COM</strong></p>
+        <div class="otp flex justify-center space-x-2 mb-4">
+          <input type="number" id="input1" min="1" max="1" class="w-12 h-12 text-center border rounded no-spinner" oninput="moveToNext(this, 'input2')" />
+          <input type="number" id="input2" min="1" max="1" class="w-12 h-12 text-center border rounded no-spinner" oninput="moveToNext(this, 'input3')" />
+          <input type="number" id="input3" min="1" max="1" class="w-12 h-12 text-center border rounded no-spinner" oninput="moveToNext(this, 'input4')" />
+          <input type="number" id="input4" min="1" max="1" class="w-12 h-12 text-center border rounded no-spinner" />
+        </div>
+        <button class="bg-blue-500 text-white py-2 px-4 rounded">Reset Password</button>
+        <a href="#" class="text-blue-500 no-underline mt-4">Back to Login</a>
+      </div>
+      <div class="indicator flex justify-center space-x-2">
+        <span class="h-2 w-2 rounded-full bg-gray-500"></span>
+        <span class="h-2 w-2 rounded-full bg-blue-500"></span>
+        <span class="h-2 w-2 rounded-full bg-gray-500"></span>
+        <span class="h-2 w-2 rounded-full bg-gray-500"></span>
+      </div>
+    </div>
+  </section>
+  <section class="flex flex-col justify-center items-center h-screen bg-gray-100" id="section5-3-forgot-password">
+    <div class="container text-center">
+      <div class="sign-up-container mb-6">
+        <h2 class="text-3xl font-semibold mb-2">SET NEW PASSWORD</h2>
+        <p class="mb-4">Must be at least <strong>8 characters</strong></p>
+        <div class="input-field mb-4 relative">
+          <input type="password" placeholder="New Password" required class="w-full px-4 py-2 border rounded" />
+          <a href="#" class="absolute right-2 top-1/2 transform -translate-y-1/2">
+            <img src="Resources/image/view-password.svg" alt="Icon" width="16px" height="16px" />
+          </a>
+        </div>
+        <div class="input-field mb-4 relative">
+          <input type="password" placeholder="Confirm new Password" required class="w-full px-4 py-2 border rounded" />
+          <a href="#" class="absolute right-2 top-1/2 transform          -translate-y-1/2">
+            <img src="Resources/image/view-password.svg" alt="Icon" width="16px" height="16px" />
+          </a>
+        </div>
+        <div class="input-field mb-4">
+          <button id="openPopup" class="bg-blue-500 text-white py-2 px-4 rounded">Set new Password</button>
+        </div>
+      </div>
+      <div id="popup" class="popup fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 hidden">
+        <div class="popup-content bg-white p-6 rounded shadow-md">
+          <h3 class="text-2xl font-semibold mb-4">CHANGE PASSWORD</h3>
+          <p class="mb-4">Continue changing password?</p>
+          <div class="input-field flex justify-between">
+            <button id="confirm" class="bg-green-500 text-white py-2 px-4 rounded">Confirm</button>
+            <button id="cancel" class="bg-red-500 text-white py-2 px-4 rounded">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <div class="indicator flex justify-center space-x-2">
+        <span class="h-2 w-2 rounded-full bg-gray-500"></span>
+        <span class="h-2 w-2 rounded-full bg-gray-500"></span>
+        <span class="h-2 w-2 rounded-full bg-blue-500"></span>
+        <span class="h-2 w-2 rounded-full bg-gray-500"></span>
+      </div>
+    </div>
+  </section>
+  <section class="flex flex-col justify-center items-center h-screen bg-white" id="section5-4-forgot-password">
+    <div class="container text-center">
+      <div class="sign-up-container mb-6">
+        <h2 class="text-3xl font-semibold mb-2">ALL DONE!</h2>
+        <p class="mb-4">Your password has been reset</p>
+        <a href="#" class="text-blue-500 no-underline">Back to Login</a>
+      </div>
+      <div class="indicator flex justify-center space-x-2">
+        <span class="h-2 w-2 rounded-full bg-gray-500"></span>
+        <span class="h-2 w-2 rounded-full bg-gray-500"></span>
+        <span class="h-2 w-2 rounded-full bg-blue-500"></span>
+        <span class="h-2 w-2 rounded-full bg-gray-500"></span>
+      </div>
+    </div>
+  </section>
+  <script src="Resources/files/javascript-folder/b-login-firebase.js"></script>
+  <script src="Resources/files/javascript-folder/b-login.js"></script>
+</body>
+</html>
