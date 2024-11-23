@@ -1,4 +1,4 @@
-!<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -22,20 +22,18 @@
   </head>
   <body>
     <div class="sidenav">
-      <button onclick="openFileById(`dashboard`)">My Dashboard</button>
+      <button onclick="openFileById(`dashboard`)">My Dashbaord</button>
       <button onclick="openFileById(`requests`)">Requests</button>
       <button onclick="openFileById(`reports`)">Reports</button>
       <button onclick="openFileById(`notifications`)">Notifications</button>
-      <button onclick="openFileById(`Settings`)">Settings</button>
+      <button>Settings</button>
     </div>
 
-    <div class="content">
-      <div id="documentsContainer">
-        <h2>View Request Details</h2>
-        <div id="userInfo"></div>
-      </div>
-    </div>
-    <scrip src="Resources/files/javascript-folder/navigation.js"></scrip>
-    <script src="/Resources/files/javascript-folder/admin-dashboard_js/edit-reports.js"></script>
+    <div class="content"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="/Resources/files/javascript-folder/navigation.js"></script>
+    <script src="\Resources\files\javascript-folder\client-dashboard-js\settings.js"></script>
   </body>
 </html>

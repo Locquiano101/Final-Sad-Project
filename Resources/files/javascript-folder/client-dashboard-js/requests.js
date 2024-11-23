@@ -71,7 +71,7 @@ async function retrieveDocuments() {
       }
 
       // Access Document_Title and Condition from documentData
-      const docTimeStamp = docData.timestamp;
+      const docTimeStamp = docData.submittedAt;
       const Condition = docData.Condition;
       const docID = doc.id;
 
@@ -80,7 +80,7 @@ async function retrieveDocuments() {
       docDiv.classList.add("document");
 
       let conditionColor;
-      if (Condition === "Ready for PickUp") {
+      if (Condition == "Approved") {
         conditionColor = "red";
       } else if (Condition === "Pending for PickUp") {
         conditionColor = "blue";
@@ -104,7 +104,7 @@ async function retrieveDocuments() {
         <input type="checkbox" id="checkbox-${docID}" name="documentCheckbox" value="${docID}">
         <h3>${docID}</h3>
         <h3>${monthNames[month]} ${day}, ${year}</h3>
-        <p style="color: ${conditionColor};">${Condition}</p>
+        <p style="color: ${conditionColor} !important;">${Condition}</p>
         <button class="edit-button" onclick="editDocument('${doc.id}')">Edit</button>
       `;
 

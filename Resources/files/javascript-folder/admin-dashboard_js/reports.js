@@ -76,7 +76,7 @@ async function retrieveAllUserDocuments() {
 
       // Create a header for the user with their name and ID
       const userHeader = document.createElement("h2");
-      userHeader.textContent = `Documents for User: ${userName} (ID: ${userID})`;
+      userHeader.textContent = `Documents of: ${userName}  `;
       userContainer.appendChild(userHeader);
 
       // Add user container to the main container
@@ -100,7 +100,7 @@ async function retrieveAllUserDocuments() {
         const docDiv = document.createElement("div");
         docDiv.classList.add("document");
 
-        let conditionColor;
+        let conditionColor = null;
         if (Condition === "Ready for PickUp") {
           conditionColor = "red";
         } else if (Condition === "Pending for PickUp") {
@@ -160,45 +160,6 @@ async function editDocument(docID, userID) {
   );
   await loadRequestDetails(docID, userID);
 }
-
-// Function to load request details
-
-// Function to display request details
-// function displayRequestDetails(data) {
-//   const container = document.getElementById("requestDetails");
-
-//   // Dynamically populate fields based on data
-//   container.innerHTML = `
-//     <div class="field">
-//       <h4>Recipient:</h4>
-//       <p>${data.recipientName} (${data.recipientContact})</p>
-//     </div>
-//     <div class="field">
-//       <h4>Seedlings:</h4>
-//       <p>${data.seedlingsQuantity} x ${data.seedlingsType}</p>
-//     </div>
-//     <div class="field">
-//       <h4>Location:</h4>
-//       <p>${data.location.municipality}, ${data.location.barangay}</p>
-//     </div>
-//     <div class="field">
-//       <h4>Purpose:</h4>
-//       <p>${data.purpose}</p>
-//     </div>
-//     <div class="field">
-//       <h4>Overview:</h4>
-//       <p>${data.projectOverview || "No overview provided"}</p>
-//     </div>
-//     <div class="field">
-//       <h4>Species Suitability:</h4>
-//       <p>${data.speciesSuitability || "Not specified"}</p>
-//     </div>
-//     <div class="field">
-//       <h4>Promissory Note:</h4>
-//       <p>${data.promissoryNote}</p>
-//     </div>
-//   `;
-// }
 
 // Call the function to retrieve and display documents
 retrieveAllUserDocuments();

@@ -37,6 +37,163 @@ const documentData = {
   Document_Title: "Seedling Request Form", // Title of the document
   Condition: "Pending Approval", // Default condition/status of the document
 };
+const trees = [
+  // Non-Fruit-Bearing Trees
+  {
+    value: "Mahogany",
+    typeOfTree: "not fruit-bearing Tree",
+    width: 3,
+    length: 4,
+  },
+  {
+    value: "Narra",
+    typeOfTree: "not fruit-bearing Tree",
+    width: 3,
+    length: 4,
+  },
+  {
+    value: "Kamagong",
+    typeOfTree: "not fruit-bearing Tree",
+    width: 3,
+    length: 3,
+  },
+  {
+    value: "Dancalan",
+    typeOfTree: "not fruit-bearing Tree",
+    width: 3,
+    length: 3,
+  },
+  {
+    value: "Makaasim",
+    typeOfTree: "not fruit-bearing Tree",
+    width: 3,
+    length: 3,
+  },
+  {
+    value: "Malapili",
+    typeOfTree: "not fruit-bearing Tree",
+    width: 3,
+    length: 3,
+  },
+  {
+    value: "Kulipapa",
+    typeOfTree: "not fruit-bearing Tree",
+    width: 3,
+    length: 3,
+  },
+  {
+    value: "Neem tree",
+    typeOfTree: "not fruit-bearing Tree",
+    width: 3,
+    length: 4,
+  },
+  {
+    value: "Bulala",
+    typeOfTree: "not fruit-bearing Tree",
+    width: 3,
+    length: 3,
+  },
+  {
+    value: "Lawaan",
+    typeOfTree: "not fruit-bearing Tree",
+    width: 2,
+    length: 2,
+  },
+  {
+    value: "Lubas",
+    typeOfTree: "not fruit-bearing Tree",
+    width: 3,
+    length: 3,
+  },
+  {
+    value: "Dao",
+    typeOfTree: "not fruit-bearing Tree",
+    width: 7,
+    length: 7,
+  },
+  {
+    value: "Manayaw",
+    typeOfTree: "not fruit-bearing Tree",
+    width: 10,
+    length: 10,
+  },
+  {
+    value: "Amugis",
+    typeOfTree: "not fruit-bearing Tree",
+    width: 3,
+    length: 3,
+  },
+
+  // Fruit-Bearing Trees
+  {
+    value: "Cacao",
+    typeOfTree: "fruit-bearing Tree",
+    width: 3,
+    length: 4,
+  },
+  {
+    value: "Coffee",
+    typeOfTree: "fruit-bearing Tree",
+    width: 4,
+    length: 4,
+  },
+  {
+    value: "Maligang",
+    typeOfTree: "fruit-bearing Tree",
+    width: 4,
+    length: 4,
+  },
+  {
+    value: "Lukban",
+    typeOfTree: "fruit-bearing Tree",
+    width: 10,
+    length: 10,
+  },
+  {
+    value: "Marang",
+    typeOfTree: "fruit-bearing Tree",
+    width: 10,
+    length: 10,
+  },
+  {
+    value: "Pili",
+    typeOfTree: "fruit-bearing Tree",
+    width: 10,
+    length: 10,
+  },
+  {
+    value: "Sampalok",
+    typeOfTree: "fruit-bearing Tree",
+    width: 10,
+    length: 10,
+  },
+  {
+    value: "Kalamata",
+    typeOfTree: "fruit-bearing Tree",
+    width: 5,
+    length: 5,
+  },
+  {
+    value: "Bagras",
+    typeOfTree: "fruit-bearing Tree",
+    width: 4,
+    length: 4,
+  },
+  {
+    value: "Batuan",
+    typeOfTree: "fruit-bearing Tree",
+    width: 10,
+    length: 10,
+  },
+];
+
+const selectedtree = document.getElementById("selectedTreeType");
+trees.forEach((tree) => {
+  const option = document.createElement("option");
+  option.value = tree.value;
+  option.textContent = `(${tree.typeOfTree}) ${tree.value}`;
+  selectedtree.appendChild(option);
+});
 
 async function sendDocument(userID, documentData) {
   try {
@@ -97,7 +254,7 @@ document.getElementById("projectForm").addEventListener("submit", async (e) => {
     const activityType = formData.get("activity-type");
     const vicinityMap = formData.get("vicinity-map");
     const seedlingsNumber = formData.get("seedlings-number");
-    const seedlingsType = formData.get("seedlings-type");
+    const seedlingsType = selectedtree.value;
     const requestorSignature = formData.get("requestor-signature");
 
     const isPublicLand = landClassification === "Public";
@@ -211,7 +368,7 @@ document.getElementById("projectForm").addEventListener("submit", async (e) => {
             new docx.Paragraph({
               children: [
                 new docx.TextRun({
-                  text: `TITLE NO: ____________`,
+                  text: `TITLE NO: ____________\t\t\tTAX DECLARATION: ____________`,
                   font: "Arial",
                 }),
               ],
@@ -221,30 +378,10 @@ document.getElementById("projectForm").addEventListener("submit", async (e) => {
               spacing: { after: 150 },
               children: [
                 new docx.TextRun({
-                  text: `TAX DECLARATION: ____________`,
+                  text: `Purpose of the Activity:${activityType}`,
                   font: "Arial",
                 }),
               ],
-            }),
-            new docx.Paragraph({
-              spacing: { after: 150 },
-              children: [
-                new docx.TextRun({
-                  text: `Purpose of the Activity:`,
-                  font: "Arial",
-                }),
-              ],
-            }),
-            new docx.Paragraph({
-              children: [
-                new docx.TextRun({
-                  text: `\t${activityType}`,
-                  font: "Arial",
-                }),
-              ],
-              spacing: { after: 150 },
-              font: "Arial",
-              size: 24,
             }),
             new docx.Paragraph({
               children: [
@@ -399,7 +536,7 @@ document.getElementById("projectForm").addEventListener("submit", async (e) => {
 
     // Generate file name in the format: documents/{user}__treeRequest.docx
     const sanitizedRequestorName = requestorName.replace(/[\/\\:*?"<>|]/g, "_");
-    const fileName = `${sanitizedRequestorName}__tree_request.docx`;
+    const fileName = `${sanitizedRequestorName}_${selectedtree}_request.docx`;
 
     // Convert the document to Blob
     docx.Packer.toBlob(doc).then((blob) => {

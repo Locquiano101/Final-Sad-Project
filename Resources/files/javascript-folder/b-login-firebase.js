@@ -18,6 +18,51 @@ const firebaseDB = firebase.firestore();
 
 const userFirebase = firebaseDB.collection("Users");
 const adminCloudBase = firebaseDB.collection("Admin");
+
+// Get the modal
+var popup = document.getElementById("popup");
+// Get the link that opens the modal
+var link = document.getElementById("openPopup");
+// Get the <span> element that closes the modal
+var span = document.getElementById("closePopup");
+
+var loginHeader, adminRank;
+//when an admin logs in
+function showSection(sectionId, buttonId) {
+  const sectionToShow = document.getElementById(sectionId);
+  sectionToShow.scrollIntoView();
+
+  // Change the header based on the buttonId
+  loginHeader = document.getElementById("admin-login");
+  switch (buttonId) {
+    case "governor":
+      loginHeader.textContent = "Governor Login";
+      adminRank = "Governor";
+      break;
+    case "penro":
+      loginHeader.textContent = "PENRO Login";
+      adminRank = "PENRO";
+      break;
+    case "nursery":
+      loginHeader.textContent = "Nursery Login";
+      adminRank = "Nursery";
+      break;
+    default:
+      loginHeader.textContent = "Administrator Login";
+  }
+  console.log(adminRank);
+}
+
+// When the user clicks the link, open the modal and prevent default behavior
+link.onclick = function (event) {
+  event.preventDefault(); // Prevent the default anchor behavior
+  popup.style.display = "block";
+};
+window.onclick = function (event) {
+  if (event.target == popup) {
+    popup.style.display = "none";
+  }
+};
 function loginAdmin(adminRank, inputUsername, inputPassword) {
   adminCloudBase
     .get()
@@ -71,7 +116,7 @@ function loginAdmin(adminRank, inputUsername, inputPassword) {
       alert("Error loading records: " + error.message);
     });
 }
-
+let userID;
 document.getElementById("userLogin").onclick = async function () {
   const email = document.getElementById("userSignInEmail").value;
   const password = document.getElementById("userSignInPassword").value;
@@ -116,7 +161,7 @@ document.getElementById("creatNewUser").onclick = async function () {
 
   let fullName = fname;
   if (mI) {
-    fullName += ` ${mI}.`;
+    fullName += ` ${mI}`;
   }
   fullName += ` ${lname}`;
   if (suffix) {
@@ -184,24 +229,3 @@ document.getElementById("creatNewUser").onclick = async function () {
     alert("Error registering user: " + error.message);
   }
 };
-
-let userID;
-// Function to add a document to the user’s sub-collection
-async function sendDocument(userID, documentData) {
-  try {
-    // Add a new document to the user's `userDocuments` sub-collection
-    const userDocRef = firebase.firestore().collection("users").doc(userID);
-    const userDocumentsRef = userDocRef.collection("userDocuments");
-
-    await userDocumentsRef.add({
-      documentData,
-      submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-
-    console.log("Document added successfully!");
-    alert("Document sent successfully!");
-  } catch (error) {
-    console.error("Error sending document:", error);
-    alert("Error sending document: " + error.message);
-  }
-}

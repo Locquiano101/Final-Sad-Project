@@ -148,7 +148,6 @@ const trees = [
     length: 10,
   },
 ];
-// Populate dropdown with tree options
 
 // Populate dropdown with tree options
 const treeDropdown = document.getElementById("treeDropdown");
@@ -244,8 +243,6 @@ function updateInputsBasedOnTree() {
 }
 
 //CHART DISPLAY
-
-// Get the context of the canvas
 const ctx = document.getElementById("myBarChart").getContext("2d");
 
 // Create a new bar chart
@@ -275,9 +272,71 @@ const myBarChart = new Chart(ctx, {
     },
   },
 });
-function openFileById(id) {
-  // Construct the file path using the id
-  const filePath = `${id}.html`; // e.g., if id is "page2", it will open "page2.html"
+// Populate dropdown with tree options
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCPIdlzAlKkfZp3bu4YuI2fylSzxar1zA0",
+  authDomain: "penro-db.firebaseapp.com",
+  projectId: "penro-db",
+  storageBucket: "penro-db.appspot.com",
+  messagingSenderId: "25138598165",
+  appId: "1:25138598165:web:9c8136ef9898df7803591c",
+  measurementId: "G-8YBC8FE4XZ",
+};
 
-  window.open(filePath, "_self");
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Initialize Firestore
+const firebaseDB = firebase.firestore();
+
+// Get userID from local storage
+const userID = localStorage.getItem("userID");
+console.log(userID);
+
+// Reference to user's document collection in 'users' sub-collection
+const userDocRef = firebaseDB.collection("users").doc(userID);
+const userDocumentsRef = userDocRef.collection("userDocuments");
+
+// Function to retrieve documents and count conditions
+async function retrieveAndCountDocuments() {
+  try {
+    const querySnapshot = await userDocumentsRef.get();
+
+    if (querySnapshot.empty) {
+      console.log("No documents found!");
+      return;
+    }
+
+    // Initialize counts
+    let pendingCount = 0;
+    let approvedCount = 0;
+    let declinedCount = 0;
+
+    // Iterate over the documents
+    querySnapshot.forEach((doc) => {
+      const docData = doc.data();
+
+      // Increment the appropriate counter based on the Condition
+      if (docData.Condition === "Pending") {
+        pendingCount++;
+      } else if (docData.Condition === "Approved") {
+        approvedCount++;
+      } else if (docData.Condition === "Declined") {
+        declinedCount++;
+      }
+    });
+
+    // Update the HTML with the counts
+    document.getElementById("pending-count").innerText = pendingCount;
+    document.getElementById("approved-count").innerText = approvedCount;
+    document.getElementById("declined-count").innerText = declinedCount;
+
+    console.log("Counts updated successfully!");
+  } catch (error) {
+    console.error("Error retrieving or counting documents:", error);
+  }
 }
+
+// Call the function
+retrieveAndCountDocuments();
