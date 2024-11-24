@@ -11,14 +11,11 @@
     <script>
       // Function to list available files
       function listFiles() {
-        fetch(
-          "https://aliceblue-owl-540826.hostingersite.com//client-dashboard/list_files.php",
-          {
-            method: "GET",
-            mode: "cors", // Enable CORS
-            credentials: "omit", // Do not include credentials unless needed
-          }
-        )
+        fetch("http://localhost:3000/list-files.php", {
+          method: "GET",
+          mode: "cors", // Enable CORS
+          credentials: "omit", // Do not include credentials unless needed
+        })
           .then((response) => {
             if (!response.ok) {
               throw new Error(
@@ -33,7 +30,7 @@
             data.files.forEach((file) => {
               const listItem = document.createElement("li");
               const link = document.createElement("a");
-              link.href = `https://aliceblue-owl-540826.hostingersite.com//client-dashboard/storage/${file}`;
+              link.href = `https://aliceblue-owl-540826.hostingersite.com//client-dashboard/uploads/Brian_Joshua_V___Gania/documents/${file}`;
               link.textContent = file;
               link.download = file; // Add download attribute for direct download
               listItem.appendChild(link);
