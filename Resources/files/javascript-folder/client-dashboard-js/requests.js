@@ -37,10 +37,6 @@ async function retrieveDocuments() {
       return;
     }
 
-    // Get the container element where documents will be displayed
-    const container = document.getElementById("documentsContainer");
-    container.innerHTML = ""; // Clear previous Conditions
-
     // Array of month names
     const monthNames = [
       "January",
@@ -57,7 +53,6 @@ async function retrieveDocuments() {
       "December",
     ];
 
-    // Loop through each document and create a div for each
     querySnapshot.forEach((doc) => {
       const docData = doc.data();
 
@@ -65,7 +60,7 @@ async function retrieveDocuments() {
       console.log("Document data:", docData);
 
       // Check if the necessary fields exist inside documentData
-      if (!docData.Document_Title || !docData.Condition) {
+      if (!docData.Document_title || !docData.Condition) {
         console.log("Missing Document_Title or Condition in document:", doc.id);
         return;
       }
@@ -75,47 +70,66 @@ async function retrieveDocuments() {
       const Condition = docData.Condition;
       const docID = doc.id;
 
-      // Create a div element for each document
-      const docDiv = document.createElement("div");
-      docDiv.classList.add("document");
-
       let conditionColor;
-      if (Condition == "Approved") {
-        conditionColor = "red";
-      } else if (Condition === "Pending for PickUp") {
+      if (Condition === "Pending for Approval") {
         conditionColor = "blue";
-      } else if (Condition === "Declined for PickUp") {
+      } else if (Condition === "Approved") {
         conditionColor = "green";
+      } else if (Condition === "Declined") {
+        conditionColor = "red";
       } else {
         conditionColor = "black"; // Default color for any other condition
       }
 
+      // If timestamp exists, process it
       if (docTimeStamp) {
-        // Convert Firestore Timestamp to JavaScript Date object
-        const date = docTimeStamp.toDate();
+        const date = docTimeStamp.toDate(); // Convert Firestore timestamp to JS Date
+        const day = date.getDate(); // Correct day method
+        const month = date.getMonth(); // 0-indexed (0 = January)
+        const year = date.getFullYear();
 
-        // Get the month and year
-        const day = date.getDay(); // Get the month (0 = January, 11 = December)
-        const month = date.getMonth(); // Get the month (0 = January, 11 = December)
-        const year = date.getFullYear(); // Get the full year (e.g., 2024)
+        // Month names array
+        const monthNames = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
 
-        // Set inner HTML with the document's Document_Title and Condition
-        docDiv.innerHTML = `
-        <input type="checkbox" id="checkbox-${docID}" name="documentCheckbox" value="${docID}">
-        <h3>${docID}</h3>
-        <h3>${monthNames[month]} ${day}, ${year}</h3>
-        <p style="color: ${conditionColor} !important;">${Condition}</p>
-        <button class="edit-button" onclick="editDocument('${doc.id}')">Edit</button>
-      `;
+        const formattedDate = `${monthNames[month]} ${day}, ${year}`;
 
-        // Append the document div to the container
-        container.appendChild(docDiv);
+        // Create a new row for the table
+        const tableBody = document.querySelector("#documentTable tbody");
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td><input type="checkbox" id="checkbox-${docID}" name="documentCheckbox" value="${docID}"></td>
+          <td>${docID}</td>
+          <td>${formattedDate}</td>
+          <td style="color: ${conditionColor} !important;">${Condition}</td>
+          <td><button class="edit-button" onclick="editDocument('${docID}')">Edit</button></td>
+        `;
+
+        // Append the row to the table body
+        tableBody.appendChild(row);
       } else {
-        console.log("Timestamp field does not exist.");
-        return null;
+        console.log("Timestamp field does not exist for document:", docID);
+        return;
       }
     });
 
+    // Sample editDocument function
+    function editDocument(id) {
+      alert(`Edit document with ID: ${id}`);
+    }
     console.log("Documents retrieved and displayed successfully!");
   } catch (error) {
     console.error("Error retrieving documents:", error);

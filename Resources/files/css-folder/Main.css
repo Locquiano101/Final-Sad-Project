@@ -6,9 +6,7 @@ td {
   color: black;
   font-size: 24px;
 }
-/* div {
-  border: 1px solid white;
-} */
+
 body {
   display: flex;
   font-family: "League Spartan", sans-serif; /* Apply League Spartan font */
@@ -81,9 +79,7 @@ h6 {
   padding: 0;
   gap: 2px;
 }
-div {
-  border: 1px solid black;
-}
+
 .camarines-norte-seal {
   height: auto;
   width: 48px;

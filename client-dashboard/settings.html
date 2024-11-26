@@ -21,13 +21,82 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   </head>
   <body>
-    <div class="sidenav">
-      <button onclick="openFileById(`dashboard`)">My Dashbaord</button>
-      <button onclick="openFileById(`requests`)">Requests</button>
-      <button onclick="openFileById(`reports`)">Reports</button>
-      <button onclick="openFileById(`notifications`)">Notifications</button>
-      <button>Settings</button>
-    </div>
+    <section class="side-nav">
+      <div class="profile-holder">
+        <img
+          src="/Resources/image/client-profile.svg"
+          alt="User Icon"
+          class="profile-icon"
+        />
+        <h3>John Doe</h3>
+        <p>example@gmail.com</p>
+        <p>client</p>
+      </div>
+      <div class="navigation">
+        <a class="tablink" onclick="openFileById(`dashboard`)">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/home.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Dashboard</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById(`requests`)">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/request.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Requests</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById(`notifications`)">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/notification.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Notifications</p>
+          </div>
+        </a>
+        <a class="tablink">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/settings.svg"
+              alt="Request Icon"
+              class="icon"
+              onclick="showContent(`#dashboard`)"
+            />
+            <p>Settings</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById(`reports`)">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/log-out.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Logout</p>
+          </div>
+        </a>
+      </div>
+      <div class="title-holder">
+        <h1>
+          CNPENR<span
+            ><img
+              src="/Resources/image/cn-penro-logo.svg"
+              alt="logo"
+              style="height: 24px"
+            />-FTSMS</span
+          >
+        </h1>
+      </div>
+    </section>
 
     <div class="content"></div>
 

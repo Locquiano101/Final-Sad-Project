@@ -13,7 +13,11 @@
 
     <link
       rel="stylesheet"
-      href="/Resources/files/css-folder/client-dashboard.css"
+      href="/Resources/files/css-folder/client-dashboard/main.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/Resources/files/css-folder/client-dashboard/dashboard.css"
     />
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -21,40 +25,116 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   </head>
   <body>
-    <div class="sidenav">
-      <button>My Dashbaord</button>
-      <button onclick="openFileById(`requests`)">Requests</button>
-      <button onclick="openFileById(`reports`)">Reports</button>
-      <button onclick="openFileById(`notifications`)">Notifications</button>
-      <button onclick="openFileById(`Settings`)">Settings</button>
-    </div>
+    <section class="side-nav">
+      <div class="profile-holder">
+        <img
+          src="/Resources/image/client-profile.svg"
+          alt="User Icon"
+          class="profile-icon"
+        />
+        <h3>John Doe</h3>
+        <p>example@gmail.com</p>
+        <p>client</p>
+      </div>
+      <div class="navigation">
+        <a class="tablink">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/home.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Dashboard</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById(`requests`)">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/request.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Requests</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById(`notifications`)">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/notification.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Notifications</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById(`Settings`)">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/settings.svg"
+              alt="Request Icon"
+              class="icon"
+              onclick="showContent(`#dashboard`)"
+            />
+            <p>Settings</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById(`reports`)">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/log-out.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Logout</p>
+          </div>
+        </a>
+      </div>
+      <div class="title-holder">
+        <h1 id="cnpenro-footer">
+          CNPENR<span
+            ><img
+              src="/Resources/image/cn-penro-logo.svg"
+              alt="logo"
+              style="height: 24px"
+            />-FTSMS</span
+          >
+        </h1>
+      </div>
+    </section>
 
     <div class="content">
       <div id="content1" class="content-div">
         <div id="dashboard-left">
-          <div id="seedling-requests-count">
-            <h2>My Requests</h2>
-            <div class="seedling-request">
-              <h3 id="pending-count">0</h3>
-              <h3>Pending</h3>
-            </div>
-            <div class="seedling-request">
-              <h3 id="approved-count">0</h3>
-              <h3>Approved</h3>
-            </div>
-            <div class="seedling-request">
-              <h3 id="declined-count">0</h3>
-              <h3>Declined</h3>
+          <div class="request-panel">
+            <h1>My Requests</h1>
+            <div id="seedling-requests-count">
+              <div class="seedling-request">
+                <h1 id="pending-count">0</h1>
+                <h2>Pending</h2>
+              </div>
+              <div class="seedling-request">
+                <h1 id="approved-count">0</h1>
+                <h2>Approved</h2>
+              </div>
+              <div class="seedling-request">
+                <h1 id="declined-count">0</h1>
+                <h2>Declined</h2>
+              </div>
+              <div class="seedling-request">
+                <h1 id="total-count">0</h1>
+                <h2>Total</h2>
+              </div>
             </div>
           </div>
-          <div id="requests-new-seedlings">
+          <div id="second-area">
             <div id="calculator">
-              <h2>Select a Tree</h2>
+              <h2>Seedling per Area Calculator</h2>
+              <h3>Select a Tree</h3>
               <select id="treeDropdown" onchange="updateInputsBasedOnTree()">
                 <option value="" disabled selected>Select a tree</option>
               </select>
 
-              <h2>Quantity of trees</h2>
+              <h3>Quantity of trees</h3>
               <input
                 type="number"
                 id="areaInput"
@@ -62,7 +142,7 @@
                 placeholder="Quantiy of Trees"
               />
 
-              <h2>Lot Area (Hectares)</h2>
+              <h3>Lot Area (Hectares)</h3>
               <input
                 type="number"
                 id="sqMeterInput"
@@ -71,7 +151,7 @@
                 oninput="ConvertToQuantity()"
               />
             </div>
-            <div class="view-requests">
+            <div class="third-area">
               <div class="view-request">
                 <img
                   src="/Resources/image/view-requests.svg"
@@ -82,14 +162,17 @@
                 <div>
                   <h2>View Requests</h2>
                   <p>View seedlings requests, and monitor its status.</p>
-                  <button onclick="openFileById(`requests`)">
+                  <button
+                    id="view-sent-requests"
+                    onclick="openFileById(`requests`)"
+                  >
                     View Request
                   </button>
                 </div>
               </div>
               <div class="view-request">
                 <img
-                  src="/Resources/image/notification-bell.svg"
+                  src="/Resources/image/send-new-request.svg"
                   alt="Request Icon"
                   class="icon"
                   style="height: 64px; width: auto"
@@ -97,7 +180,10 @@
                 <div>
                   <h2>Request New Seed</h2>
                   <p>Request seedlings for upcoming projects.</p>
-                  <button onclick="openFileById(`send-request`)">
+                  <button
+                    id="send-new-requests"
+                    onclick="openFileById(`send-request`)"
+                  >
                     Request New Seed
                   </button>
                 </div>
@@ -109,45 +195,8 @@
           <div id="chart-container">
             <canvas id="myBarChart"></canvas>
           </div>
-          <div class="notifications">
-            <div class="notif-container">
-              <img
-                src="/Resources/image/notification-bell.svg"
-                alt="Request Icon"
-                class="icon"
-                style="height: 64px; width: auto"
-              />
-              <div>
-                <h2>New Request</h2>
-                <p>John Doe sent a new seedlings request.</p>
-              </div>
-            </div>
-            <hr />
-            <div class="notif-container">
-              <img
-                src="/Resources/image/notification-bell.svg"
-                alt="Request Icon"
-                class="icon"
-                style="height: 64px; width: auto"
-              />
-              <div>
-                <h2>New Request</h2>
-                <p>John Doe sent a new seedlings request.</p>
-              </div>
-            </div>
-            <hr />
-            <div class="notif-container">
-              <img
-                src="/Resources/image/notification-bell.svg"
-                alt="Request Icon"
-                class="icon"
-                style="height: 64px; width: auto"
-              />
-              <div>
-                <h2>New Request</h2>
-                <p>John Doe sent a new seedlings request.</p>
-              </div>
-            </div>
+          <div id="notifications-container" class="notifications">
+            <div class="notif-container"></div>
           </div>
         </div>
       </div>

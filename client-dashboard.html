@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="Resources\files\css-folder\client-dashboard.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  </head>
+  <body>
+    <section class="side-nav" style="visibility: visible">
+      <div class="profile-holder">
+        <img
+          src="Resources/image/client-profile.svg"
+          alt="User Icon"
+          class="profile-icon"
+        />
+        <h3>John Doe</h3>
+        <p>example@gmail.com</p>
+        <p>client</p>
+      </div>
+      <div class="navigation">
+        <a class="tablink" onclick="showContent(`#dashboard`)">
+          <div class="dashboard-button">
+            <img
+              src="Resources/image/home.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Dashboard</p>
+          </div>
+        </a>
+        <a class="tablink">
+          <div class="dashboard-button">
+            <img
+              src="Resources/image/request.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Requests</p>
+          </div>
+        </a>
+        <a class="tablink">
+          <div class="dashboard-button">
+            <img
+              src="Resources/image/notification.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Notifications</p>
+          </div>
+        </a>
+        <a class="tablink">
+          <div class="dashboard-button">
+            <img
+              src="Resources/image/settings.svg"
+              alt="Request Icon"
+              class="icon"
+              onclick="showContent(`#dashboard`)"
+            />
+            <p>Settings</p>
+          </div>
+        </a>
+        <a class="tablink">
+          <div class="dashboard-button">
+            <img
+              src="Resources/image/log-out.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Logout</p>
+          </div>
+        </a>
+      </div>
+      <div class="title-holder">
+        <h1>
+          CNPENR<span
+            ><img
+              src="Resources/image/cn-penro-logo.svg"
+              alt="logo"
+              style="height: 24px"
+            />-FTSMS</span
+          >
+        </h1>
+      </div>
+    </section>
+    <section class="dashboard">
+      <section id="client-dashboard" class="content">
+        <div class="requests-display">
+          <div class="requests">
+            <div class="request-sent">
+              <div>
+                <h2>1</h2>
+                <h3>pending</h3>
+              </div>
+              <div>
+                <h2>1</h2>
+                <h3>pending</h3>
+              </div>
+              <div>
+                <h2>1</h2>
+                <h3>pending</h3>
+              </div>
+              <div>
+                <h2>1</h2>
+                <h3>pending</h3>
+              </div>
+            </div>
+            <div class="lawless">
+              <div class="calculator">
+                <h1>Select a Tree</h1>
+                <select id="treeDropdown" onchange="updateInputsBasedOnTree()">
+                  <option value="" disabled selected>Select a tree</option>
+                </select>
+                <h1>Quantity of trees</h1>
+                <input
+                  type="number"
+                  id="areaInput"
+                  oninput="ConvertToArea()"
+                  placeholder="Quantiy of Trees"
+                />
+                <h1>Lot Area (Hectares)</h1>
+
+                <input
+                  type="number"
+                  id="sqMeterInput"
+                  min="0"
+                  placeholder="Lot Area (in Hectares)"
+                  oninput="ConvertToQuantity()"
+                />
+              </div>
+              <div class="view-requests">
+                <img
+                  src="Resources/image/view-requests.svg"
+                  alt="Request Icon"
+                  class="icon"
+                  style="height: 64px; width: auto"
+                />
+                <div>
+                  <h2>View Requests</h2>
+                  <p>View seedlings requests, and monitor its status.</p>
+                  <button>View Request</button>
+                </div>
+              </div>
+              <div class="send-new-requests">
+                <img
+                  src="Resources/image/send-new-request.svg"
+                  alt="Request Icon"
+                  class="icon"
+                  style="height: 64px; width: auto"
+                />
+                <div>
+                  <h2>View Requests</h2>
+                  <p>View seedlings requests, and monitor its status.</p>
+                  <button>Send new seedling Request</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="requests-display">
+          <div class="chart">
+            <canvas id="myBarChart" width="400" height="200"></canvas>
+
+            <!-- Chart.js Library -->
+          </div>
+          
+      </section>
+      <section id="section2" class="content">
+        <button>send request</button>
+        <div id="documentsContainer"></div>
+      </section>
+    </section>
+
+    <script src="Resources/files/javascript-folder/calculator.js"></script>
+    <script src="Resources/files/javascript-folder/client-login-firebase.js"></script>
+  </body>
+</html>

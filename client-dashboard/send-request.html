@@ -4,209 +4,264 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Responsive Sidenav</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap"
       rel="stylesheet"
     />
-
     <link
       rel="stylesheet"
-      href="/Resources/files/css-folder/client-dashboard.css"
+      href="/Resources/files/css-folder/client-dashboard/send-request.css"
     />
-
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
-    <script
-      type="module"
-      src="/Resources/files/javascript-folder/docx-template.js"
-    ></script>
-    <script src="/Resources/files/javascript-folder/navigation.js"></script>
+    <link
+      rel="stylesheet"
+      href="/Resources/files/css-folder/client-dashboard/main.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
     <script src="https://unpkg.com/docx@7.1.0/build/index.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
-    <style>
-      .hidden {
-        display: none;
-      }
-      .form-section {
-        margin-bottom: 20px;
-      }
-    </style>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
   </head>
   <body>
-    <div class="sidenav">
-      <button onclick="openFileById(`dashboard`)">My Dashbaord</button>
-      <button>Requests</button>
-      <button onclick="openFileById(`reports`)">Reports</button>
-      <button onclick="openFileById(`notifications`)">Notifications</button>
-      <button onclick="openFileById(`Settings`)">Settings</button>
-    </div>
+    <!-- Sidebar -->
+    <section class="side-nav">
+      <div class="profile-holder">
+        <img
+          src="/Resources/image/client-profile.svg"
+          alt="User Icon"
+          class="profile-icon"
+        />
+        <label>John Doe</label>
+        <p>example@gmail.com</p>
+        <p>Client</p>
+      </div>
+      <div class="navigation">
+        <a class="tablink" onclick="openFileById('dashboard')">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/home.svg"
+              alt="Dashboard Icon"
+              class="icon"
+            />
+            <p>Dashboard</p>
+          </div>
+        </a>
+        <a class="tablink">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/request.svg"
+              alt="Requests Icon"
+              class="icon"
+            />
+            <p>Requests</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById('notifications')">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/notification.svg"
+              alt="Notifications Icon"
+              class="icon"
+            />
+            <p>Notifications</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById('settings')">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/settings.svg"
+              alt="Settings Icon"
+              class="icon"
+            />
+            <p>Settings</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById('logout')">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/log-out.svg"
+              alt="Logout Icon"
+              class="icon"
+            />
+            <p>Logout</p>
+          </div>
+        </a>
+      </div>
+      <div class="title-holder">
+        <h1 id="cnpenro-footer">
+          CNPENR<span
+            ><img
+              src="/Resources/image/cn-penro-logo.svg"
+              alt="logo"
+              style="height: 24px"
+            />-FTSMS</span
+          >
+        </h1>
+      </div>
+    </section>
 
+    <!-- Main Content -->
     <div class="content">
-      <h2>Request Form</h2>
-      <form
-        id="projectForm"
-        action="https://aliceblue-owl-540826.hostingersite.com/client-dashboard/upload.php"
-        method="POST"
-        enctype="multipart/form-data"
-      >
-        <!-- Project Profile -->
-        <div class="form-section">
-          <h1>PROJECT PROFILE</h1>
-          <label for="project-location">
-            <strong>Location of Project/Planting Site:</strong>
-            <br />
-          </label>
-          <input
-            type="text"
-            id="project-location"
-            name="project-location"
-            placeholder="Enter Project Location"
-            required
-          />
-          <br />
-          <br />
-          <label><strong>Land Classification of the Property:</strong></label>
-          <div>
-            <input
-              type="radio"
-              name="land-classification"
-              value="Public"
-              id="public"
-              required
-            />
-            <label for="public">Public</label>
-            <!-- 'for' matches the 'id' of the input -->
-            <input
-              type="radio"
-              name="land-classification"
-              required
-              value="Private"
-              id="private"
-            />
-            <label for="private">Private</label>
-            <!-- 'for' matches the 'id' of the input -->
-          </div>
-          <br />
-
-          <div id="privateSection" class="hidden">
-            <label for="property-document">
-              <strong>If Private (Attach a Xerox Copy):</strong>
-            </label>
-            <input
-              type="file"
-              id="property-document"
-              name="property-document"
-            />
-
-            <label for="title-no">
-              <strong>Title No:</strong>
-            </label>
-            <input
-              type="text"
-              id="title-no"
-              name="title-no"
-              placeholder="Enter Title No."
-            />
-
-            <label for="tax-declaration">
-              <strong>Tax Declaration No:</strong>
-            </label>
-            <input
-              type="text"
-              id="tax-declaration"
-              name="tax-declaration"
-              placeholder="Enter Tax Declaration No."
-            />
+      <div class="main-div">
+        <form
+          id="projectForm"
+          action="https://aliceblue-owl-540826.hostingersite.com/client-dashboard/upload.php"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <!-- Seedling Information -->
+          <div class="seedling-container">
+            <h2>Seedling Information</h2>
+            <div class="seedling-input-container">
+              <div class="seedling-input-group">
+                <p>Quantity of seedlings</p>
+                <input type="number" name="number[]" required />
+                <p>Type of Seedling</p>
+                <select id="treeSelect" name="treeSelect[]" required></select>
+              </div>
+            </div>
+            <button type="button" id="addButton">
+              + Add Another Batch of Seedlings
+            </button>
           </div>
 
-          <label for="activity-type">
-            <strong>Purpose / Type of Activity:</strong>
-          </label>
-          <textarea
-            id="activity-type"
-            name="activity-type"
-            cols="103"
-            rows="5"
-            placeholder="Enter Purpose or Type of Activity"
-            required
-          ></textarea>
-          <br />
-          <label for="vicinity-map">
-            <strong>Location / Vicinity Map of Planting Site:</strong>
-          </label>
-          <input
-            type="file"
-            id="vicinity-map"
-            name="vicinity-map"
-            accept="image/*"
-          />
+          <!-- Project Information -->
+          <div class="project-information">
+            <h2>Project Information</h2>
+            <h3>Location of Project/Planting Site:</h3>
+            <input
+              type="text"
+              id="project-location"
+              name="project-location"
+              placeholder="Enter Project Location"
+              required
+            />
+            <!-- Land Classification -->
+            <div class="land-classification-container">
+              <h3>Land Classification of the Property:</h3>
+              <div class="classification-option">
+                <input
+                  type="radio"
+                  id="public"
+                  name="land-classification"
+                  value="Public"
+                  required
+                />
+                <label for="public">Public</label>
+              </div>
+              <div class="classification-option">
+                <input
+                  type="radio"
+                  id="private"
+                  name="land-classification"
+                  value="Private"
+                  required
+                />
+                <label for="private">Private</label>
+              </div>
+            </div>
+          </div>
+          <!-- PropertyDetails -->
+          <div class="property-details-container" style="display: none">
+            <div class="property-details-option">
+              <label for="property-document">Attach Land Owner Consent:</label>
+              <input
+                type="file"
+                id="property-document"
+                name="property-document"
+              />
+            </div>
+          </div>
 
-          <label for="seedlings-number">
-            <strong>No. of Seedlings Requested:</strong>
-          </label>
-          <input
-            type="number"
-            id="seedlings-number"
-            name="seedlings-number"
-            placeholder="Enter Number of Seedlings"
-            required
-            min="1"
-          />
+          <!-- Activity Purpose -->
+          <div class="activity-type-container">
+            <h3>Purpose/ Type of Activity:</h3>
+            <textarea
+              id="activity-type"
+              name="activity-type"
+              cols="100"
+              rows="5"
+              placeholder="Enter Purpose or Type of Activity"
+              required
+            ></textarea>
+          </div>
 
-          <label for="seedlings-type">
-            <strong>Type of Seedlings:</strong>
-          </label>
-          <select id="selectedTreeType">
-            <option value="" disabled selected>Select a tree</option>
-          </select>
-        </div>
+          <!-- Location Map -->
+          <div class="vicinity-map-holder">
+            <h3>Location / Vicinity Map of Planting Site:</h3>
+            <div id="mapContainer"></div>
+          </div>
 
-        <!-- Promissory Note -->
-        <div class="form-section">
-          <h1>PROMISSORY NOTE</h1>
+          <!-- Promissory Note -->
+          <div class="promisory-note-container">
+            <div class="promisory-note">
+              <h1>Promissory Note</h1>
+              <p>
+                <i>
+                  I am aware that PG-PENRO staff will monitor the growth of the
+                  planted seedlings. I will maintain and protect said seedlings
+                  to ensure a 100% survival rate. Otherwise, I will pay the
+                  seedlings that do not survive in the amount of THIRTY PESOS
+                  (₱30.00 each).
+                </i>
+              </p>
+              <p>
+                <i>
+                  I am signifying through this Promissory Note my interest and
+                  willingness to execute and abide by the above intentions.
+                </i>
+              </p>
+              <div class="checkbox-container">
+                <input
+                  type="checkbox"
+                  id="agree-note"
+                  name="agree-note"
+                  required
+                />
+                <label for="agree-note"
+                  >I have read and agreed to this Promissory Note</label
+                >
+              </div>
+            </div>
+          </div>
+          <div class="property-details-container">
+            <div class="property-details-option">
+              <h3>Upload Requestor's Signature:</h3>
+              <input
+                type="file"
+                id="signature-upload"
+                accept="image/*"
+                onchange="handleSignatureUpload(event)"
+              />
+            </div>
+          </div>
+          <!-- Submit Button -->
+          <div id="button-holder">
+            <button type="submit" onclick="openModal()">Submit</button>
+          </div>
+        </form>
+
+        <!-- Popup -->
+        <div class="overlay" onclick="closePopup()"></div>
+        <div class="popup" id="popup" style="display: none">
+          <h1>Request Submitted</h1>
+          <p>Request #<span>00001</span></p>
+          <p>Status: <span class="status">Pending</span></p>
           <p>
-            I am aware that PG-PENRO staff will monitor the growth of the
-            planted seedlings. I will maintain and protect said seedlings to
-            ensure a 100% survival rate. Otherwise, I will pay for the seedlings
-            that do not survive in the amount of THIRTY PESOS (P30.00 each).
+            Your request has been submitted and is now pending approval. Please
+            check your dashboard regularly for updates. Thank you!
           </p>
-          <p>
-            I am signifying through this Promissory Note my interest and
-            willingness to execute and abide by the above intentions.
-          </p>
-
-          <label for="requestor-signature">
-            <strong>Requestor's Signature:</strong>
-          </label>
-          <input
-            type="file"
-            id="requestor-signature"
-            name="requestor-signature"
-            accept="image/*"
-            required
-          />
+          <a href="#" onclick="closePopup()">Back To Dashboard</a>
         </div>
-
-        <button type="submit" id="projectForm">Submit</button>
-      </form>
+      </div>
     </div>
 
-    <script>
-      const privateRadio = document.getElementById("private");
-      const publicRadio = document.getElementById("public");
-      const privateSection = document.getElementById("privateSection");
-
-      const togglePrivateSection = () => {
-        privateSection.classList.toggle("hidden", !privateRadio.checked);
-      };
-      privateRadio.addEventListener("change", togglePrivateSection);
-      publicRadio.addEventListener("change", togglePrivateSection);
-    </script>
+    <script src="/Resources/files/javascript-folder/navigation.js"></script>
+    <script src="/Resources/files/javascript-folder/client-dashboard-js/send-requests.js"></script>
   </body>
 </html>

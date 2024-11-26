@@ -10,10 +10,14 @@
       href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="/Resources/files/css-folder/client-dashboard/main.css"
+    />
 
     <link
       rel="stylesheet"
-      href="/Resources/files/css-folder/client-dashboard.css"
+      href="/Resources/files/css-folder/client-dashboard/requests.css"
     />
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -21,17 +25,110 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   </head>
   <body>
-    <div class="sidenav">
-      <button onclick="openFileById(`dashboard`)">My Dashbaord</button>
-      <button>Requests</button>
-      <button onclick="openFileById(`reports`)">Reports</button>
-      <button onclick="openFileById(`notifications`)">Notifications</button>
-      <button onclick="openFileById(`Settings`)">Settings</button>
-    </div>
+    <section class="side-nav">
+      <div class="profile-holder">
+        <img
+          src="/Resources/image/client-profile.svg"
+          alt="User Icon"
+          class="profile-icon"
+        />
+        <h3>John Doe</h3>
+        <p>example@gmail.com</p>
+        <p>client</p>
+      </div>
+      <div class="navigation">
+        <a class="tablink" onclick="openFileById(`dashboard`)">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/home.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Dashboard</p>
+          </div>
+        </a>
+        <a class="tablink">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/request.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Requests</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById(`notifications`)">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/notification.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Notifications</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById(`Settings`)">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/settings.svg"
+              alt="Request Icon"
+              class="icon"
+              onclick="showContent(`#dashboard`)"
+            />
+            <p>Settings</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById(`reports`)">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/log-out.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Logout</p>
+          </div>
+        </a>
+      </div>
+      <div class="title-holder">
+        <h1>
+          CNPENR<span
+            ><img
+              src="/Resources/image/cn-penro-logo.svg"
+              alt="logo"
+              style="height: 24px"
+            />-FTSMS</span
+          >
+        </h1>
+      </div>
+    </section>
 
     <div class="content">
-      <button onclick="openFileById(`send-request`)">send request</button>
-      <div id="documentsContainer"></div>
+      <div id="first-section">
+        <h3>My Request</h3>
+        <button id="request-button" onclick="openFileById(`send-request`)">
+          + Request new Seed
+        </button>
+      </div>
+      <div id="second-section">
+        <button>All Requests</button>
+        <button>Pending</button>
+        <button>Completed</button>
+        <button>Rejected</button>
+      </div>
+      <table id="documentTable">
+        <thead>
+          <tr>
+            <th>Select</th>
+            <th>Document ID</th>
+            <th>Date</th>
+            <th>Condition</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Rows will be dynamically inserted here -->
+        </tbody>
+      </table>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 

@@ -86,7 +86,7 @@ async function retrieveAllUserDocuments() {
       documentsSnapshot.forEach((doc) => {
         const docData = doc.data();
 
-        if (!docData.Document_Title || !docData.Condition) {
+        if (!docData.Document_title || !docData.Condition) {
           console.log(`Missing required fields in document: ${doc.id}`);
           return;
         }

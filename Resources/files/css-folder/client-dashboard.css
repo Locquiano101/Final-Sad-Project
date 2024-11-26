@@ -1,12 +1,12 @@
 * {
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 body {
   display: grid;
   grid-template-columns: 20% 80%;
   height: 100vh;
-  color: white;
   font-family: "League Spartan", sans-serif;
 }
 button,
@@ -19,12 +19,16 @@ textarea {
 .side-nav p,
 a {
   font-weight: bold;
-  color: black !important;
+  color: black;
   text-decoration: none; /* Remove underline */
   color: inherit; /* Remove default blue color and inherit the color of parent element */
   cursor: pointer; /* Optional: Change cursor to a pointer */
 }
+#cnpenro {
+  color: #1dbeb9 !important;
+}
 .side-nav {
+  width: 25%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -69,7 +73,6 @@ a {
 
 .request-sent {
   display: flex;
-  border-radius: 24px;
   align-items: center;
   justify-content: space-evenly;
   background-color: #103635;
@@ -85,13 +88,12 @@ a {
 
 .lawless {
   display: grid;
-  grid-template-rows: auto auto !important;
+  grid-template-rows: auto auto;
   grid-template-columns: auto auto;
   gap: 1rem;
 }
 .lawless div {
   background-color: #103635;
-  border-radius: 24px;
   padding: 1rem;
 }
 .lawless div input,
@@ -134,7 +136,6 @@ select {
 }
 
 .chart {
-  border-radius: 2rem;
   padding: 1rem;
   background-color: #103635;
 }
@@ -145,7 +146,6 @@ select {
   border: 1px solid;
   padding: 15px;
   margin-bottom: 10px;
-  border-radius: 5px;
   background-color: black;
 }
 #documentsContainer h3 {
@@ -168,15 +168,10 @@ body {
   height: 100vh;
 }
 
-.sidenav {
-  width: 20%;
-  color: white;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  padding-top: 20px;
+.side-nav h1 {
+  font-size: 30px;
+  color: black;
 }
-
 .sidenav button {
   background: none;
   color: black;
@@ -195,22 +190,20 @@ body {
 
 .content {
   padding: 1rem;
-  width: 80%;
+  width: 100%;
+  overflow-y: auto !important;
+
   background-color: #011b1a;
 }
 
 .content-div {
   height: 100%;
-  display: none;
-}
-
-.content-div.active {
-  display: block;
 }
 
 #content1 {
   display: flex;
 }
+
 #dashboard-left {
   padding: 10px;
   width: 60%;
@@ -244,6 +237,7 @@ body {
   height: 60%;
 }
 #requests-new-seedlings div {
+  padding: 0.5rem;
   border-radius: 1rem;
 }
 #calculator input,
@@ -255,9 +249,9 @@ select {
 #calculator {
   background-color: #103635;
   width: 50%;
-  height: 100%;
   padding: 1rem;
-  gap: 1rem;
+  height: auto;
+  box-sizing: border-box;
   margin: 1rem 0 0 0;
   color: white;
 }

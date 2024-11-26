@@ -85,6 +85,8 @@ if (!docID || !userID) {
         <p>Recipients Address: ${Useraddress}</p>
         <br>
         <p>Document Title: ${data.Document_Title}</p>
+        <p>Seedling: ${data.Seedlings_Number}</p>
+        <p>Seedling Quantity: ${data.Seedlings_Number}</p>
         <p>Planting Site Location: ${data.Project_Location}</p>
         <p>land Classification: ${data.Land_Classification}</p>
         <p>Purpose Of Activity: ${data.Activity_Type}</p>
@@ -100,7 +102,6 @@ if (!docID || !userID) {
       console.error("No user document found for userID:", userId);
     }
   }
-
   loadRequestDetails(docID, userID);
 }
 
@@ -121,8 +122,26 @@ async function updateDocumentCondition(userID, documentID, condition, note) {
     alert("Error updating document: " + error.message);
   }
 }
+async function storeNotification(userID, documentTitle, notificationDetails) {
+  try {
+    const notificationsRef = firebaseDB
+      .collection("users")
+      .doc(userID)
+      .collection("notifications");
 
-// Add event listeners to buttons
+    // Use documentTitle as the ID for the notification
+    const notificationId = documentTitle.replace(/\s+/g, "_").toLowerCase(); // Replace spaces with underscores and convert to lowercase for safety
+
+    await notificationsRef.doc(notificationId).set({
+      ...notificationDetails,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+    console.log("Notification stored successfully with ID:", notificationId);
+  } catch (error) {
+    console.error("Error storing notification:", error);
+  }
+}
 document.addEventListener("click", async (event) => {
   if (event.target.matches("#approveButton, #declineButton")) {
     const button = event.target;
@@ -130,14 +149,80 @@ document.addEventListener("click", async (event) => {
     const noteField = document.querySelector("textarea[name='note']");
     const note = noteField ? noteField.value : "";
 
-    // Replace these with actual userID and documentID
+    // Retrieve user and document details
+    const userDocRef = firebaseDB.collection("users").doc(userID);
+    const userDocSnapshot = await userDocRef.get();
 
-    await updateDocumentCondition(userID, docID, condition, note);
+    if (userDocSnapshot.exists) {
+      const userData = userDocSnapshot.data();
+      const userEmail = userData.email || "No Email";
+      const userName = userData.name || "No Name";
+
+      // Retrieve document details
+      const userDocumentsRef = firebaseDB
+        .collection("users")
+        .doc(userID)
+        .collection("userDocuments")
+        .doc(docID);
+      const documentSnapshot = await userDocumentsRef.get();
+
+      if (documentSnapshot.exists) {
+        const documentData = documentSnapshot.data();
+        const documentTitle =
+          documentData.Document_title || "Untitled_Document";
+        const seedling = documentData.Seedlings_Type || "N/A";
+        const seedlingQuantity = documentData.Seedlings_Number || "N/A";
+
+        emailjs.init("CHysrc6RIJb6U2SkY"); // Replace with your actual public key from the EmailJS dashboard
+
+        // Send email notification
+        emailjs
+          .send("service_rihrhh4", "template_4fh1w57", {
+            Seedling: seedling,
+            seedling_quantity: seedlingQuantity,
+            Note: note,
+            user_name: userName,
+            Condition: condition,
+            user_email: userEmail,
+          })
+          .then(
+            async (response) => {
+              console.log(
+                "Email sent successfully:",
+                response.status,
+                response.text
+              );
+
+              // Prepare notification details
+              const notificationDetails = {
+                title: `Request ${condition}`,
+                message: `Your request titled "${documentTitle}" has been ${condition}.`,
+                note: note || "No additional notes provided.",
+                condition: condition,
+                emailStatus: "Sent", // Additional info to track email status
+              };
+
+              // Store notification using the document title as the ID
+              await storeNotification(
+                userID,
+                documentTitle,
+                notificationDetails
+              );
+
+              // Update the document condition after email is sent
+              await updateDocumentCondition(userID, docID, condition, note);
+            },
+            (error) => {
+              console.error("Error sending email:", error);
+            }
+          );
+      } else {
+        console.error("Document not found for ID:", docID);
+        alert("Failed to retrieve document details. Email not sent.");
+      }
+    } else {
+      console.error("User data not found for userID:", userID);
+      alert("Failed to retrieve user details. Email not sent.");
+    }
   }
 });
-function openFileById(id) {
-  // Construct the file path using the id
-  const filePath = `${id}.html`; // e.g., if id is "page2", it will open "page2.html"
-
-  window.open(filePath, "_self");
-}
