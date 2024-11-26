@@ -13,13 +13,15 @@
     />
     <link
       rel="stylesheet"
-      href="/Resources/files/css-folder/client-dashboard/main.css"
+      href="/Resources/files/css-folder/admin-dashboard/main.css"
     />
-
     <link
       rel="stylesheet"
-      href="/Resources/files/css-folder/client-dashboard/requests.css"
+      href="/Resources/files/css-folder/admin-dashboard/requests.css
+    "
     />
+
+    <link rel="stylesheet" />
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -103,10 +105,7 @@
     </section>
     <div class="content">
       <div id="first-section">
-        <h3>My Request</h3>
-        <button id="request-button" onclick="openFileById(`send-request`)">
-          + Request new Seed
-        </button>
+        <h1>All Clients' Request</h1>
       </div>
       <div id="second-section">
         <button>All Requests</button>
@@ -117,21 +116,20 @@
       <table id="documentTable">
         <thead>
           <tr>
-            <th>Document ID</th>
             <th>Document Title</th>
+            <th>Document Requestor</th>
+
             <th>Date</th>
-            <th>Condition</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Rows will be dynamically inserted here -->
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script src="/Resources/files/javascript-folder/navigation.js"></script>
-    <script src="/Resources/files/javascript-folder/client-dashboard-js/requests.js"></script>
+    <script src="/Resources/files/javascript-folder/admin-dashboard_js/requests.js"></script>
   </body>
 </html>

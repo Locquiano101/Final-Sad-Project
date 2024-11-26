@@ -188,7 +188,6 @@ function handleSignatureUpload(event) {
     reader.readAsArrayBuffer(file); // Read the file as ArrayBuffer
   }
 }
-let fileName;
 
 async function generateTreeRequestDocument(params) {
   const {
@@ -427,84 +426,86 @@ async function generateTreeRequestDocument(params) {
     ],
   });
 
-  const sanitizedRequestorName = user.replace(/[\/\\:*?"<>| ]/g, "_");
+  const sanitizedRequestorName = user.replace(/[\/\\:.*?"<>| ]/g, "");
+  const sanitizedseedlingsType = seedlingsType.replace(/[\/\\:*.?"<>| ]/g, "_");
 
-  fileName = `${sanitizedRequestorName}_${seedlingsType}_tree_request.docx`;
+  const fileName = `${sanitizedRequestorName}_${sanitizedseedlingsType}_tree_request.docx`;
 
   const docBlob = await docx.Packer.toBlob(doc);
 
+  insertDocumentToFirestore(params, userID, fileName);
+
   // Create a link element to download the document
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(docBlob);
-  link.download = fileName;
-  link.click();
-  docx.Packer.toBlob(doc).then((docBlob) => {
-    const formData = new FormData();
-    formData.append("file", docBlob, fileName);
-    formData.append("requestorName", user);
+  // const link = document.createElement("a");
+  // link.href = URL.createObjectURL(docBlob);
+  // link.download = fileName;
+  // link.click();
+  // docx.Packer.toBlob(doc).then((docBlob) => {
+  //   const formData = new FormData();
+  //   formData.append("file", docBlob, fileName);
+  //   formData.append("requestorName", user);
 
-    fetch(
-      "https://aliceblue-owl-540826.hostingersite.com//client-dashboard/upload.php",
-      {
-        method: "POST",
-        body: formData,
-        mode: "cors",
-        credentials: "omit",
-      }
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            "Network response was not ok: " + response.statusText
-          );
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.status === "success") {
-          alert(data.message);
-        } else {
-          console.error("Upload failed:", data.message);
-          alert("Error: " + data.message);
-        }
-      })
-      .catch((error) => {
-        console.error("Upload error:", error);
-        alert("An error occurred: " + error.message);
-      });
-  });
+  //   fetch(
+  //     "https://aliceblue-owl-540826.hostingersite.com//client-dashboard/upload.php",
+  //     {
+  //       method: "POST",
+  //       body: formData,
+  //       mode: "cors",
+  //       credentials: "omit",
+  //     }
+  //   )
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error(
+  //           "Network response was not ok: " + response.statusText
+  //         );
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       if (data.status === "success") {
+  //         alert(data.message);
+  //       } else {
+  //         console.error("Upload failed:", data.message);
+  //         alert("Error: " + data.message);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Upload error:", error);
+  //       alert("An error occurred: " + error.message);
+  //     });
+  // });
 }
-async function insertDocumentToFirestore(params, userID) {
+async function insertDocumentToFirestore(params, userID, fileName) {
   try {
-    // Define the path where the user-specific documents are stored
-    const userDocsRef = firebaseDB
-      .collection("users")
-      .doc(userID)
-      .collection("Documents");
+    // Define the path where the user-specific document IDs are stored
+    const userRef = firebaseDB.collection("users").doc(userID);
 
-    // Fetch the latest document based on the 'counter' field
-    const snapshot = await userDocsRef
-      .orderBy("counter", "desc")
-      .limit(1)
-      .get();
+    // Reference to track the incrementing ID in a specific document (e.g., "metaData" or "counters")
+    const counterRef = userRef.collection("metaData").doc("documentCounter");
 
-    // Determine the next counter value
-    let currentCounter = snapshot.empty
-      ? 1
-      : snapshot.docs[0].data().counter + 1;
+    // Get the current counter value (incrementing ID)
+    const docSnapshot = await counterRef.get();
+    let currentCounter = docSnapshot.exists ? docSnapshot.data().counter : 0;
 
-    // Reference for the new document
-    const docRef = userDocsRef.doc(currentCounter.toString());
+    // Increment the counter for the next document ID
+    currentCounter += 1;
 
-    // Add "Pending for Approval" and "fileName" field to the params
+    // Set the document with the incrementing ID (you can set this as the document ID)
+    const docRef = userRef.collection("Documents").doc(`${currentCounter}`);
+
+    // Add "Pending for Approval" field to the params
     const documentData = {
       ...params, // Spread the existing params data
       status: "Pending for Approval",
-      fileName: fileName || "Untitled", // Default fileName if not provided
+      fileName: fileName, // Add the new field
     };
 
     // Insert the params data into Firestore
     await docRef.set(documentData);
+
+    // Update the counter for the next time
+    await counterRef.set({ counter: currentCounter });
 
     console.log(
       "Document successfully added to Firestore with ID: " + currentCounter
@@ -513,7 +514,6 @@ async function insertDocumentToFirestore(params, userID) {
     console.error("Error adding document to Firestore: ", error);
   }
 }
-
 document.getElementById("projectForm").addEventListener("submit", (event) => {
   event.preventDefault();
 
@@ -593,7 +593,6 @@ document.getElementById("projectForm").addEventListener("submit", (event) => {
     };
 
     generateTreeRequestDocument(params);
-    insertDocumentToFirestore(params, userID);
     // Show a popup on success
     showPopup();
   } catch (error) {
