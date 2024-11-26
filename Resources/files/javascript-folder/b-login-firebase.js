@@ -98,7 +98,10 @@ function loginAdmin(adminRank, inputUsername, inputPassword) {
 
           // Redirect based on admin rank
           if (adminRank === "Governor") {
-            window.open("admin-dashboard/dashboard.html", "_self");
+            window.open(
+              "admin-dashboard-main/governor/dashboard.html",
+              "_self"
+            );
           } else if (adminRank === "PENRO") {
             window.open("e-penro-dashboard.ht ml", "_self");
           } else if (adminRank === "Nursery") {

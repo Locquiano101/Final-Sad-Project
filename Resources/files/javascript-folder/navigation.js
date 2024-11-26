@@ -7,5 +7,5 @@ function openFileById(id) {
 function logout() {
   alert("Are you sure?");
   localStorage.removeItem("userID");
-  window.open("../b-login.html", "_self"); // ".." goes one level up
+  window.open("../../b-login.html", "_self"); // ".." goes one level up
 }

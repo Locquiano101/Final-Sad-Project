@@ -3,39 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Responsive Sidenav</title>
+    <title>CNPNRO-FTSMS Dashboard</title>
+    <link rel="icon" href="Resources/image/penro (0).png" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="/Resources/files/css-folder/client-dashboard/main.css"
+    />
 
     <link
       rel="stylesheet"
-      href="/Resources/files/css-folder/client-dashboard.css"
+      href="/Resources/files/css-folder/client-dashboard/requests.css"
     />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://js.api.here.com/v3/3.1/mapsjs-ui.css"
-    />
-    <script
-      type="text/javascript"
-      src="https://js.api.here.com/v3/3.1/mapsjs-core.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://js.api.here.com/v3/3.1/mapsjs-service.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"
-    ></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -49,13 +33,12 @@
           alt="User Icon"
           class="profile-icon"
         />
-        <h3>John Doe</h3>
-        <p>example@gmail.com</p>
-        <p>client</p>
+        <h3 id="user">{Governor's Officer/Governor}</h3>
+        <p id="email"><i>Governor's Officer</i></p>
       </div>
       <div class="navigation">
         <a class="tablink">
-          <div class="dashboard-button">
+          <div class="dashboard-button" onclick="openFileById(`dashboard`)">
             <img
               src="/Resources/image/home.svg"
               alt="Request Icon"
@@ -64,7 +47,7 @@
             <p>Dashboard</p>
           </div>
         </a>
-        <a class="tablink" onclick="openFileById(`requests`)">
+        <a class="tablink">
           <div class="dashboard-button">
             <img
               src="/Resources/image/request.svg"
@@ -72,6 +55,16 @@
               class="icon"
             />
             <p>Requests</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById(`reports`)">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/reports.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Reports</p>
           </div>
         </a>
         <a class="tablink" onclick="openFileById(`notifications`)">
@@ -84,18 +77,8 @@
             <p>Notifications</p>
           </div>
         </a>
-        <a class="tablink" onclick="openFileById(`Settings`)">
-          <div class="dashboard-button">
-            <img
-              src="/Resources/image/settings.svg"
-              alt="Request Icon"
-              class="icon"
-              onclick="showContent(`#dashboard`)"
-            />
-            <p>Settings</p>
-          </div>
-        </a>
-        <a class="tablink" onclick="openFileById(`reports`)">
+
+        <a class="tablink" onclick="logout() ">
           <div class="dashboard-button">
             <img
               src="/Resources/image/log-out.svg"
@@ -107,7 +90,7 @@
         </a>
       </div>
       <div class="title-holder">
-        <h1>
+        <h1 id="cnpenro-footer">
           CNPENR<span
             ><img
               src="/Resources/image/cn-penro-logo.svg"
@@ -118,10 +101,37 @@
         </h1>
       </div>
     </section>
-
-    <div class="content"></div>
+    <div class="content">
+      <div id="first-section">
+        <h3>My Request</h3>
+        <button id="request-button" onclick="openFileById(`send-request`)">
+          + Request new Seed
+        </button>
+      </div>
+      <div id="second-section">
+        <button>All Requests</button>
+        <button>Pending</button>
+        <button>Completed</button>
+        <button>Rejected</button>
+      </div>
+      <table id="documentTable">
+        <thead>
+          <tr>
+            <th>Document ID</th>
+            <th>Document Title</th>
+            <th>Date</th>
+            <th>Condition</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Rows will be dynamically inserted here -->
+        </tbody>
+      </table>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="/Resources/files/javascript-folder/navigation.js"></script>
-    <script src="/Resources/files/javascript-folder/client-dashboard-js/dashboard.js"></script>
+    <script src="/Resources/files/javascript-folder/client-dashboard-js/requests.js"></script>
   </body>
 </html>
