@@ -15,6 +15,30 @@ firebase.initializeApp(firebaseConfig);
 const firebaseDB = firebase.firestore();
 
 const userID = localStorage.getItem("userID");
+
+async function displayUserData(userId) {
+  try {
+    const userRef = firebase.firestore().collection("users").doc(userId);
+    const userDoc = await userRef.get();
+
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+
+      userName = userData.name || "N/A";
+      userEmail = userData.email || "N/A";
+
+      document.getElementById("user").textContent = userName;
+      document.getElementById("email").textContent = userEmail;
+      console.log(userName, userEmail);
+    } else {
+      console.log("No user data found for this ID.");
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+}
+displayUserData(userID);
+
 const fetchAndDisplayNotifications = async (userID) => {
   try {
     const notificationsRef = firebaseDB

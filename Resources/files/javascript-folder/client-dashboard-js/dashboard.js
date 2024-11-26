@@ -147,12 +147,36 @@ const firebaseDB = firebase.firestore();
 // User ID from local storage
 const userID = localStorage.getItem("userID");
 
+async function displayUserData(userId) {
+  try {
+    const userRef = firebase.firestore().collection("users").doc(userId);
+    const userDoc = await userRef.get();
+
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+
+      userName = userData.name || "N/A";
+      userEmail = userData.email || "N/A";
+
+      document.getElementById("user").textContent = userName;
+      document.getElementById("email").textContent = userEmail;
+      console.log(userName, userEmail);
+    } else {
+      console.log("No user data found for this ID.");
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+}
+displayUserData(userID);
+
 // Update document counts
 async function retrieveAndCountDocuments() {
   const userDocumentsRef = firebaseDB
     .collection("users")
     .doc(userID)
-    .collection("userDocuments");
+    .collection("Documents");
+
   try {
     const querySnapshot = await userDocumentsRef.get();
 
@@ -161,10 +185,13 @@ async function retrieveAndCountDocuments() {
       declinedCount = 0;
 
     querySnapshot.forEach((doc) => {
-      const condition = doc.data().Condition;
-      if (condition === "Pending for Approval") pendingCount++;
-      else if (condition === "Approved") approvedCount++;
-      else if (condition === "Declined") declinedCount++;
+      const status = doc.data().status; // Use 'status' instead of 'Condition'
+
+      if (!status) return; // Skip if status is undefined or null
+
+      if (status === "Pending for Approval") pendingCount++;
+      else if (status === "Approved") approvedCount++;
+      else if (status === "Declined") declinedCount++;
     });
 
     document.getElementById("pending-count").innerText = pendingCount;
@@ -195,7 +222,7 @@ async function fetchAndDisplayNotifications(userID) {
             style="height: 64px; width: auto"
           />
           <div>
-            <h2 id="request-condition">No Notifications</h2>
+            <h2 id="request-status">No Notifications</h2>
             <p id="request-details">You have no notifications at the moment.</p>
           </div>
         </div>
@@ -217,7 +244,7 @@ async function fetchAndDisplayNotifications(userID) {
                 style="height: 64px; width: auto"
               />
               <div>
-                <h2 id="request-condition">${
+                <h2 id="request-status">${
                   notification.title || "Untitled Notification"
                 }</h2>
                 <p id="request-details">${
@@ -249,7 +276,7 @@ async function fetchAndDisplayNotifications(userID) {
         style="height: 64px; width: auto"
       />
       <div>
-        <h2 id="request-condition">Error</h2>
+        <h2 id="request-status">Error</h2>
         <p id="request-details">Unable to fetch notifications.</p>
       </div>`;
   }
@@ -275,7 +302,7 @@ async function calculateTopRequestedSeeds(userID) {
     const userDocumentsRef = firebaseDB
       .collection("users")
       .doc(userID)
-      .collection("userDocuments");
+      .collection("Documents");
 
     const querySnapshot = await userDocumentsRef.get();
 

@@ -32,8 +32,8 @@
           alt="User Icon"
           class="profile-icon"
         />
-        <h3>John Doe</h3>
-        <p>example@gmail.com</p>
+        <h3 id="user">John Doe</h3>
+        <p id="email">example@gmail.com</p>
         <p>client</p>
       </div>
       <div class="navigation">
@@ -67,18 +67,8 @@
             <p>Notifications</p>
           </div>
         </a>
-        <a class="tablink" onclick="openFileById(`Settings`)">
-          <div class="dashboard-button">
-            <img
-              src="/Resources/image/settings.svg"
-              alt="Request Icon"
-              class="icon"
-              onclick="showContent(`#dashboard`)"
-            />
-            <p>Settings</p>
-          </div>
-        </a>
-        <a class="tablink" onclick="openFileById(`reports`)">
+
+        <a class="tablink" onclick="logout() ">
           <div class="dashboard-button">
             <img
               src="/Resources/image/log-out.svg"
@@ -90,7 +80,7 @@
         </a>
       </div>
       <div class="title-holder">
-        <h1>
+        <h1 id="cnpenro-footer">
           CNPENR<span
             ><img
               src="/Resources/image/cn-penro-logo.svg"

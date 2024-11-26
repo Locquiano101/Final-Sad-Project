@@ -169,12 +169,6 @@ function showPopup() {
   document.getElementById("popup").style.display = "block";
   document.querySelector(".overlay").style.display = "block";
 }
-function openModal() {
-  const popup = document.getElementById("popup");
-  if (popup) {
-    popup.style.display = "block";
-  }
-}
 function closePopup() {
   document.getElementById("popup").style.display = "none";
   document.querySelector(".overlay").style.display = "none";
@@ -194,6 +188,7 @@ function handleSignatureUpload(event) {
     reader.readAsArrayBuffer(file); // Read the file as ArrayBuffer
   }
 }
+let fileName;
 
 async function generateTreeRequestDocument(params) {
   const {
@@ -433,7 +428,8 @@ async function generateTreeRequestDocument(params) {
   });
 
   const sanitizedRequestorName = user.replace(/[\/\\:*?"<>| ]/g, "_");
-  const fileName = `${sanitizedRequestorName}_${seedlingsType}_tree_request.docx`;
+
+  fileName = `${sanitizedRequestorName}_${seedlingsType}_tree_request.docx`;
 
   const docBlob = await docx.Packer.toBlob(doc);
 
@@ -478,6 +474,45 @@ async function generateTreeRequestDocument(params) {
       });
   });
 }
+async function insertDocumentToFirestore(params, userID) {
+  try {
+    // Define the path where the user-specific documents are stored
+    const userDocsRef = firebaseDB
+      .collection("users")
+      .doc(userID)
+      .collection("Documents");
+
+    // Fetch the latest document based on the 'counter' field
+    const snapshot = await userDocsRef
+      .orderBy("counter", "desc")
+      .limit(1)
+      .get();
+
+    // Determine the next counter value
+    let currentCounter = snapshot.empty
+      ? 1
+      : snapshot.docs[0].data().counter + 1;
+
+    // Reference for the new document
+    const docRef = userDocsRef.doc(currentCounter.toString());
+
+    // Add "Pending for Approval" and "fileName" field to the params
+    const documentData = {
+      ...params, // Spread the existing params data
+      status: "Pending for Approval",
+      fileName: fileName || "Untitled", // Default fileName if not provided
+    };
+
+    // Insert the params data into Firestore
+    await docRef.set(documentData);
+
+    console.log(
+      "Document successfully added to Firestore with ID: " + currentCounter
+    );
+  } catch (error) {
+    console.error("Error adding document to Firestore: ", error);
+  }
+}
 
 document.getElementById("projectForm").addEventListener("submit", (event) => {
   event.preventDefault();
@@ -520,7 +555,11 @@ document.getElementById("projectForm").addEventListener("submit", (event) => {
       document.getElementById("agree-note").checked;
 
     // Get the current date for document
-    const formattedDate = new Date().toLocaleDateString();
+    const formattedDate = new Date().toLocaleString("en-US", {
+      month: "long", // Full month name
+      day: "numeric", // Day of the month as a number
+      year: "numeric", // Four-digit year
+    });
 
     // Fetch the user's information (assuming this is already set elsewhere)
     const user = userName; // You can fetch these from the earlier fetchUserData() if needed
@@ -544,7 +583,7 @@ document.getElementById("projectForm").addEventListener("submit", (event) => {
     const params = {
       user: user,
       userNum: userNum,
-      address: "123 Main St, City, Country",
+      address: address,
       projectLocation: projectLocation,
       landClassification: formData.landClassification,
       activityType: formData.activityType,
@@ -552,13 +591,13 @@ document.getElementById("projectForm").addEventListener("submit", (event) => {
       seedlingsType: formData.seedlings.map((s) => s.type).join(", "),
       formattedDate: formattedDate,
     };
-    console.log(formattedDate);
+
     generateTreeRequestDocument(params);
+    insertDocumentToFirestore(params, userID);
     // Show a popup on success
+    showPopup();
   } catch (error) {
     console.error("Error collecting form data:", error);
-  } finally {
-    showPopup();
   }
 });
 function displayMap() {
@@ -607,4 +646,5 @@ function displayMap() {
   );
   map.addObject(marker);
 }
+
 displayMap();

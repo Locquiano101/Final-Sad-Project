@@ -18,13 +18,34 @@ const firebaseDB = firebase.firestore();
 
 // Get userID from local storage
 const userID = localStorage.getItem("userID");
-console.log(userID);
 
 // Reference to user's document collection in 'users' sub-collection
 const userDocRef = firebaseDB.collection("users").doc(userID);
-const userDocumentsRef = userDocRef.collection("userDocuments");
+const userDocumentsRef = userDocRef.collection("Documents");
 
 // Export the instances and references
+async function displayUserData(userId) {
+  try {
+    const userRef = firebase.firestore().collection("users").doc(userId);
+    const userDoc = await userRef.get();
+
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+
+      userName = userData.name || "N/A";
+      userEmail = userData.email || "N/A";
+
+      document.getElementById("user").textContent = userName;
+      document.getElementById("email").textContent = userEmail;
+      console.log(userName, userEmail);
+    } else {
+      console.log("No user data found for this ID.");
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+}
+displayUserData(userID);
 
 async function retrieveDocuments() {
   try {
@@ -37,22 +58,6 @@ async function retrieveDocuments() {
       return;
     }
 
-    // Array of month names
-    const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-
     querySnapshot.forEach((doc) => {
       const docData = doc.data();
 
@@ -60,62 +65,41 @@ async function retrieveDocuments() {
       console.log("Document data:", docData);
 
       // Check if the necessary fields exist inside documentData
-      if (!docData.Document_title || !docData.Condition) {
-        console.log("Missing Document_Title or Condition in document:", doc.id);
+      if (!docData.fileName || !docData.status) {
+        console.log("Missing fileName or status in document:", doc.id);
         return;
       }
 
-      // Access Document_Title and Condition from documentData
-      const docTimeStamp = docData.submittedAt;
-      const Condition = docData.Condition;
+      // Access Document_Title and status from documentData
+      const docTimeStamp = docData.formattedDate;
+      const status = docData.status;
       const docID = doc.id;
+      const docTitle = docData.fileName;
 
       let conditionColor;
-      if (Condition === "Pending for Approval") {
-        conditionColor = "blue";
-      } else if (Condition === "Approved") {
+      if (status === "Pending for Approval") {
+        conditionColor = "white";
+      } else if (status === "Approved") {
         conditionColor = "green";
-      } else if (Condition === "Declined") {
+      } else if (status === "Declined") {
         conditionColor = "red";
       } else {
-        conditionColor = "black"; // Default color for any other condition
+        conditionColor = "white"; // Default color for any other condition
       }
 
       // If timestamp exists, process it
       if (docTimeStamp) {
-        const date = docTimeStamp.toDate(); // Convert Firestore timestamp to JS Date
-        const day = date.getDate(); // Correct day method
-        const month = date.getMonth(); // 0-indexed (0 = January)
-        const year = date.getFullYear();
-
-        // Month names array
-        const monthNames = [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December",
-        ];
-
-        const formattedDate = `${monthNames[month]} ${day}, ${year}`;
-
         // Create a new row for the table
         const tableBody = document.querySelector("#documentTable tbody");
         const row = document.createElement("tr");
 
         row.innerHTML = `
-          <td><input type="checkbox" id="checkbox-${docID}" name="documentCheckbox" value="${docID}"></td>
-          <td>${docID}</td>
-          <td>${formattedDate}</td>
-          <td style="color: ${conditionColor} !important;">${Condition}</td>
-          <td><button class="edit-button" onclick="editDocument('${docID}')">Edit</button></td>
+        <td>${docID}</td>
+        <td>${docTitle}</td>
+        
+          <td>${docTimeStamp}</td>
+          <td style="color: ${conditionColor} !important;">${status}</td>
+          <td><button class="edit-button" onclick="deleteDocument('${docID}')">Delete</button></td>
         `;
 
         // Append the row to the table body
@@ -126,13 +110,28 @@ async function retrieveDocuments() {
       }
     });
 
-    // Sample editDocument function
-    function editDocument(id) {
-      alert(`Edit document with ID: ${id}`);
-    }
     console.log("Documents retrieved and displayed successfully!");
   } catch (error) {
     console.error("Error retrieving documents:", error);
+  }
+}
+async function deleteDocument(docID) {
+  try {
+    // Reference to the document in Firestore
+    const docRef = userDocumentsRef.doc(docID);
+
+    // Delete the document from Firestore
+    await docRef.delete();
+
+    // Remove the row from the table
+    const row = document.querySelector(`tr[data-id="${docID}"]`);
+    if (row) {
+      row.remove();
+    }
+
+    console.log(`Document with ID: ${docID} deleted successfully!`);
+  } catch (error) {
+    console.error("Error deleting document:", error);
   }
 }
 retrieveDocuments();

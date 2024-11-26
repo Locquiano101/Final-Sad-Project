@@ -29,7 +29,6 @@
     <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
   </head>
   <body>
-    <!-- Sidebar -->
     <section class="side-nav">
       <div class="profile-holder">
         <img
@@ -37,16 +36,16 @@
           alt="User Icon"
           class="profile-icon"
         />
-        <label>John Doe</label>
-        <p>example@gmail.com</p>
-        <p>Client</p>
+        <h3 id="user">John Doe</h3>
+        <p id="email">example@gmail.com</p>
+        <p>client</p>
       </div>
       <div class="navigation">
-        <a class="tablink" onclick="openFileById('dashboard')">
+        <a class="tablink" onclick="openFileById(`dashboard`)">
           <div class="dashboard-button">
             <img
               src="/Resources/image/home.svg"
-              alt="Dashboard Icon"
+              alt="Request Icon"
               class="icon"
             />
             <p>Dashboard</p>
@@ -56,37 +55,28 @@
           <div class="dashboard-button">
             <img
               src="/Resources/image/request.svg"
-              alt="Requests Icon"
+              alt="Request Icon"
               class="icon"
             />
             <p>Requests</p>
           </div>
         </a>
-        <a class="tablink" onclick="openFileById('notifications')">
+        <a class="tablink" onclick="openFileById(`notifications`)">
           <div class="dashboard-button">
             <img
               src="/Resources/image/notification.svg"
-              alt="Notifications Icon"
+              alt="Request Icon"
               class="icon"
             />
             <p>Notifications</p>
           </div>
         </a>
-        <a class="tablink" onclick="openFileById('settings')">
-          <div class="dashboard-button">
-            <img
-              src="/Resources/image/settings.svg"
-              alt="Settings Icon"
-              class="icon"
-            />
-            <p>Settings</p>
-          </div>
-        </a>
-        <a class="tablink" onclick="openFileById('logout')">
+
+        <a class="tablink" onclick="logout() ">
           <div class="dashboard-button">
             <img
               src="/Resources/image/log-out.svg"
-              alt="Logout Icon"
+              alt="Request Icon"
               class="icon"
             />
             <p>Logout</p>
@@ -243,7 +233,7 @@
           </div>
           <!-- Submit Button -->
           <div id="button-holder">
-            <button type="submit" onclick="openModal()">Submit</button>
+            <button type="submit">Submit</button>
           </div>
         </form>
 
