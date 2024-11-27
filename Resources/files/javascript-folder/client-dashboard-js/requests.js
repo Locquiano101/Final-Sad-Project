@@ -82,7 +82,7 @@ async function retrieveDocuments() {
       if (status === "Pending for Approval") {
         conditionColor = "white";
       } else if (status === "Approved") {
-        conditionColor = "green";
+        conditionColor = "blue";
       } else if (status === "Declined") {
         conditionColor = "red";
       } else {
