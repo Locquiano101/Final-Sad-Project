@@ -12,9 +12,10 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Initialize Firestore and other services
+// Initialize Firestore
 const firebaseDB = firebase.firestore();
 
+// Function to retrieve and display all documents
 async function retrieveAllDocuments() {
   try {
     const usersCollection = firebaseDB.collection("users");
@@ -49,60 +50,41 @@ async function retrieveAllDocuments() {
         // Log the document data to check its structure
         console.log("Document data:", docData);
 
-        // Ensure necessary fields exist
-        if (!docData.fileName || !docData.status || !docData.user) {
+        // Validate required fields
+        const { fileName, user: requestor, status, formattedDate } = docData;
+        if (!fileName || !status || !requestor) {
           console.log("Missing necessary fields in document:", doc.id);
           return;
         }
 
-        // Extract fields from the document
-        const docTitle = docData.fileName;
-        const requestor = docData.user;
-        const docTimeStamp = docData.formattedDate || "N/A";
-        const status = docData.status;
-        const docID = doc.id; // Firestore-generated ID
+        // Determine status color
+        const statusColors = {
+          "Pending for Approval": "white",
+          Approved: "green",
+          Declined: "red",
+        };
+        const conditionColor = statusColors[status] || "gray";
 
-        // Set condition color based on status
-        let conditionColor;
-        switch (status) {
-          case "Pending for Approval":
-            conditionColor = "white";
-            break;
-          case "Approved":
-            conditionColor = "green";
-            break;
-          case "Declined":
-            conditionColor = "red";
-            break;
-          default:
-            conditionColor = "gray";
-        }
-
-        // Create a new row for the table
+        // Create a new table row
         const row = document.createElement("tr");
-        row.dataset.id = docID; // Store docID for row identification during deletion
+        row.dataset.id = doc.id; // Store docID for row identification during deletion
 
         row.innerHTML = `
-          <td>${docTitle}</td>
+          <td>${fileName}</td>
           <td>${requestor}</td>
-          <td>${docTimeStamp}</td>
+          <td>${formattedDate || "N/A"}</td>
           <td style="color: ${conditionColor} !important;">${status}</td>
           <td>
-           <div style="display: flex">
+            <div style="display: flex; gap: 5px;">
               <button
                 class="edit-button"
-                onclick="edit('${userID}', '${docID}')"
+                onclick="editDocument('${userID}', '${doc.id}')"
               >
-                Edit
+                View
               </button>
-              <br />
-              <button
-                class="delete-button"
-                onclick="Delete('${userID}', '${docID}')"
-              >
-                Delete
-              </button>
-            </div></td>
+
+            </div>
+          </td>
         `;
 
         // Append the row to the table body
@@ -116,30 +98,14 @@ async function retrieveAllDocuments() {
   }
 }
 
-async function deleteDocument(userID, docID) {
-  try {
-    // Reference to the document in Firestore
-    const docRef = firebaseDB
-      .collection("users")
-      .doc(userID)
-      .collection("Documents")
-      .doc(docID);
+// Placeholder function for editing (implement as needed)
+function editDocument(userID, docID) {
+  localStorage.setItem("userID", userID);
+  localStorage.setItem("docID", docID);
+  alert(`Edit function called for User: ${userID}, Document: ${docID}`);
 
-    // Delete the document from Firestore
-    await docRef.delete();
-
-    // Remove the row from the table
-    const row = document.querySelector(`tr[data-id="${docID}"]`);
-    if (row) {
-      row.remove();
-    }
-
-    console.log(
-      `Document with ID: ${docID} for user: ${userID} deleted successfully!`
-    );
-  } catch (error) {
-    console.error("Error deleting document:", error);
-  }
+  window.open("view-requests.html", "_self");
+  // Implement your edit logic here
 }
 
 // Call the function to retrieve and display all documents

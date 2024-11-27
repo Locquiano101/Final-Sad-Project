@@ -436,45 +436,45 @@ async function generateTreeRequestDocument(params) {
   insertDocumentToFirestore(params, userID, fileName);
 
   // Create a link element to download the document
-  // const link = document.createElement("a");
-  // link.href = URL.createObjectURL(docBlob);
-  // link.download = fileName;
-  // link.click();
-  // docx.Packer.toBlob(doc).then((docBlob) => {
-  //   const formData = new FormData();
-  //   formData.append("file", docBlob, fileName);
-  //   formData.append("requestorName", user);
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(docBlob);
+  link.download = fileName;
+  link.click();
+  docx.Packer.toBlob(doc).then((docBlob) => {
+    const formData = new FormData();
+    formData.append("file", docBlob, fileName);
+    formData.append("requestorName", user);
 
-  //   fetch(
-  //     "https://aliceblue-owl-540826.hostingersite.com//client-dashboard/upload.php",
-  //     {
-  //       method: "POST",
-  //       body: formData,
-  //       mode: "cors",
-  //       credentials: "omit",
-  //     }
-  //   )
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error(
-  //           "Network response was not ok: " + response.statusText
-  //         );
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       if (data.status === "success") {
-  //         alert(data.message);
-  //       } else {
-  //         console.error("Upload failed:", data.message);
-  //         alert("Error: " + data.message);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Upload error:", error);
-  //       alert("An error occurred: " + error.message);
-  //     });
-  // });
+    fetch(
+      "https://aliceblue-owl-540826.hostingersite.com//client-dashboard/upload.php",
+      {
+        method: "POST",
+        body: formData,
+        mode: "cors",
+        credentials: "omit",
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            "Network response was not ok: " + response.statusText
+          );
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.status === "success") {
+          alert(data.message);
+        } else {
+          console.error("Upload failed:", data.message);
+          alert("Error: " + data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Upload error:", error);
+        alert("An error occurred: " + error.message);
+      });
+  });
 }
 async function insertDocumentToFirestore(params, userID, fileName) {
   try {

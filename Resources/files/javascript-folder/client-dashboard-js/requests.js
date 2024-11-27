@@ -20,7 +20,10 @@ const firebaseDB = firebase.firestore();
 const userID = localStorage.getItem("userID");
 
 // Reference to user's document collection in 'users' sub-collection
-const userDocumentsRef = firebaseDB.collection("users").collection("Documents");
+const userDocumentsRef = firebaseDB
+  .collection("users")
+  .doc(userID)
+  .collection("Documents");
 
 // Export the instances and references
 async function displayUserData(userId) {

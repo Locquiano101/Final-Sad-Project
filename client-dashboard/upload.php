@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['file']) && isset($_POST['requestorName'])) {
         $requestorName = preg_replace("/[^a-zA-Z0-9_]/", "_", $_POST['requestorName']); // Sanitize input
-        $uploadDir = __DIR__ . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . $requestorName . DIRECTORY_SEPARATOR . 'documents';
+        $uploadDir = __DIR__ . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'documents';
 
         // Create directory if it doesn't exist
         if (!is_dir($uploadDir)) {

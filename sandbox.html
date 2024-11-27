@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Upload and Download</title>
+  </head>
+  <body>
+    <h1>Download File</h1>
+
+    <!-- File Download Section -->
+    <button id="downloadButton">Download File</button>
+
+    <script>
+      // Handle file upload
+
+      // JavaScript function to trigger the download
+      document
+        .getElementById("downloadButton")
+        .addEventListener("click", () => {
+          const fileUrl = `https://aliceblue-owl-540826.hostingersite.com//client-dashboard/uploads/Greg_Patrick_Locquiano/documents/GregPatrickLocquiano_Marang__Manayaw_tree_request.docx`;
+          const fileName = "yourfile.pdf"; // Replace with your file's name
+
+          // Create an anchor element
+          const a = document.createElement("a");
+          a.href = fileUrl;
+          a.download = fileName;
+
+          // Append the anchor to the body
+          document.body.appendChild(a);
+
+          // Trigger a click event on the anchor
+          a.click();
+
+          // Remove the anchor from the body
+          document.body.removeChild(a);
+        });
+    </script>
+  </body>
+</html>
