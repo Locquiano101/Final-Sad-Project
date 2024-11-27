@@ -161,14 +161,13 @@ h6 {
   }
 
   .sticky-nav ul {
-    display: none; /* Hide initially */
-    flex-direction: column;
-    background-color: #333;
-    width: 100%;
-    position: absolute;
+    z-index: 5; /* Lower than .menu-icon */
+    position: absolute; /* Keeps it below the button */
     top: 60px;
     left: 0;
-    text-align: left;
+    background-color: #333;
+    width: 100%;
+    display: none; /* Hidden by default */
   }
 
   #menu-toggle:checked + .menu-icon + ul {
@@ -485,6 +484,35 @@ SECTION 4
   max-width: 100%; /* Ensures the image scales properly */
   border-radius: 10px;
 }
+/* 
+********************
+SECTION 5
+********************
+*/
+.cell2 {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
+  cursor: pointer; /* Indicate clickable */
+}
+
+.cell2:hover {
+  background-color: #e9e9e9; /* Highlight on hover */
+}
+
+.cell-content {
+  display: none; /* Hidden by default */
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.service-title2 h1 {
+  text-align: center;
+  margin-bottom: 20px;
+} 
 /* 
 ********************
 FOOTER

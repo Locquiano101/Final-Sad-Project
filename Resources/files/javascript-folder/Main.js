@@ -99,7 +99,22 @@ links.forEach((link) => {
             }
           });
         
-// // change background color navigation
+
+          function toggleContent(element) {
+            // Find the .cell-content inside the clicked cell
+            const content = element.querySelector('.cell-content');
+          
+            if (content) {
+              // Toggle display between 'block' and 'none'
+              if (content.style.display === 'block') {
+                content.style.display = 'none';
+              } else {
+                content.style.display = 'block';
+              }
+            }
+          }
+          
+// // change background color navigation  
 // window.addEventListener("scroll", function () {
 //   var navbar = document.getElementById("navbar");
 
