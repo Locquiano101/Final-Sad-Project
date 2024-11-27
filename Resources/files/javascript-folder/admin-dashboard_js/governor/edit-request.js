@@ -20,6 +20,7 @@ console.log("Firebase initialized!");
 // Retrieve values from localStorage
 const userID = localStorage.getItem("userID");
 const docID = localStorage.getItem("docID");
+
 let filenamefromFirebase,
   activityType,
   address,
@@ -112,7 +113,7 @@ async function updateDocumentStatus(userID, documentID, newStatus, notes) {
     await docRef.update({
       status: newStatus,
       notes: notes || "",
-      UpdateTime: firebase.firestore.FieldValue.serverTimestamp(), //Optional: Add an updated timestamp
+      UpdateTime: w, //Optional: Add an updated timestamp
     });
 
     console.log("Document status updated successfully!");
@@ -125,7 +126,8 @@ async function updateDocumentStatus(userID, documentID, newStatus, notes) {
 document.addEventListener("click", async (event) => {
   if (event.target.matches("#approve, #decline")) {
     const button = event.target;
-    const condition = button.id === "approve" ? "Approved" : "Declined";
+    const condition =
+      button.id === "approve" ? "Ready for Pick Up" : "Declined";
     const noteField = document.querySelector("textarea#Note");
     const note = noteField ? noteField.value : "";
 

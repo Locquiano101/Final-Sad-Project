@@ -85,6 +85,8 @@ async function retrieveDocuments() {
         conditionColor = "blue";
       } else if (status === "Declined") {
         conditionColor = "red";
+      } else if (status === "Ready for Pick Up") {
+        conditionColor = "yellow";
       } else {
         conditionColor = "white"; // Default color for any other condition
       }

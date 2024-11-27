@@ -1,0 +1,129 @@
+.dashboard {
+  display: flex;
+  padding: 1rem;
+  flex-direction: column;
+  height: 100%;
+  gap: 1rem;
+}
+
+.request-panel {
+  border-radius: 10px;
+}
+.stats {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  align-items: center;
+  border-radius: 16px;
+}
+#mostRequestedChart {
+  border: 1px solid white;
+  width: 100%;
+  height: auto;
+}
+.stats button {
+  border-style: none;
+  background-color: #ffc107;
+}
+#readyforPickUps-div {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  width: 50%;
+  padding: 2rem;
+  background-color: #103635;
+  border-radius: 16px;
+  gap: 1rem;
+}
+#firstPanel {
+  height: 45%;
+  gap: 1rem;
+  display: flex;
+}
+#chart-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  width: 55%;
+  background-color: #103635;
+  border-radius: 16px;
+}
+button {
+  border-style: none;
+  background-color: #ffc107;
+  padding: 0.5rem 1rem;
+}
+#secondPanel {
+  display: flex;
+  gap: 1rem;
+  height: 50%;
+  box-sizing: border-box;
+}
+#secondPanel-firstDiv {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  width: 55%;
+}
+.seedlings {
+  display: flex;
+  padding: 1rem;
+  gap: 1rem;
+  width: 100%;
+  background-color: #103635;
+  align-items: center;
+  justify-content: space-between;
+}
+.seedlings-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #103635;
+  padding: 1rem;
+  border-radius: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+.manageData {
+  display: flex;
+  gap: 1rem;
+}
+
+.button-container {
+  background-color: #103635;
+  border-radius: 16px;
+  display: flex;
+  padding: 3rem 2rem;
+  gap: 1rem;
+  align-items: center;
+}
+
+.button-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.inventory-container {
+  border-radius: 16px;
+  background-color: #103635;
+  width: 50%;
+  display: flex;
+  padding: 2rem;
+
+  flex-direction: column;
+  gap: 1rem;
+}
+.inventory-container-container {
+  display: flex;
+  border: 1px solid white;
+  padding: 1rem;
+  justify-content: left;
+
+  align-items: center;
+  gap: 1rem;
+}
+.inventory-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 1rem;
+}

@@ -3,39 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>File Upload and Download</title>
+    <title>Most Requested Seedlings Chart</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
-    <h1>Download File</h1>
-
-    <!-- File Download Section -->
-    <button id="downloadButton">Download File</button>
+    <h1>Most Requested Seedlings</h1>
 
     <script>
-      // Handle file upload
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCPIdlzAlKkfZp3bu4YuI2fylSzxar1zA0",
+        authDomain: "penro-db.firebaseapp.com",
+        projectId: "penro-db",
+        storageBucket: "penro-db.appspot.com",
+        messagingSenderId: "25138598165",
+        appId: "1:25138598165:web:9c8136ef9898df7803591c",
+        measurementId: "G-8YBC8FE4XZ",
+      };
 
-      // JavaScript function to trigger the download
-      document
-        .getElementById("downloadButton")
-        .addEventListener("click", () => {
-          const fileName =
-            "GregPatrickLocquiano_KalaataBagras_tree_request.docx"; // Replace with your file's name
-          const fileUrl = `https://aliceblue-owl-540826.hostingersite.com//client-dashboard/uploads/documents/${fileName}`;
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
 
-          // Create an anchor element
-          const a = document.createElement("a");
-          a.href = fileUrl;
-          a.download = fileName;
-
-          // Append the anchor to the body
-          document.body.appendChild(a);
-
-          // Trigger a click event on the anchor
-          a.click();
-
-          // Remove the anchor from the body
-          document.body.removeChild(a);
-        });
+      // Function to fetch and display the chart
     </script>
   </body>
 </html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CNPNRO-FTSMS Dashboard</title>
+    <title>CNPNRO-FTSMS</title>
     <link rel="icon" href="/Resources/image/penro (0).png" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,8 +17,10 @@
     />
     <link
       rel="stylesheet"
-      href="/Resources/files/css-folder/admin-dashboard/dashboard.css"
+      href="/Resources/files/css-folder/admin-dashboard/penro/dashboard.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   </head>
@@ -52,6 +54,16 @@
               class="icon"
             />
             <p>Requests</p>
+          </div>
+        </a>
+        <a class="tablink">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/side-nav-inventory.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Inventory</p>
           </div>
         </a>
         <a class="tablink" onclick="openFileById(`reports`)">
@@ -88,6 +100,383 @@
       </div>
     </section>
 
-    <div class="content"></div>
+    <div class="content">
+      <div class="dashboard">
+        <div id="firstPanel">
+          <div id="readyforPickUps-div">
+            <h3>5 Pending Pickups</h3>
+            <div class="stats">
+              <img
+                src="/Resources/image/pickUpReady.svg"
+                alt="Request Icon"
+                class="icon"
+                style="height: 48px; width: auto"
+              />
+              <p>[Pick up code] (quantity and type of seed)</p>
+              <button class="button">Confirm Pick-up</button>
+            </div>
+            <hr />
+            <div class="stats">
+              <img
+                src="/Resources/image/pickUpReady.svg"
+                alt="Request Icon"
+                class="icon"
+                style="height: 48px; width: auto"
+              />
+              <p>[Pick up code] (quantity and type of seed)</p>
+              <button class="button">Confirm Pick-up</button>
+            </div>
+          </div>
+
+          <!-- High Demand Seeds -->
+          <div id="chart-container">
+            <h1>TOP 3 Requested Seeds</h1>
+            <canvas id="mostRequestedChart"></canvas>
+          </div>
+        </div>
+
+        <div id="secondPanel">
+          <div id="secondPanel-firstDiv">
+            <div class="seedlings-container">
+              <div class="seedlings">
+                <h3>Seed Type Available</h3>
+                <h2 id="seedTypeAvailable">loading...</h2>
+              </div>
+              <hr style="width: 100%" />
+              <div class="seedlings">
+                <h3>Seed Quantity Available</h3>
+                <h2 id="seedQuantityAvailable">loading...</h2>
+              </div>
+            </div>
+
+            <div class="manageData">
+              <div class="button-container">
+                <img
+                  src="/Resources/image/pickUpReady.svg"
+                  alt="Request Icon"
+                  class="icon"
+                  style="height: 64px; width: auto"
+                />
+                <div class="button-info">
+                  <h3>Confirm Pick-up</h3>
+                  <p>
+                    Confirm client pick-up codes, and update requests’ status.
+                  </p>
+                  <button class="button">Add/Update Inventory</button>
+                </div>
+              </div>
+              <div class="button-container">
+                <img
+                  src="/Resources/image/pickUpReady.svg"
+                  alt="Request Icon"
+                  class="icon"
+                  style="height: 64px; width: auto"
+                />
+                <div class="button-info">
+                  <h3>Confirm Pick-up</h3>
+                  <p>
+                    Confirm client pick-up codes, and update requests’ status.
+                  </p>
+                  <button class="button">Add/Update Inventory</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="inventory-container">
+            <h1>Seedlings Inventory</h1>
+            <hr />
+            <div class="inventory-grid">
+              <div class="inventory-container-container">
+                <img
+                  src="/Resources/image/inventory-icon.svg"
+                  alt="Request Icon"
+                  class="icon"
+                  style="height: 32x; width: auto"
+                />
+                <div>
+                  <h4>Seedlings Quantity</h4>
+                  <br />
+                  <p id="seedlingQuantity">100</p>
+                </div>
+              </div>
+              <div class="inventory-container-container">
+                <img
+                  src="/Resources/image/inventory-icon.svg"
+                  alt="Request Icon"
+                  class="icon"
+                  style="height: 32x; width: auto"
+                />
+                <div>
+                  <h4>Low on Stocks</h4>
+                  <br />
+                  <p id="lowSeedTypeQty">100</p>
+                </div>
+              </div>
+              <div class="inventory-container-container">
+                <img
+                  src="/Resources/image/inventory-icon.svg"
+                  alt="Request Icon"
+                  class="icon"
+                  style="height: 32x; width: auto"
+                />
+                <div>
+                  <h4>Out of Stocks</h4>
+                  <br />
+
+                  <p id="outofStocksSeedlings">this, that, and there</p>
+                  <br />
+                </div>
+              </div>
+              <div class="inventory-container-container">
+                <img
+                  src="/Resources/image/inventory-icon.svg"
+                  alt="Request Icon"
+                  class="icon"
+                  style="height: 32x; width: auto"
+                />
+                <div>
+                  <h4>
+                    Most Stocks(<span id="mostStockSeedType">loading...</span>)
+                  </h4>
+                  <br />
+                  <p id="mostStockSeedTypeQty">100</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Manage Inventory -->
+    </div>
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCPIdlzAlKkfZp3bu4YuI2fylSzxar1zA0",
+        authDomain: "penro-db.firebaseapp.com",
+        projectId: "penro-db",
+        storageBucket: "penro-db.appspot.com",
+        messagingSenderId: "25138598165",
+        appId: "1:25138598165:web:9c8136ef9898df7803591c",
+        measurementId: "G-8YBC8FE4XZ",
+      };
+
+      // Initialize Firebase
+      const app = firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
+      // Fetch and display data
+      const inventoryGrid = document.getElementById("inventoryGrid");
+
+      function fetchLowStocks() {
+        const lowStockThreshold = 10; // Define the threshold for "low stock"
+        const lowSeedType = document.getElementById("lowSeedType");
+        const lowSeedTypeQty = document.getElementById("lowSeedTypeQty");
+
+        db.collection("trees")
+          .where("quantity", "<", lowStockThreshold)
+          .get()
+          .then((querySnapshot) => {
+            if (querySnapshot.empty) {
+              lowSeedType.innerText = "None";
+              lowSeedTypeQty.innerText = "0";
+              return;
+            }
+
+            let lowStockItems = [];
+            let totalLowQuantity = 0;
+
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              lowStockItems.push(data.name); // Collect item names
+              totalLowQuantity += data.quantity; // Sum up the quantities
+            });
+
+            // Update the DOM
+            lowSeedTypeQty.innerText = lowStockItems.join(", ");
+          })
+          .catch((error) => {
+            console.error("Error fetching low stock data:", error);
+            lowSeedType.innerText = "Error";
+            lowSeedTypeQty.innerText = "N/A";
+          });
+      }
+      function fetchOutOfStocks() {
+        const outOfStocksSeedlings = document.getElementById(
+          "outofStocksSeedlings"
+        );
+
+        db.collection("trees")
+          .where("quantity", "==", 0)
+          .get()
+          .then((querySnapshot) => {
+            if (querySnapshot.empty) {
+              outOfStocksSeedlings.innerText = "None"; // If no out-of-stock items
+              return;
+            }
+
+            let outOfStockItems = [];
+
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              outOfStockItems.push(data.name); // Collect item names
+            });
+
+            // Update the DOM
+            outOfStocksSeedlings.innerText = outOfStockItems.join(", ");
+          })
+          .catch((error) => {
+            console.error("Error fetching out-of-stock data:", error);
+            outOfStocksSeedlings.innerText = "Error";
+          });
+      }
+      function fetchSeedlingsQuantity() {
+        const seedlingQuantity = document.getElementById("seedlingQuantity");
+        let totalQuantity = 0;
+
+        db.collection("trees")
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              totalQuantity += data.quantity; // Sum up the quantities
+            });
+
+            // Update the DOM with the total quantity
+            seedlingQuantity.innerText = totalQuantity;
+          })
+          .catch((error) => {
+            console.error("Error fetching total quantity:", error);
+            seedlingQuantity.innerText = "Error";
+          });
+      }
+      function fetchMostStocks() {
+        const mostStockSeedType = document.getElementById("mostStockSeedType");
+        const mostStockSeedTypeQty = document.getElementById(
+          "mostStockSeedTypeQty"
+        );
+
+        db.collection("trees")
+          .get()
+          .then((querySnapshot) => {
+            let mostStockItem = null;
+            let highestQuantity = 0;
+
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              if (data.quantity > highestQuantity) {
+                highestQuantity = data.quantity;
+                mostStockItem = data.name;
+              }
+            });
+
+            // Update the DOM
+            if (mostStockItem) {
+              mostStockSeedType.innerText = mostStockItem;
+              mostStockSeedTypeQty.innerText = highestQuantity;
+            } else {
+              mostStockSeedType.innerText = "None";
+              mostStockSeedTypeQty.innerText = "0";
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching most stocks data:", error);
+            mostStockSeedType.innerText = "Error";
+            mostStockSeedTypeQty.innerText = "N/A";
+          });
+      }
+      function fetchSeedlingsData() {
+        const seedTypeAvailable = document.getElementById("seedTypeAvailable");
+        const seedQuantityAvailable = document.getElementById(
+          "seedQuantityAvailable"
+        );
+
+        db.collection("trees")
+          .get()
+          .then((querySnapshot) => {
+            const seedTypes = querySnapshot.size; // Number of documents = number of seed types
+            let totalQuantity = 0;
+
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              totalQuantity += data.quantity; // Sum up the quantity
+            });
+
+            // Update the DOM
+            seedTypeAvailable.innerText = seedTypes;
+            seedQuantityAvailable.innerText = totalQuantity;
+          })
+          .catch((error) => {
+            console.error("Error fetching seedlings data:", error);
+            seedTypeAvailable.innerText = "Error";
+            seedQuantityAvailable.innerText = "Error";
+          });
+      }
+      function fetchMostRequestedSeedlings() {
+        const ctx = document
+          .getElementById("mostRequestedChart")
+          .getContext("2d");
+
+        db.collection("InventoryTrackingDatabase")
+          .doc("MostSeedlingRequested")
+          .get()
+          .then((doc) => {
+            if (!doc.exists) {
+              console.error("No document found!");
+              return;
+            }
+
+            // Extract data
+            const data = doc.data();
+            const requestSamples = Object.values(data);
+
+            // Prepare chart data
+            const seedlingTypes = requestSamples.map(
+              (sample) => sample.seedlingType
+            );
+            const seedlingQuantities = requestSamples.map((sample) =>
+              parseInt(sample.seedlingQty, 10)
+            ); // Convert to numbers
+
+            // Render chart
+            new Chart(ctx, {
+              type: "bar",
+              data: {
+                labels: seedlingTypes,
+                datasets: [
+                  {
+                    label: "Most Requested Seedlings",
+                    data: seedlingQuantities,
+                    backgroundColor: ["white"],
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+              },
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching MostSeedlingRequested data:", error);
+          });
+      }
+
+      // Call the function to fetch data and render chart
+      fetchMostRequestedSeedlings();
+      // Call the function to fetch and display seedlings data
+      fetchSeedlingsData();
+      // Call the function to fetch and display the item with the most stocks
+      fetchMostStocks();
+      // Call the function to fetch and display total seedlings quantity
+      fetchSeedlingsQuantity();
+      // Call the function to fetch and display out-of-stock items
+      fetchOutOfStocks();
+      // Call the function to fetch and display low stocks
+      fetchLowStocks();
+    </script>
   </body>
 </html>
