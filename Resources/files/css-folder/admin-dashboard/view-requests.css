@@ -10,9 +10,7 @@
   padding: 5rem 4rem;
   border-radius: 16px;
 }
-div {
-  border: 1px solid white;
-}
+
 .seedling-input-container {
   display: flex;
   flex-direction: column;
@@ -21,7 +19,8 @@ input[type="number"]:focus,
 input[type="text"]:focus,
 select:focus,
 textarea:focus {
-  border: 3px solid white white; /* Keep the border color the same on focus */
+  color: white;
+  border: 3px solid white; /* Keep the border color the same on focus */
 }
 form {
   display: flex;
@@ -32,6 +31,12 @@ form {
   gap: 1rem;
   display: flex;
   flex-wrap: wrap;
+}
+textarea {
+  background-color: transparent !important;
+  border: 1px solid white;
+  padding: 1rem;
+  border-radius: 16px;
 }
 .seedling-container button {
   border: 3px solid white;
@@ -105,7 +110,14 @@ form {
   justify-content: space-between;
   flex: 1;
 }
-
+#approve {
+  background-color: #1976d2 !important;
+  color: white !important;
+}
+#decline {
+  color: white !important;
+  background-color: #cf4747 !important;
+}
 .property-details-option input,
 select {
   padding: 1rem;

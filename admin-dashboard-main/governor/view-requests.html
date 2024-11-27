@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CNPNRO-FTSMS Dashboard</title>
-    <link rel="icon" href="Resources/image/penro (0).png" type="image/png" />
+    <link rel="icon" href="/Resources/image/penro (0).png" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,7 +19,11 @@
       rel="stylesheet"
       href="/Resources/files/css-folder/admin-dashboard/view-requests.css"
     />
-    <link rel="stylesheet" />
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
+    ></script>
+
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   </head>
@@ -107,7 +111,10 @@
         <p id="recipientNum">Loading...</p>
         <p id="recipientAddress">Loading...</p>
         <h2>Download File Requests</h2>
-        <div><h1 id="fileName"></h1></div>
+        <div>
+          <h2 id="fileName">Loading...</h2>
+          <button id="DownLoadFile" style="display: none">Download File</button>
+        </div>
       </div>
       <div class="main-div">
         <!-- Seedling Information -->
@@ -177,11 +184,21 @@
             </div>
           </div>
         </div>
-
+        <div class="activity-type-container">
+          <h3>Note:</h3>
+          <textarea
+            id="Note"
+            name="Note"
+            cols="100"
+            rows="5"
+            placeholder="Note"
+            required
+          ></textarea>
+        </div>
         <!-- Submit Button -->
         <div id="button-holder">
-          <button id="decline">Submit</button>
-          <button id="approve">Submit</button>
+          <button id="approve">Approve Requests</button>
+          <button id="decline">Decline Requests</button>
         </div>
 
         <!-- Popup -->

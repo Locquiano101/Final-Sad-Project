@@ -100,7 +100,6 @@ function convertToArea() {
     }
   }
 }
-
 // Convert input area to tree quantity
 function convertToQuantity() {
   const selectedTreeName = treeDropdown.value;
@@ -120,7 +119,22 @@ function convertToQuantity() {
     }
   }
 }
+function updateInputsBasedOnTree() {
+  const selectedTreeName = document.getElementById("treeDropdown").value;
+  const selectedTree = trees.find((tree) => tree.name === selectedTreeName);
 
+  if (selectedTree) {
+    // Enable inputs related to the selected tree
+    document.getElementById("areaInput").disabled = false;
+    document.getElementById("sqMeterInput").disabled = false;
+
+    console.log(`Selected Tree: ${selectedTree.name}`);
+  } else {
+    // Disable inputs if no tree is selected
+    document.getElementById("areaInput").disabled = true;
+    document.getElementById("sqMeterInput").disabled = true;
+  }
+}
 // Disable inputs initially until a tree is selected
 document.getElementById("areaInput").disabled = true;
 document.getElementById("sqMeterInput").disabled = true;
@@ -202,102 +216,8 @@ async function retrieveAndCountDocuments() {
   }
 }
 
-// Fetch and display notifications
-async function fetchAndDisplayNotifications(userID) {
-  const notificationsRef = firebaseDB
-    .collection("users")
-    .doc(userID)
-    .collection("notifications");
-
-  try {
-    const snapshot = await notificationsRef.get();
-    const container = document.querySelector("#notifications-container");
-    if (snapshot.empty) {
-      container.innerHTML = `
-        <div class="notif-container">
-          <img
-            src="/Resources/image/notification-bell.svg"
-            alt="Notification Icon"
-            class="icon"
-            style="height: 64px; width: auto"
-          />
-          <div>
-            <h2 id="request-status">No Notifications</h2>
-            <p id="request-details">You have no notifications at the moment.</p>
-          </div>
-        </div>
-      `;
-    } else {
-      const notificationsHTML = snapshot.docs
-        .map((doc) => {
-          const notification = doc.data();
-          const timestamp = notification.timestamp?.toDate()
-            ? new Date(notification.timestamp.toDate()).toLocaleString()
-            : "Unknown";
-
-          return `
-            <div class="notif-container">
-              <img
-                src="/Resources/image/notification-bell.svg"
-                alt="Notification Icon"
-                class="icon"
-                style="height: 64px; width: auto"
-              />
-              <div>
-                <h2 id="request-status">${
-                  notification.title || "Untitled Notification"
-                }</h2>
-                <p id="request-details">${
-                  notification.message || "No message provided."
-                }</p>
-    
-                <button style="margin-top: 10px;" onclick="deleteNotification('${userID}', '${
-            doc.id
-          }')">
-                  Delete
-                </button>
-              </div>
-            </div>
-            <hr />
-          `;
-        })
-        .join(""); // Combine all notifications into one string
-
-      container.innerHTML = notificationsHTML;
-    }
-  } catch (error) {
-    console.error("Error fetching notifications:", error);
-    const container = document.querySelector(".notif-container");
-    container.innerHTML = `
-      <img
-        src="/Resources/image/notification-bell.svg"
-        alt="Request Icon"
-        class="icon"
-        style="height: 64px; width: auto"
-      />
-      <div>
-        <h2 id="request-status">Error</h2>
-        <p id="request-details">Unable to fetch notifications.</p>
-      </div>`;
-  }
-}
-
-// Delete notification
-async function deleteNotification(userID, notificationId) {
-  try {
-    await firebaseDB
-      .collection("users")
-      .doc(userID)
-      .collection("notifications")
-      .doc(notificationId)
-      .delete();
-    document.getElementById(notificationId)?.remove();
-  } catch (error) {
-    console.error("Error deleting notification:", error);
-  }
-}
-
 async function calculateTopRequestedSeeds(userID) {
+  console.log("Calculating..");
   try {
     const userDocumentsRef = firebaseDB
       .collection("users")
@@ -318,16 +238,27 @@ async function calculateTopRequestedSeeds(userID) {
     querySnapshot.forEach((doc) => {
       const docData = doc.data();
 
-      // Extract Seedlings_Type and Seedlings_Number
-      const seedType = docData.Seedlings_Type;
-      const seedCount = parseInt(docData.Seedlings_Number, 10) || 0;
+      // Extract and split Seedlings_Type and Seedlings_Number
+      const seedTypes =
+        docData.seedlingsType?.split(",").map((s) => s.trim()) || [];
+      const seedCounts =
+        docData.seedlingsNumber
+          ?.split(",")
+          .map((n) => parseInt(n.replace(/,/g, ""), 10)) || [];
 
-      console.log(seedType);
-
-      if (seedType && seedCount > 0) {
-        // Add to the seedRequests map
-        seedRequests[seedType] = (seedRequests[seedType] || 0) + seedCount;
+      // Ensure both arrays have the same length
+      if (seedTypes.length !== seedCounts.length) {
+        console.warn("Mismatch in seed types and counts for document:", doc.id);
+        return;
       }
+
+      // Aggregate seed counts
+      seedTypes.forEach((type, index) => {
+        const count = seedCounts[index];
+        if (type && count > 0) {
+          seedRequests[type] = (seedRequests[type] || 0) + count;
+        }
+      });
     });
 
     // Convert the map to an array and sort by seed count in descending order
@@ -344,28 +275,27 @@ async function calculateTopRequestedSeeds(userID) {
     console.error("Error calculating top requested seeds:", error);
   }
 }
+
 // Function to update the bar chart with new data
 function updateBarChart(topSeeds) {
+  console.log(topSeeds); // Log the top seeds to check the data structure
+
   if (!myBarChart || !myBarChart.data) {
     console.error("Chart is not initialized or has invalid data structure.");
     return;
   }
 
-  // Ensure the datasets array and first dataset exist
   if (!myBarChart.data.datasets || !myBarChart.data.datasets[0]) {
     console.error("Dataset structure in the chart is missing.");
     return;
   }
 
-  // Prepare labels and data for the chart
   const labels = topSeeds.map((seed) => seed[0]); // Seed types
   const data = topSeeds.map((seed) => seed[1]); // Seed counts
 
-  // Update chart labels and dataset
   myBarChart.data.labels = labels;
   myBarChart.data.datasets[0].data = data;
 
-  // Refresh the chart
   myBarChart.update();
 }
 
@@ -395,6 +325,87 @@ const myBarChart = new Chart(ctx, {
     },
   },
 });
-calculateTopRequestedSeeds(userID);
+
+const fetchAndDisplayNotifications = async (userID) => {
+  try {
+    const notificationsRef = firebaseDB
+      .collection("users")
+      .doc(userID)
+      .collection("Notifications");
+
+    const snapshot = await notificationsRef.get();
+
+    if (snapshot.empty) {
+      document.getElementById("notification-container").innerHTML =
+        "<p>No notifications found.</p>";
+      return;
+    }
+
+    // Get the container to append notifications
+    const container = document.getElementById("notification-container");
+    container.innerHTML = ""; // Clear existing notifications
+
+    // Loop through each notification document
+    snapshot.forEach((doc) => {
+      const notification = doc.data();
+      const notificationID = doc.id; // Get the document ID for deletion
+
+      // Create a new notification div
+      const notificationDiv = document.createElement("div");
+      notificationDiv.classList.add("notification");
+
+      // Set up the structure and content, adding a delete button
+      notificationDiv.innerHTML = `
+        <img
+          src="/Resources/image/notification-bell.svg"
+          alt="Request Icon"
+          class="icon"
+          style="height: 64px; width: 64"
+        />
+        <div>
+          <h2>${notification.title || "Untitled Notification"}</h2>
+          <small>${notification.message || "No message provided."}</small>
+          <small>Timestamp: ${
+            notification.timestamp?.toDate() || "Unknown"
+          }</small>
+          <button class="delete-btn" data-id="${notificationID}">Delete</button>
+        </div>
+      `;
+
+      // Get the delete button and add event listener
+      const deleteButton = notificationDiv.querySelector(".delete-btn");
+      deleteButton.addEventListener("click", async () => {
+        await deleteNotification(userID, notificationID);
+      });
+
+      // Append the notification div to the container
+      container.appendChild(notificationDiv);
+    });
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+  }
+};
+
+const deleteNotification = async (userID, notificationID) => {
+  try {
+    const notificationRef = firebaseDB
+      .collection("users")
+      .doc(userID)
+      .collection("Notifications")
+      .doc(notificationID);
+
+    await notificationRef.delete(); // Delete the notification document
+
+    // Optionally, update the UI after deletion
+    document
+      .querySelector(`button[data-id="${notificationID}"]`)
+      .parentElement.remove();
+    console.log("Notification deleted successfully!");
+  } catch (error) {
+    console.error("Error deleting notification:", error);
+  }
+};
+
 fetchAndDisplayNotifications(userID);
+calculateTopRequestedSeeds(userID);
 retrieveAndCountDocuments();

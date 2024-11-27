@@ -44,7 +44,7 @@ const fetchAndDisplayNotifications = async (userID) => {
     const notificationsRef = firebaseDB
       .collection("users")
       .doc(userID)
-      .collection("notifications");
+      .collection("Notifications");
 
     const snapshot = await notificationsRef.get();
 
@@ -72,7 +72,7 @@ const fetchAndDisplayNotifications = async (userID) => {
       // Add content to the div
       notificationDiv.innerHTML = `
           <h3>${notification.title || "Untitled Notification"}</h3>
-          <p>${notification.message || "No message provided."}</p>
+          <small>${notification.message || "No message provided."}</small>
           <small>Timestamp: ${
             notification.timestamp?.toDate() || "Unknown"
           }</small>

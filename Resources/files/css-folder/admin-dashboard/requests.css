@@ -59,7 +59,10 @@
   background-color: #4caf50;
   font-weight: bold;
 }
-
+textarea {
+  background-color: transparent !important;
+  border: 1px solid white;
+}
 #documentTable tr:hover {
   background-color: #103635;
 }

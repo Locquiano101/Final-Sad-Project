@@ -18,8 +18,9 @@
       document
         .getElementById("downloadButton")
         .addEventListener("click", () => {
-          const fileUrl = `https://aliceblue-owl-540826.hostingersite.com//client-dashboard/uploads/Greg_Patrick_Locquiano/documents/GregPatrickLocquiano_Marang__Manayaw_tree_request.docx`;
-          const fileName = "yourfile.pdf"; // Replace with your file's name
+          const fileName =
+            "GregPatrickLocquiano_KalaataBagras_tree_request.docx"; // Replace with your file's name
+          const fileUrl = `https://aliceblue-owl-540826.hostingersite.com//client-dashboard/uploads/documents/${fileName}`;
 
           // Create an anchor element
           const a = document.createElement("a");

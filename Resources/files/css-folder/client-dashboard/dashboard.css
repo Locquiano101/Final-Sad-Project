@@ -131,3 +131,34 @@ input {
   background-color: red !important;
   border-style: none;
 }
+.notification-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 16px;
+  gap: 1rem;
+  background-color: #103635;
+}
+.notification {
+  border: 1px solid white;
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  border-radius: 16px;
+  align-items: center;
+}
+.notification div {
+  width: 80%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.notification button {
+  border-style: none;
+  border-radius: 16px;
+  padding: 0.5rem;
+  color: white;
+  background-color: #cf4747 !important;
+}

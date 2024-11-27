@@ -11,18 +11,15 @@
       href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap"
       rel="stylesheet"
     />
-
     <link
       rel="stylesheet"
-      href="/Resources/files/css-folder/client-dashboard/main.css"
+      href="/Resources/files/css-folder/admin-dashboard/main.css"
     />
     <link
       rel="stylesheet"
-      href="/Resources/files/css-folder/client-dashboard/dashboard.css"
+      href="/Resources/files/css-folder/admin-dashboard/dashboard.css"
     />
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   </head>
   <body>
@@ -33,12 +30,11 @@
           alt="User Icon"
           class="profile-icon"
         />
-        <h3 id="user">John Doe</h3>
-        <p id="email">example@gmail.com</p>
-        <p>client</p>
+        <h3 id="user">{Penro Officer's Name}</h3>
+        <p id="email"><i>Penro Officer</i></p>
       </div>
       <div class="navigation">
-        <a class="tablink" onclick="openFileById(`dashboard`)">
+        <a class="tablink">
           <div class="dashboard-button">
             <img
               src="/Resources/image/home.svg"
@@ -58,25 +54,14 @@
             <p>Requests</p>
           </div>
         </a>
-        <a class="tablink" onclick="openFileById(`notifications`)">
+        <a class="tablink" onclick="openFileById(`reports`)">
           <div class="dashboard-button">
             <img
-              src="/Resources/image/notification.svg"
+              src="/Resources/image/reports.svg"
               alt="Request Icon"
               class="icon"
             />
-            <p>Notifications</p>
-          </div>
-        </a>
-        <a class="tablink">
-          <div class="dashboard-button">
-            <img
-              src="/Resources/image/settings.svg"
-              alt="Request Icon"
-              class="icon"
-              onclick="showContent(`#dashboard`)"
-            />
-            <p>Settings</p>
+            <p>Reports</p>
           </div>
         </a>
         <a class="tablink" onclick="logout() ">
@@ -104,7 +89,5 @@
     </section>
 
     <div class="content"></div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/Resources/files/javascript-folder/navigation.js"></script>
   </body>
 </html>

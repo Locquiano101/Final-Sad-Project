@@ -103,9 +103,7 @@ function loginAdmin(adminRank, inputUsername, inputPassword) {
               "_self"
             );
           } else if (adminRank === "PENRO") {
-            window.open("e-penro-dashboard.ht ml", "_self");
-          } else if (adminRank === "Nursery") {
-            window.open("f-nursery-dashboard.html", "_self");
+            window.open("admin-dashboard-main/penro/dashboard.html", "_self");
           }
         }
       });

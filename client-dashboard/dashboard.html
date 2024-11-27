@@ -58,17 +58,6 @@
             <p>Requests</p>
           </div>
         </a>
-        <a class="tablink" onclick="openFileById(`notifications`)">
-          <div class="dashboard-button">
-            <img
-              src="/Resources/image/notification.svg"
-              alt="Request Icon"
-              class="icon"
-            />
-            <p>Notifications</p>
-          </div>
-        </a>
-
         <a class="tablink" onclick="logout() ">
           <div class="dashboard-button">
             <img
@@ -124,13 +113,12 @@
               <select id="treeDropdown" onchange="updateInputsBasedOnTree()">
                 <option value="" disabled selected>Select a tree</option>
               </select>
-
               <h3>Quantity of trees</h3>
               <input
                 type="number"
                 id="areaInput"
-                oninput="ConvertToArea()"
-                placeholder="Quantiy of Trees"
+                oninput="convertToArea()"
+                placeholder="Quantity of Trees"
               />
 
               <h3>Lot Area (Hectares)</h3>
@@ -139,7 +127,7 @@
                 id="sqMeterInput"
                 min="0"
                 placeholder="Lot Area (in Hectares)"
-                oninput="ConvertToQuantity()"
+                oninput="convertToQuantity()"
               />
             </div>
             <div class="third-area">
@@ -186,8 +174,9 @@
           <div id="chart-container">
             <canvas id="myBarChart"></canvas>
           </div>
-          <div id="notifications-container" class="notifications">
-            <div class="notif-container"></div>
+          <div class="notification-container">
+            <h2>NOTIFICATIONS</h2>
+            <div id="notification-container"></div>
           </div>
         </div>
       </div>

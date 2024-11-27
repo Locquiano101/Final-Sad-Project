@@ -427,7 +427,10 @@ async function generateTreeRequestDocument(params) {
   });
 
   const sanitizedRequestorName = user.replace(/[\/\\:.*?"<>| ]/g, "");
-  const sanitizedseedlingsType = seedlingsType.replace(/[\/\\:*.?"<>| ]/g, "_");
+  const sanitizedseedlingsType = seedlingsType.replace(
+    /[\/\\:*.?"<>|m, ]/g,
+    ""
+  );
 
   const fileName = `${sanitizedRequestorName}_${sanitizedseedlingsType}_tree_request.docx`;
 
