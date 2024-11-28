@@ -161,17 +161,21 @@ h6 {
   }
 
   .sticky-nav ul {
-    z-index: 5; /* Lower than .menu-icon */
-    position: absolute; /* Keeps it below the button */
-    top: 60px;
-    left: 0;
-    background-color: #333;
-    width: 100%;
-    display: none; /* Hidden by default */
-  }
+    display: none;
+  flex-direction: column;
+  background-color: #0c504f;
+  width: 250px; /* Width of the menu */
+  position: fixed; /* Fixed position for sliding effect */
+  top: 0;
+  right: -250px; /* Initially hidden off-screen */
+  height: 100%; /* Full height of the viewport */
+  transition: right 0.3s ease; /* Smooth sliding animation */
+  padding: 20px;
+}
 
   #menu-toggle:checked + .menu-icon + ul {
     display: flex; /* Show menu when checked */
+    right: 0; /* Slide in from the right */
   }
 
   .sticky-nav ul li {
