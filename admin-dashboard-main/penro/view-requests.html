@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CNPNRO-FTSMS</title>
+    <link rel="icon" href="/Resources/image/penro (0).png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="/Resources/files/css-folder/admin-dashboard/main.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/Resources/files/css-folder/admin-dashboard/governor/view-requests.css"
+    />
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
+    ></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  </head>
+  <body>
+    <section class="side-nav">
+      <div class="profile-holder">
+        <img
+          src="/Resources/image/client-profile.svg"
+          alt="User Icon"
+          class="profile-icon"
+        />
+        <h3 id="user">{Governor's Officer/Governor}</h3>
+        <p id="email"><i>Governor's Officer</i></p>
+      </div>
+      <div class="navigation">
+        <a class="tablink">
+          <div class="dashboard-button" onclick="openFileById(`dashboard`)">
+            <img
+              src="/Resources/image/home.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Dashboard</p>
+          </div>
+        </a>
+        <a class="tablink">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/request.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Requests</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="openFileById(`reports`)">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/reports.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Reports</p>
+          </div>
+        </a>
+        <a class="tablink" onclick="logout() ">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/log-out.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Logout</p>
+          </div>
+        </a>
+      </div>
+      <div class="title-holder">
+        <h1 id="cnpenro-footer">
+          CNPENR<span
+            ><img
+              src="/Resources/image/cn-penro-logo.svg"
+              alt="logo"
+              style="height: 24px"
+            />-FTSMS</span
+          >
+        </h1>
+      </div>
+    </section>
+    <div class="content">
+      <!-- Popup -->
+      <div class="main-profile-holder">
+        <h1>Recipient</h1>
+        <h2 id="recipient">Loading...</h2>
+        <p id="recipientNum">Loading...</p>
+        <p id="recipientAddress">Loading...</p>
+        <h2>Download File Requests</h2>
+        <div>
+          <h2 id="fileName">Loading...</h2>
+          <button id="DownLoadFile" style="display: none">Download File</button>
+        </div>
+      </div>
+      <div class="main-div">
+        <!-- Seedling Information -->
+        <div class="seedling-container">
+          <h2>Seedling Information</h2>
+          <div class="project-information-details">
+            <p>
+              Quantity of seedlings:
+              <span id="seedlingQuantity">Loading...</span>
+            </p>
+            <p>Type of Seedling: <span id="seedlingType">Loading...</span></p>
+          </div>
+        </div>
+
+        <!-- Project Information -->
+        <div class="project-information">
+          <h2>Project Information</h2>
+          <div class="project-information-details">
+            <h4>
+              Location of Project/Planting Site:
+              <span id="plantingSite">Loading...</span>
+            </h4>
+            <h4>
+              Land Classification of the Property:
+              <span id="landClassification">Loading...</span>
+            </h4>
+          </div>
+        </div>
+
+        <!-- Activity Purpose -->
+        <div class="activity-type-container">
+          <h3>Purpose/ Type of Activity:</h3>
+          <div class="project-information-details">
+            <h4 id="activityPurpose">Loading...</h4>
+          </div>
+        </div>
+
+        <!-- Promissory Note -->
+        <div class="promisory-note-container">
+          <div class="promisory-note">
+            <h1>Promissory Note</h1>
+            <p>
+              <i>
+                I am aware that PG-PENRO staff will monitor the growth of the
+                planted seedlings. I will maintain and protect said seedlings to
+                ensure a 100% survival rate. Otherwise, I will pay the seedlings
+                that do not survive in the amount of THIRTY PESOS (₱30.00 each).
+              </i>
+            </p>
+            <p>
+              <i>
+                I am signifying through this Promissory Note my interest and
+                willingness to execute and abide by the above intentions.
+              </i>
+            </p>
+            <div class="checkbox-container">
+              <input
+                type="checkbox"
+                id="agree-note"
+                name="agree-note"
+                checked
+                required
+              />
+              <label for="agree-note"
+                >I have read and agreed to this Promissory Note</label
+              >
+            </div>
+          </div>
+        </div>
+        <div class="activity-type-container">
+          <h3>Note:</h3>
+          <textarea
+            id="Note"
+            name="Note"
+            cols="100"
+            rows="5"
+            placeholder="Note"
+            required
+          ></textarea>
+        </div>
+        <!-- Submit Button -->
+        <div id="button-holder">
+          <button id="approve">Approve Requests</button>
+          <button id="decline">Decline Requests</button>
+        </div>
+
+        <!-- Popup -->
+        <div class="overlay" onclick="closePopup()"></div>
+        <div class="popup" id="popup" style="display: none">
+          <h1>Request Submitted</h1>
+          <p>Request #<span>00001</span></p>
+          <p>Status: <span class="status">Pending</span></p>
+          <p>
+            Your request has been submitted and is now pending approval. Please
+            check your dashboard regularly for updates. Thank you!
+          </p>
+          <a href="#" onclick="closePopup()">Back To Dashboard</a>
+        </div>
+      </div>
+    </div>
+    <script src="/Resources/files/javascript-folder/navigation.js"></script>
+    <script src="/Resources/files/javascript-folder/admin-dashboard_js/governor/edit-request.js"></script>
+  </body>
+</html>

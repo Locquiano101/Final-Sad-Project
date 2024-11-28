@@ -75,7 +75,8 @@ displayUserData(userID);
 const treesCollection = firebaseDB.collection("trees");
 
 const treeSelect = document.getElementById("treeSelect");
-
+const initialTreeSelect = document.getElementById("treeSelect");
+populateTreeSelect(initialTreeSelect);
 // Map to store tree IDs and their corresponding names
 const treeNameMap = new Map();
 
@@ -110,11 +111,6 @@ function populateTreeSelect(selectElement) {
       selectElement.innerHTML = '<option value="">Error loading trees</option>';
     });
 }
-
-// Initial population of the treeSelect dropdown
-const initialTreeSelect = document.getElementById("treeSelect");
-populateTreeSelect(initialTreeSelect);
-
 // Add Seedling input group with functional tree select
 document.getElementById("addButton").addEventListener("click", (event) => {
   event.preventDefault();
@@ -141,7 +137,6 @@ document.getElementById("addButton").addEventListener("click", (event) => {
   );
   populateTreeSelect(newTreeSelect);
 });
-
 // Use event delegation for DELETE buttons
 const seedlingContainer = document.querySelector(".seedling-input-container");
 seedlingContainer.addEventListener("click", (event) => {
@@ -517,91 +512,128 @@ async function insertDocumentToFirestore(params, userID, fileName) {
     console.error("Error adding document to Firestore: ", error);
   }
 }
-document.getElementById("projectForm").addEventListener("submit", (event) => {
-  event.preventDefault();
-
+async function updateTreeData(treeId, treeName, requestedQuantity) {
   try {
-    const formData = {};
+    await firebaseDB.runTransaction(async (transaction) => {
+      const treeDocRef = treesCollection.doc(treeId);
+      const treeDoc = await transaction.get(treeDocRef);
 
-    // Collect Seedling Information
-    const quantity = [];
-    const type = [];
-    const seedlingNames = [];
-    document.querySelectorAll(".seedling-input-group").forEach((group) => {
-      const treeId = group.querySelector('select[name="treeSelect[]"]').value;
-      quantity.push(group.querySelector('input[name="number[]"]').value);
-      type.push(treeId); // Collect IDs for reference
-      seedlingNames.push(treeNameMap.get(treeId) || "Unknown Tree"); // Use map to get tree name
+      if (!treeDoc.exists) {
+        console.error(`Tree document with ID "${treeId}" does not exist!`);
+        return;
+      }
+
+      const currentData = treeDoc.data();
+      const availableQuantity = currentData.quantity || 0;
+
+      if (requestedQuantity > availableQuantity) {
+        alert(
+          `Low on stocks: Cannot request ${requestedQuantity} for "${treeName}".`
+        );
+        console.error(
+          `Low on stocks: Cannot request ${requestedQuantity} for "${treeName}".`
+        );
+        return;
+      }
+
+      transaction.update(treeDocRef, {
+        quantity: availableQuantity - requestedQuantity, // Ensure both are numbers
+        request: (currentData.request || 0) + 1,
+      });
     });
-
-    formData.seedlings = quantity.map((qty, index) => ({
-      quantity: qty,
-      type: seedlingNames[index], // Use the name instead of ID
-    }));
-
-    const projectLocation = (formData.projectLocation =
-      document.getElementById("project-location").value);
-
-    // Collect Land Classification
-    const landClassification = document.querySelector(
-      'input[name="land-classification"]:checked'
-    );
-    formData.landClassification = landClassification
-      ? landClassification.value
-      : null;
-
-    // Collect Activity Type
-    formData.activityType = document.getElementById("activity-type").value;
-
-    // Collect Promissory Note Agreement
-    formData.agreedToPromissoryNote =
-      document.getElementById("agree-note").checked;
-
-    // Get the current date for document
-    const formattedDate = new Date().toLocaleString("en-US", {
-      month: "long", // Full month name
-      day: "numeric", // Day of the month as a number
-      year: "numeric", // Four-digit year
-    });
-
-    // Fetch the user's information (assuming this is already set elsewhere)
-    const user = userName; // You can fetch these from the earlier fetchUserData() if needed
-    const userNum = userContactNumber; // Same as above
-    const address = completeAddress; // Same as above
-    const requestorSignature = null; // Replace with actual signature data if available
-
-    console.log("Uploading document with the following details:", {
-      user,
-      userNum,
-      address,
-      projectLocation,
-      landClassification: formData.landClassification,
-      activityType: formData.activityType,
-      seedlingQuantities: formData.seedlings.map((s) => s.quantity).join(", "),
-      seedlingTypes: formData.seedlings.map((s) => s.type).join(", "), // Seedling names
-      formattedDate,
-      requestorSignature,
-    });
-
-    const params = {
-      user: user,
-      userNum: userNum,
-      address: address,
-      projectLocation: projectLocation,
-      landClassification: formData.landClassification,
-      activityType: formData.activityType,
-      seedlingsNumber: formData.seedlings.map((s) => s.quantity).join(", "),
-      seedlingsType: formData.seedlings.map((s) => s.type).join(", "),
-      formattedDate: formattedDate,
-    };
-
-    generateTreeRequestDocument(params);
-    // Show a popup on success
-    showPopup();
   } catch (error) {
-    console.error("Error collecting form data:", error);
+    console.error(`Error updating tree data for ID "${treeId}":`, error);
   }
-});
+}
+document
+  .getElementById("projectForm")
+  .addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    try {
+      const formData = {};
+
+      // Collect Seedling Information
+      const seedlings = [];
+      document.querySelectorAll(".seedling-input-group").forEach((group) => {
+        const treeId = group.querySelector('select[name="treeSelect[]"]').value;
+        const requestedQuantity = parseInt(
+          group.querySelector('input[name="number[]"]').value,
+          10
+        );
+
+        if (isNaN(requestedQuantity) || requestedQuantity <= 0) {
+          console.error("Invalid quantity entered:", requestedQuantity);
+          return; // Skip invalid entries
+        }
+
+        const treeName = treeNameMap.get(treeId) || "Unknown Tree"; // Replace treeNameMap with actual mapping logic
+
+        seedlings.push({ treeId, requestedQuantity, treeName });
+
+        console.log(
+          `Submitting Tree ID: ${treeId}, Quantity: ${requestedQuantity}`
+        );
+        // Call updateTreeData with the correct quantity
+        updateTreeData(treeId, requestedQuantity); // Ensure this function is defined
+      });
+
+      // Populate formData with seedling details
+      formData.seedlings = seedlings.map((seedling) => ({
+        quantity: seedling.requestedQuantity,
+        type: seedling.treeName, // Use the name instead of ID
+      }));
+
+      // Collect Project Location
+      formData.projectLocation =
+        document.getElementById("project-location").value;
+
+      // Collect Land Classification
+      const landClassification = document.querySelector(
+        'input[name="land-classification"]:checked'
+      );
+      formData.landClassification = landClassification
+        ? landClassification.value
+        : null;
+
+      // Collect Activity Type
+      formData.activityType = document.getElementById("activity-type").value;
+
+      // Collect Promissory Note Agreement
+      formData.agreedToPromissoryNote =
+        document.getElementById("agree-note").checked;
+
+      // Get the current date for document
+      const formattedDate = new Date().toISOString(); // Alternatively, use Firestore timestamp if required
+
+      // Fetch the user's information
+      const user = userName || "Anonymous User"; // Replace with actual user data
+      const userNum = userContactNumber || "Unknown Contact"; // Replace with actual user contact number
+      const address = completeAddress || "Unknown Address"; // Replace with the user's address
+
+      // Parameters for generating the request document
+      const params = {
+        user: user,
+        userNum: userNum,
+        address: address,
+        projectLocation: formData.projectLocation,
+        landClassification: formData.landClassification,
+        activityType: formData.activityType,
+        seedlingsNumber: formData.seedlings.map((s) => s.quantity).join(", "),
+        seedlingsType: formData.seedlings.map((s) => s.type).join(", "),
+        formattedDate: formattedDate,
+      };
+
+      // Generate the tree request document
+      generateTreeRequestDocument(params); // Ensure this function is defined
+
+      // Show confirmation popup
+      showPopup(); // Ensure this function is defined
+    } catch (error) {
+      console.error("Error collecting form data:", error);
+    }
+  });
+
 function displayMap() {
   // Initialize the platform object
   var platform = new H.service.Platform({

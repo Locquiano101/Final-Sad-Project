@@ -15,7 +15,6 @@ firebase.initializeApp(firebaseConfig);
 // Initialize Firestore
 const firebaseDB = firebase.firestore();
 
-// Function to retrieve and display all documents
 async function retrieveAllDocuments() {
   try {
     const usersCollection = firebaseDB.collection("users");
@@ -30,7 +29,7 @@ async function retrieveAllDocuments() {
     const tableBody = document.querySelector("#documentTable tbody");
     tableBody.innerHTML = ""; // Clear previous rows
 
-    foundPendingDocuments = false; // Flag to track if any pending documents are found
+    let foundPendingDocuments = false; // Flag to track if any pending documents are found
 
     // Iterate through all users
     for (const userDoc of usersSnapshot.docs) {
@@ -60,28 +59,35 @@ async function retrieveAllDocuments() {
         }
 
         // Only proceed if the status is "Pending for Approval"
-        if (status !== "Ready for Pick Up") {
+        if (status !== "Pending for Approval") {
           return;
         }
 
         // Mark that we found a pending document
         foundPendingDocuments = true;
 
+        // Convert the formattedDate if it's a Firestore Timestamp
+        let displayDate = "N/A";
+        if (formattedDate instanceof firebase.firestore.Timestamp) {
+          displayDate = formattedDate.toDate().toLocaleDateString(); // Convert to local date string
+        } else if (formattedDate) {
+          displayDate = formattedDate; // Use the formattedDate directly if it's already a string
+        }
+
         // Create a new table row
         const row = document.createElement("tr");
         row.dataset.id = doc.id; // Store docID for row identification during deletion
 
         row.innerHTML = `
-          <td>${fileName}</td>
+          <td>
+            <button class="download-file" data-file="${fileName}">Download File</button> ${fileName}
+          </td>
           <td>${requestor}</td>
-          <td>${formattedDate || "N/A"}</td>
+          <td>${displayDate}</td>
           <td>${status}</td>
           <td>
             <div style="display: flex; gap: 5px;">
-              <button
-                class="edit-button"
-                onclick="editDocument('${userID}', '${doc.id}')"
-              >
+              <button class="edit-button" onclick="editDocument('${userID}', '${doc.id}')">
                 View
               </button>
             </div>
@@ -110,9 +116,32 @@ async function retrieveAllDocuments() {
   }
 }
 
-//double it and give it to the next fucntion
+// Event listener for download buttons
+document.querySelector("#documentTable").addEventListener("click", (event) => {
+  if (event.target.classList.contains("download-file")) {
+    const fileName = event.target.getAttribute("data-file"); // Retrieve fileName from the button's data attribute
+    const fileUrl = `https://aliceblue-owl-540826.hostingersite.com//client-dashboard/uploads/documents/${fileName}`;
+
+    // Create an anchor element
+    const a = document.createElement("a");
+    a.href = fileUrl;
+    a.download = fileName;
+
+    // Append the anchor to the body
+    document.body.appendChild(a);
+
+    // Trigger a click event on the anchor
+    a.click();
+
+    // Remove the anchor from the body
+    document.body.removeChild(a);
+  }
+});
+
+// double it and give it to the next fucntion
 function editDocument(userID, docID) {
   localStorage.setItem("docID", docID);
+  localStorage.setItem("userID", userID);
   alert(`Edit function called for User: ${userID}, Document: ${docID}`);
   window.open("view-requests.html", "_self");
 }

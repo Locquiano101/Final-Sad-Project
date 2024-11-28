@@ -37,7 +37,15 @@
   gap: 10rem;
   padding: 1rem;
 }
-
+.download-file {
+  background-color: blue;
+  color: white;
+  border: none;
+  margin-right: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
 /* table design */
 #documentTable {
   width: 100%;

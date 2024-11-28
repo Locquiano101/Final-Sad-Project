@@ -196,7 +196,7 @@
                 <div>
                   <h4>Seedlings Quantity</h4>
                   <br />
-                  <p id="seedlingQuantity">100</p>
+                  <p id="seedlingQuantity">loading...</p>
                 </div>
               </div>
               <div class="inventory-container-container">
@@ -209,7 +209,7 @@
                 <div>
                   <h4>Low on Stocks</h4>
                   <br />
-                  <p id="lowSeedTypeQty">100</p>
+                  <p id="lowSeedTypeQty">loading...</p>
                 </div>
               </div>
               <div class="inventory-container-container">
@@ -223,7 +223,7 @@
                   <h4>Out of Stocks</h4>
                   <br />
 
-                  <p id="outofStocksSeedlings">this, that, and there</p>
+                  <p id="outofStocksSeedlings">loading...</p>
                   <br />
                 </div>
               </div>
@@ -239,7 +239,7 @@
                     Most Stocks(<span id="mostStockSeedType">loading...</span>)
                   </h4>
                   <br />
-                  <p id="mostStockSeedTypeQty">100</p>
+                  <p id="mostStockSeedTypeQty">loading...</p>
                 </div>
               </div>
             </div>
@@ -248,235 +248,7 @@
       </div>
       <!-- Manage Inventory -->
     </div>
-    <script>
-      // Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyCPIdlzAlKkfZp3bu4YuI2fylSzxar1zA0",
-        authDomain: "penro-db.firebaseapp.com",
-        projectId: "penro-db",
-        storageBucket: "penro-db.appspot.com",
-        messagingSenderId: "25138598165",
-        appId: "1:25138598165:web:9c8136ef9898df7803591c",
-        measurementId: "G-8YBC8FE4XZ",
-      };
-
-      // Initialize Firebase
-      const app = firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore();
-
-      // Fetch and display data
-      const inventoryGrid = document.getElementById("inventoryGrid");
-
-      function fetchLowStocks() {
-        const lowStockThreshold = 10; // Define the threshold for "low stock"
-        const lowSeedType = document.getElementById("lowSeedType");
-        const lowSeedTypeQty = document.getElementById("lowSeedTypeQty");
-
-        db.collection("trees")
-          .where("quantity", "<", lowStockThreshold)
-          .get()
-          .then((querySnapshot) => {
-            if (querySnapshot.empty) {
-              lowSeedType.innerText = "None";
-              lowSeedTypeQty.innerText = "0";
-              return;
-            }
-
-            let lowStockItems = [];
-            let totalLowQuantity = 0;
-
-            querySnapshot.forEach((doc) => {
-              const data = doc.data();
-              lowStockItems.push(data.name); // Collect item names
-              totalLowQuantity += data.quantity; // Sum up the quantities
-            });
-
-            // Update the DOM
-            lowSeedTypeQty.innerText = lowStockItems.join(", ");
-          })
-          .catch((error) => {
-            console.error("Error fetching low stock data:", error);
-            lowSeedType.innerText = "Error";
-            lowSeedTypeQty.innerText = "N/A";
-          });
-      }
-      function fetchOutOfStocks() {
-        const outOfStocksSeedlings = document.getElementById(
-          "outofStocksSeedlings"
-        );
-
-        db.collection("trees")
-          .where("quantity", "==", 0)
-          .get()
-          .then((querySnapshot) => {
-            if (querySnapshot.empty) {
-              outOfStocksSeedlings.innerText = "None"; // If no out-of-stock items
-              return;
-            }
-
-            let outOfStockItems = [];
-
-            querySnapshot.forEach((doc) => {
-              const data = doc.data();
-              outOfStockItems.push(data.name); // Collect item names
-            });
-
-            // Update the DOM
-            outOfStocksSeedlings.innerText = outOfStockItems.join(", ");
-          })
-          .catch((error) => {
-            console.error("Error fetching out-of-stock data:", error);
-            outOfStocksSeedlings.innerText = "Error";
-          });
-      }
-      function fetchSeedlingsQuantity() {
-        const seedlingQuantity = document.getElementById("seedlingQuantity");
-        let totalQuantity = 0;
-
-        db.collection("trees")
-          .get()
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              const data = doc.data();
-              totalQuantity += data.quantity; // Sum up the quantities
-            });
-
-            // Update the DOM with the total quantity
-            seedlingQuantity.innerText = totalQuantity;
-          })
-          .catch((error) => {
-            console.error("Error fetching total quantity:", error);
-            seedlingQuantity.innerText = "Error";
-          });
-      }
-      function fetchMostStocks() {
-        const mostStockSeedType = document.getElementById("mostStockSeedType");
-        const mostStockSeedTypeQty = document.getElementById(
-          "mostStockSeedTypeQty"
-        );
-
-        db.collection("trees")
-          .get()
-          .then((querySnapshot) => {
-            let mostStockItem = null;
-            let highestQuantity = 0;
-
-            querySnapshot.forEach((doc) => {
-              const data = doc.data();
-              if (data.quantity > highestQuantity) {
-                highestQuantity = data.quantity;
-                mostStockItem = data.name;
-              }
-            });
-
-            // Update the DOM
-            if (mostStockItem) {
-              mostStockSeedType.innerText = mostStockItem;
-              mostStockSeedTypeQty.innerText = highestQuantity;
-            } else {
-              mostStockSeedType.innerText = "None";
-              mostStockSeedTypeQty.innerText = "0";
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching most stocks data:", error);
-            mostStockSeedType.innerText = "Error";
-            mostStockSeedTypeQty.innerText = "N/A";
-          });
-      }
-      function fetchSeedlingsData() {
-        const seedTypeAvailable = document.getElementById("seedTypeAvailable");
-        const seedQuantityAvailable = document.getElementById(
-          "seedQuantityAvailable"
-        );
-
-        db.collection("trees")
-          .get()
-          .then((querySnapshot) => {
-            const seedTypes = querySnapshot.size; // Number of documents = number of seed types
-            let totalQuantity = 0;
-
-            querySnapshot.forEach((doc) => {
-              const data = doc.data();
-              totalQuantity += data.quantity; // Sum up the quantity
-            });
-
-            // Update the DOM
-            seedTypeAvailable.innerText = seedTypes;
-            seedQuantityAvailable.innerText = totalQuantity;
-          })
-          .catch((error) => {
-            console.error("Error fetching seedlings data:", error);
-            seedTypeAvailable.innerText = "Error";
-            seedQuantityAvailable.innerText = "Error";
-          });
-      }
-      function fetchMostRequestedSeedlings() {
-        const ctx = document
-          .getElementById("mostRequestedChart")
-          .getContext("2d");
-
-        db.collection("InventoryTrackingDatabase")
-          .doc("MostSeedlingRequested")
-          .get()
-          .then((doc) => {
-            if (!doc.exists) {
-              console.error("No document found!");
-              return;
-            }
-
-            // Extract data
-            const data = doc.data();
-            const requestSamples = Object.values(data);
-
-            // Prepare chart data
-            const seedlingTypes = requestSamples.map(
-              (sample) => sample.seedlingType
-            );
-            const seedlingQuantities = requestSamples.map((sample) =>
-              parseInt(sample.seedlingQty, 10)
-            ); // Convert to numbers
-
-            // Render chart
-            new Chart(ctx, {
-              type: "bar",
-              data: {
-                labels: seedlingTypes,
-                datasets: [
-                  {
-                    label: "Most Requested Seedlings",
-                    data: seedlingQuantities,
-                    backgroundColor: ["white"],
-                    borderWidth: 1,
-                  },
-                ],
-              },
-              options: {
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                  },
-                },
-              },
-            });
-          })
-          .catch((error) => {
-            console.error("Error fetching MostSeedlingRequested data:", error);
-          });
-      }
-
-      // Call the function to fetch data and render chart
-      fetchMostRequestedSeedlings();
-      // Call the function to fetch and display seedlings data
-      fetchSeedlingsData();
-      // Call the function to fetch and display the item with the most stocks
-      fetchMostStocks();
-      // Call the function to fetch and display total seedlings quantity
-      fetchSeedlingsQuantity();
-      // Call the function to fetch and display out-of-stock items
-      fetchOutOfStocks();
-      // Call the function to fetch and display low stocks
-      fetchLowStocks();
-    </script>
+    <script src="/Resources/files/javascript-folder/navigation.js"></script>
+    <script src="/Resources/files/javascript-folder/admin-dashboard_js/penro/dashboard.js"></script>
   </body>
 </html>

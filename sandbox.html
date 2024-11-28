@@ -3,14 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Most Requested Seedlings Chart</title>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Firebase NaN Field Checker</title>
   </head>
   <body>
-    <h1>Most Requested Seedlings</h1>
-
+    <h1>Firebase NaN Field Checker</h1>
+    <div id="output"></div>
+    <div class="card">
+      <img
+        src="/Resources/image/inventory-overview.svg"
+        alt="User Icon"
+        class="profile-icon"
+        style="height: 75px; width: auto"
+      />
+      <h3>Inventory Overview</h3>
+      <p>
+        Current inventory levels of each seedling type, including recent stock
+        additions or deletions.
+      </p>
+      <button id="generateReport" style="background-color: #a7ffb5">
+        Generate Report
+      </button>
+    </div>
+    <script src="https://unpkg.com/docx@7.1.0/build/index.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
     <script>
       // Firebase configuration
       const firebaseConfig = {
@@ -22,12 +39,193 @@
         appId: "1:25138598165:web:9c8136ef9898df7803591c",
         measurementId: "G-8YBC8FE4XZ",
       };
-
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore();
+      const firebaseDB = firebase.firestore();
 
-      // Function to fetch and display the chart
+      // Fetch data and generate .docx report
+      document
+        .getElementById("generateReport")
+        .addEventListener("click", async () => {
+          try {
+            const querySnapshot = await firebaseDB
+              .collection("trees")
+              .orderBy("request", "desc")
+              .get();
+
+            const topSeeds = querySnapshot.docs.map((doc) => doc.data());
+
+            const doc = new docx.Document({
+              sections: [
+                {
+                  properties: {},
+                  children: [
+                    new docx.Paragraph({
+                      children: [
+                        new docx.TextRun({
+                          text: "Top Requested Seeds",
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: docx.AlignmentType.CENTER,
+                      spacing: { after: 300 },
+                    }),
+                    new docx.Table({
+                      rows: [
+                        // Table Header
+                        new docx.TableRow({
+                          children: [
+                            new docx.TableCell({
+                              children: [
+                                new docx.Paragraph({
+                                  children: [
+                                    new docx.TextRun({
+                                      text: "Rank",
+                                      bold: true,
+                                      size: 24,
+                                    }),
+                                  ],
+                                }),
+                              ],
+                            }),
+                            new docx.TableCell({
+                              children: [
+                                new docx.Paragraph({
+                                  children: [
+                                    new docx.TextRun({
+                                      text: "Seed Name",
+                                      bold: true,
+                                      size: 24,
+                                    }),
+                                  ],
+                                }),
+                              ],
+                            }),
+                            new docx.TableCell({
+                              children: [
+                                new docx.Paragraph({
+                                  children: [
+                                    new docx.TextRun({
+                                      text: "Requested Times",
+                                      bold: true,
+                                      size: 24,
+                                    }),
+                                  ],
+                                }),
+                              ],
+                            }),
+                            new docx.TableCell({
+                              children: [
+                                new docx.Paragraph({
+                                  children: [
+                                    new docx.TextRun({
+                                      text: "Type of Tree",
+                                      bold: true,
+                                      size: 24,
+                                    }),
+                                  ],
+                                }),
+                              ],
+                            }),
+                            new docx.TableCell({
+                              children: [
+                                new docx.Paragraph({
+                                  children: [
+                                    new docx.TextRun({
+                                      text: "Quantity",
+                                      bold: true,
+                                      size: 24,
+                                    }),
+                                  ],
+                                }),
+                              ],
+                            }),
+                          ],
+                        }),
+                        // Table Rows for Seeds
+                        ...topSeeds.map(
+                          (seed, index) =>
+                            new docx.TableRow({
+                              children: [
+                                new docx.TableCell({
+                                  children: [
+                                    new docx.Paragraph({
+                                      children: [
+                                        new docx.TextRun({
+                                          text: `${index + 1}`,
+                                          size: 24,
+                                        }),
+                                      ],
+                                    }),
+                                  ],
+                                }),
+                                new docx.TableCell({
+                                  children: [
+                                    new docx.Paragraph({
+                                      children: [
+                                        new docx.TextRun({
+                                          text: seed.name,
+                                          size: 24,
+                                        }),
+                                      ],
+                                    }),
+                                  ],
+                                }),
+                                new docx.TableCell({
+                                  children: [
+                                    new docx.Paragraph({
+                                      children: [
+                                        new docx.TextRun({
+                                          text: `${seed.request}`,
+                                          size: 24,
+                                        }),
+                                      ],
+                                    }),
+                                  ],
+                                }),
+                                new docx.TableCell({
+                                  children: [
+                                    new docx.Paragraph({
+                                      children: [
+                                        new docx.TextRun({
+                                          text: seed.typeOfTree,
+                                          size: 24,
+                                        }),
+                                      ],
+                                    }),
+                                  ],
+                                }),
+                                new docx.TableCell({
+                                  children: [
+                                    new docx.Paragraph({
+                                      children: [
+                                        new docx.TextRun({
+                                          text: seed.quantity,
+                                          size: 24,
+                                        }),
+                                      ],
+                                    }),
+                                  ],
+                                }),
+                              ],
+                            })
+                        ),
+                      ],
+                    }),
+                  ],
+                },
+              ],
+            });
+            const blob = await docx.Packer.toBlob(doc);
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "Top_Seeds_Report.docx";
+            link.click();
+          } catch (error) {
+            console.error("Error generating report:", error);
+          }
+        });
     </script>
   </body>
 </html>

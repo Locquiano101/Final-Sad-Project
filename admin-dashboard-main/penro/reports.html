@@ -13,16 +13,13 @@
     />
     <link
       rel="stylesheet"
-      href="/Resources/files/css-folder/client-dashboard/main.css"
+      href="/Resources/files/css-folder/admin-dashboard/main.css"
     />
-
     <link
       rel="stylesheet"
-      href="/Resources/files/css-folder/client-dashboard/requests.css"
+      href="/Resources/files/css-folder/admin-dashboard/governor/dashboard.css"
     />
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   </head>
   <body>
@@ -33,9 +30,8 @@
           alt="User Icon"
           class="profile-icon"
         />
-        <h3 id="user">John Doe</h3>
-        <p id="email">example@gmail.com</p>
-        <p>client</p>
+        <h3 id="user">{Governor's Officer/Governor}</h3>
+        <p id="email"><i>Governor's Officer</i></p>
       </div>
       <div class="navigation">
         <a class="tablink" onclick="openFileById(`dashboard`)">
@@ -48,7 +44,7 @@
             <p>Dashboard</p>
           </div>
         </a>
-        <a class="tablink">
+        <a class="tablink" onclick="openFileById(`requests`)">
           <div class="dashboard-button">
             <img
               src="/Resources/image/request.svg"
@@ -56,6 +52,16 @@
               class="icon"
             />
             <p>Requests</p>
+          </div>
+        </a>
+        <a class="tablink">
+          <div class="dashboard-button">
+            <img
+              src="/Resources/image/reports.svg"
+              alt="Request Icon"
+              class="icon"
+            />
+            <p>Reports</p>
           </div>
         </a>
         <a class="tablink" onclick="logout() ">
@@ -82,36 +88,10 @@
       </div>
     </section>
     <div class="content">
-      <div id="first-section">
-        <h3>My Request</h3>
-        <button id="request-button" onclick="openFileById(`send-request`)">
-          + Request new Seed
-        </button>
-      </div>
-      <div id="second-section">
-        <button>All Requests</button>
-        <button>Pending</button>
-        <button>Completed</button>
-        <button>Rejected</button>
-      </div>
-      <table id="documentTable">
-        <thead>
-          <tr>
-            <th>Document ID</th>
-            <th>Document Title</th>
-            <th>Date</th>
-            <th>Condition</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Rows will be dynamically inserted here -->
-        </tbody>
-      </table>
+      <div id="dashboard-container">this is reports</div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script src="/Resources/files/javascript-folder/navigation.js"></script>
-    <script src="Resources\files\css-folder\client-dashboard\requests.css"></script>
   </body>
 </html>
