@@ -122,8 +122,7 @@ async function updateDocumentStatus(userID, documentID, newStatus, notes) {
 document.addEventListener("click", async (event) => {
   if (event.target.matches("#approve, #decline")) {
     const button = event.target;
-    const condition =
-      button.id === "approve" ? "Ready for Pick Up" : "Declined";
+    const condition = button.id === "approve" ? "Approved" : "Declined";
     const noteField = document.querySelector("textarea#Note");
     const note = noteField ? noteField.value : "";
 
@@ -183,7 +182,7 @@ document.addEventListener("click", async (event) => {
       };
 
       // Store notification using the document title as the ID
-      document.getElementById("idNum").textContent = docID; // Set the document ID
+      document.getElementById("idNum").textContent = `Request ID: ${docID}`; // Set the document ID
       document.getElementById("backTodashBoard").style.visibility = "visible";
       document.getElementById(
         "detailsPopUp"

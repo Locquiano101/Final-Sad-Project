@@ -123,7 +123,7 @@ async function updateDocumentStatus(userID, documentID, newStatus, notes) {
 document.addEventListener("click", async (event) => {
   if (event.target.matches("#ConfirmPickUp")) {
     // Define the status condition
-    const condition = "Completed"; // or any other status value you need
+    const condition = "Ready for pick up"; // or any other status value you need
 
     try {
       // Reference the user's Firestore document

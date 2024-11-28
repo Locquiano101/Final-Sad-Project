@@ -29,7 +29,7 @@ async function retrieveAllDocuments() {
     const tableBody = document.querySelector("#documentTable tbody");
     tableBody.innerHTML = ""; // Clear previous rows
 
-    let foundReadyDocuments = false; // Flag to track if any ready documents are found
+    let foundApprovedDocuments = false; // Flag to track if any approved documents are found
 
     // Iterate through all users
     for (const userDoc of usersSnapshot.docs) {
@@ -58,13 +58,13 @@ async function retrieveAllDocuments() {
           return;
         }
 
-        // Filter for "Ready for Pick Up" status
-        if (status !== "Ready for Pick Up") {
+        // Filter for "Approved" status
+        if (status !== "Approved") {
           return; // Skip this document if it doesn't match the required status
         }
 
-        // Mark that we found a "Ready for Pick Up" document
-        foundReadyDocuments = true;
+        // Mark that we found an "Approved" document
+        foundApprovedDocuments = true;
 
         // Convert the formattedDate if it's a Firestore Timestamp
         let displayDate = "N/A";
@@ -99,11 +99,11 @@ async function retrieveAllDocuments() {
       });
     }
 
-    if (!foundReadyDocuments) {
-      console.log("No documents with status 'Ready for Pick Up' found!");
+    if (!foundApprovedDocuments) {
+      console.log("No documents with status 'Approved' found!");
     } else {
       console.log(
-        "All 'Ready for Pick Up' documents retrieved and displayed successfully!"
+        "All 'Approved' documents retrieved and displayed successfully!"
       );
     }
   } catch (error) {
