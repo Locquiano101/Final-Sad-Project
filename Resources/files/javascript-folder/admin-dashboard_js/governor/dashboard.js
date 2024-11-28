@@ -30,74 +30,84 @@ async function retrieveLatestRequests() {
 
     let requestCount = 0; // Initialize counter to track the number of requests displayed
 
-    if (!usersSnapshot.empty) {
-      // Iterate over each user document
-      for (const userDoc of usersSnapshot.docs) {
-        // Get documents related to the user and order by timestamp
-        const userDocumentsRef = userDoc.ref
-          .collection("Documents")
-          .orderBy("formattedDate", "desc") // Sort by timestamp in descending order
-          .limit(4); // Limit to the latest 4 documents
+    if (usersSnapshot.empty) {
+      console.log("No users found in the database.");
+      return;
+    }
 
-        // Fetch the user's documents
-        const userDocumentsSnapshot = await userDocumentsRef.get();
+    // Iterate over each user document
+    for (const userDoc of usersSnapshot.docs) {
+      // Reference to the user's documents collection
+      const userDocumentsRef = userDoc.ref
+        .collection("Documents")
+        .orderBy("formattedDate", "desc") // Sort by timestamp in descending order
+        .limit(4); // Limit to the latest 4 documents
 
-        if (!userDocumentsSnapshot.empty) {
-          // Iterate over each document for the current user
-          for (const doc of userDocumentsSnapshot.docs) {
-            if (requestCount >= 3) break; // Stop if 5 requests are displayed
+      // Fetch the user's documents
+      const userDocumentsSnapshot = await userDocumentsRef.get();
 
-            const requestData = doc.data();
-            const requestElement = document.createElement("div");
-            requestElement.classList.add("latest-request");
+      // Skip users with no documents
+      if (userDocumentsSnapshot.empty) {
+        console.log(`No documents found for user: ${userDoc.id}`);
+        continue;
+      }
 
-            // Safely access the timestamp
-            const timestamp = requestData.timestamp;
-            let formattedDate = "N/A"; // Default value in case timestamp is missing or invalid
+      // Process each document for the current user
+      for (const doc of userDocumentsSnapshot.docs) {
+        if (requestCount >= 5) break; // Stop if 5 requests are displayed
 
-            if (timestamp && timestamp.seconds) {
-              formattedDate = new Date(
-                timestamp.seconds * 1000
-              ).toLocaleDateString();
-            } else if (timestamp instanceof Date) {
-              formattedDate = timestamp.toLocaleDateString();
-            }
+        const requestData = doc.data();
+        const requestElement = document.createElement("div");
+        requestElement.classList.add("latest-request");
 
-            // Format the request details
-            requestElement.innerHTML = `
-              <img
-                src="/Resources/image/white-client-profile.svg"
-                alt="User Icon"
-                class="profile-icon"
-                height="64px"
-                width="auto"
-              />
-              <div class="request-details">
-                <h2>Request from: ${requestData.user}</h2>
-                <p>
-                  ${requestData.fileName} - 
-                  <span>${requestData.formattedDate}</span>
-                </p>
-              </div>
-            `;
+        // Safely access the timestamp
+        const timestamp = requestData.timestamp;
+        let formattedDate = "N/A"; // Default value in case timestamp is missing or invalid
 
-            // Append the new request to the container
-            requestsContainer.appendChild(requestElement);
-            requestCount++; // Increment the request counter
-
-            // Optional: Log the request data for debugging
-            console.log("Request Data:", requestData);
-          }
-
-          if (requestCount >= 5) break; // Exit loop if 5 requests are already added
-        } else {
-          console.log("No documents found for user:", userDoc.id);
+        if (timestamp && timestamp.seconds) {
+          formattedDate = new Date(
+            timestamp.seconds * 1000
+          ).toLocaleDateString();
+        } else if (timestamp instanceof Date) {
+          formattedDate = timestamp.toLocaleDateString();
         }
 
-        if (requestCount >= 5) break; // Exit outer loop if 5 requests are already added
+        // Format the request details
+        requestElement.innerHTML = `
+          <img
+            src="/Resources/image/white-client-profile.svg"
+            alt="User Icon"
+            class="profile-icon"
+            height="64px"
+            width="auto"
+          />
+          <div class="request-details">
+            <h2>Request from: ${requestData.user || "Unknown User"}</h2>
+            <p>
+              ${requestData.fileName || "Unnamed File"} - 
+              <span>${formattedDate}</span>
+            </p>
+          </div>
+        `;
+
+        // Append the new request to the container
+        requestsContainer.appendChild(requestElement);
+        requestCount++; // Increment the request counter
+
+        // Optional: Log the request data for debugging
+        console.log("Request Data:", requestData);
+
+        if (requestCount >= 5) break; // Stop processing further documents if 5 requests are displayed
       }
-    } else {
-      console.log("No users found in the database.");
+
+      if (requestCount >= 5) break; // Exit the outer loop if 5 requests are already added
+    }
+
+    // If no requests are found after processing all users
+    if (requestCount === 0) {
+      const noRequestsMessage = document.createElement("p");
+      noRequestsMessage.textContent = "No latest requests found.";
+      requestsContainer.appendChild(noRequestsMessage);
     }
   } catch (error) {
     console.error("Error retrieving latest requests:", error);
@@ -211,7 +221,6 @@ function showPopup(title, message, time) {
         <h1>${title}</h1>
         <p>${message}</p>
         <h3 id="notification-time-stamp">${time}</h3>
-        <button onclick="closePopUp()" style="background-color: #cf4747; border-style: none;">Close</button>
       </div>
     </div>
   `;

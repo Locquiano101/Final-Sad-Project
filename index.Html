@@ -37,7 +37,11 @@
           </div>
           <div>
             <nav class="sticky-nav"></nav>
-            <input type="checkbox" id="menu-toggle" />
+            <input
+              type="checkbox"
+              id="menu-toggle"
+              style="visibility: hidden"
+            />
             <!--nilagay ko-->
             <label for="menu-toggle" class="menu-icon">&#9776;</label>
             <!--nilagay ko-->
@@ -305,13 +309,15 @@
           <div class="cell">
             <img
               class="profile-picture"
-              src="Resources/image/man.png"
+              src="Resources\image\BADIOLA.jpg"
               alt="picture holder"
             />
             <br />
-            <p class="penro-officer-name">Engr. Leopoldo P. Badiola</p>
+            <p class="penro-officer-name">ENGR. LEOPOLDO P. BADIOLA</p>
             <br />
-            <p class="penro-officer-title">Penro Head Officer</p>
+            <p class="penro-officer-title">
+              PROVINCIAL ENVIRONMENTAL AND NATURAL RESOURCES OFFICER
+            </p>
           </div>
           <div class="cell">
             <img
@@ -320,10 +326,10 @@
               alt="picture holder"
             />
             <br />
-            <p class="penro-officer-name">Name of the Officer</p>
+            <p class="penro-officer-name">CHRISTOPHER SALVADOR T. OBRA</p>
             <br />
             <p class="penro-officer-title">
-              Supervising Environment Specialist
+              SENIOR ENVIRONMENTAL MANAGEMENT SPECIALIST
             </p>
           </div>
         </div>
@@ -331,27 +337,27 @@
           <div class="cell">
             <img
               class="profile-picture"
-              src="Resources/image/man.png"
+              src="Resources\image\GUEVARRA.jpg"
               alt="picture holder"
             />
             <br />
-            <p class="penro-officer-name">Name of the Officer</p>
+            <p class="penro-officer-name">EnP. DONNA A. GUEVARRA</p>
             <br />
             <p class="penro-officer-title">
-              Supervising Environment Specialist
+              ENVIRONMENTAL MANAGEMENT SPECIALIST II
             </p>
           </div>
           <div class="cell">
             <img
               class="profile-picture"
-              src="Resources/image/man.png"
+              src="Resources\image\BADAGUAS.jpg"
               alt="picture holder"
             />
             <br />
-            <p class="penro-officer-name">Name of the Officer</p>
+            <p class="penro-officer-name">GIL B. BADAGUAS JR.</p>
             <br />
             <p class="penro-officer-title">
-              Supervising Environment Specialist
+              ENVIRONMENTAL MANAGEMENT SPECIALIST II
             </p>
           </div>
         </div>
@@ -359,14 +365,14 @@
           <div class="cell">
             <img
               class="profile-picture"
-              src="Resources/image/man.png"
+              src="Resources\image\SAN GASPAR.jpg"
               alt="picture holder"
             />
             <br />
-            <p class="penro-officer-name">Name of the Officer</p>
+            <p class="penro-officer-name">EMERINE A. SAN GASPAR</p>
             <br />
             <p class="penro-officer-title">
-              Supervising Environment Specialist
+              ENVIRONMENTAL MANAGEMENT SPECIALIST I
             </p>
           </div>
           <div class="cell">
@@ -376,10 +382,10 @@
               alt="picture holder"
             />
             <br />
-            <p class="penro-officer-name">Name of the Officer</p>
+            <p class="penro-officer-name">ENRIQUE F. PALACIO JR.</p>
             <br />
             <p class="penro-officer-title">
-              Supervising Environment Specialist
+              COMMUNITY DEVELOPMENT ASSISTANT II
             </p>
           </div>
         </div>
@@ -387,15 +393,13 @@
           <div class="cell">
             <img
               class="profile-picture"
-              src="Resources/image/man.png"
+              src="Resources\image\BARDON.jpg"
               alt="picture holder"
             />
             <br />
-            <p class="penro-officer-name">Name of the Officer</p>
+            <p class="penro-officer-name">ROGELIO T. BARDON</p>
             <br />
-            <p class="penro-officer-title">
-              Supervising Environment Specialist
-            </p>
+            <p class="penro-officer-title">DRIVER I</p>
           </div>
           <div class="cell">
             <img
@@ -411,8 +415,16 @@
             </p>
           </div>
         </div>
+        <div id="specific-div">
+          <button id="org">See Organizational Chart</button>
+        </div>
+        <div id="org-chart">
+          <img src="\Resources\image\Chart.png" alt="Organizational Chart" />
+        </div>
+        c
       </div>
     </div>
+
     <!--
     SECTION 5 - Services
     -->
@@ -421,37 +433,49 @@
         <h1>FREQUENTLY ASKED QUESTIONS</h1>
       </div>
       <div class="table2">
+        <!-- FAQ Item 1 -->
         <div class="cell2" onclick="toggleContent(this)">
-          <div style="display: flex; justify-content: space-between">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
             <div>
               <img
                 style="height: 32px; width: auto"
                 src="Resources/image/question.svg"
-                alt="question placeholder placeholder"
+                alt="question placeholder"
               />
             </div>
-            <div>
+            <div style="flex-grow: 1; margin-left: 10px">
               <p class="faqs-holder">
-                How to Process Applications for Commercial Sand and
-                Gravel/Quarry Permit?
+                Who is the head officer of Camarines Norte PENRO?
               </p>
-              <br />
-              <br />
               <div class="cell-content">
-                <p class="faqs-holder">Extra information</p>
+                <p>- ENGR. LEOPOLDO P. BADIOLA</p>
               </div>
             </div>
             <div>
               <img
                 style="height: 32px; width: auto"
                 src="Resources/image/dropdown.svg"
-                alt="question placeholder"
+                alt="dropdown"
               />
             </div>
           </div>
         </div>
+
+        <!-- FAQ Item 2 -->
         <div class="cell2" onclick="toggleContent(this)">
-          <div style="display: flex; justify-content: space-between">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
             <div>
               <img
                 style="height: 32px; width: auto"
@@ -459,28 +483,38 @@
                 alt="question placeholder"
               />
             </div>
-            <div>
+            <div style="flex-grow: 1; margin-left: 10px">
               <p class="faqs-holder">
-                How to Process Applications for Commercial Sand and
-                Gravel/Quarry Permit?
+                How can I request Forest Tree Seedlings?
               </p>
-              <br />
-              <br />
               <div class="cell-content">
-                <p class="faqs-holder">Extra information</p>
+                <p>
+                  - You can follow the walk-in process outlined above or submit
+                  your request online through our system, CNPENRO-FTSMS. Simply
+                  log in or signup to our system using the login button located
+                  in the navigation bar.
+                </p>
               </div>
             </div>
             <div>
               <img
                 style="height: 32px; width: auto"
                 src="Resources/image/dropdown.svg"
-                alt="question placeholder"
+                alt="dropdown"
               />
             </div>
           </div>
         </div>
+
+        <!-- FAQ Item 3 -->
         <div class="cell2" onclick="toggleContent(this)">
-          <div style="display: flex; justify-content: space-between">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
             <div>
               <img
                 style="height: 32px; width: auto"
@@ -488,22 +522,19 @@
                 alt="question placeholder"
               />
             </div>
-            <div>
+            <div style="flex-grow: 1; margin-left: 10px">
               <p class="faqs-holder">
-                How to Process Applications for Commercial Sand and
-                Gravel/Quarry Permit?
+                How long does it take to process permits?
               </p>
-              <br />
-              <br />
               <div class="cell-content">
-                <p class="faqs-holder">Extra information</p>
+                <p>- Processing times may vary depending on the permit type.</p>
               </div>
             </div>
             <div>
               <img
                 style="height: 32px; width: auto"
                 src="Resources/image/dropdown.svg"
-                alt="question placeholder"
+                alt="dropdown"
               />
             </div>
           </div>

@@ -57,7 +57,7 @@
           </div>
         </a>
         <a class="tablink">
-          <div class="dashboard-button">
+          <div class="dashboard-button" onclick="openFileById(`inventory`)">
             <img
               src="/Resources/image/side-nav-inventory.svg"
               alt="Request Icon"
@@ -104,13 +104,13 @@
       <div class="dashboard">
         <div id="firstPanel">
           <div id="readyforPickUps-div">
-            <h3>5 Pending Pickups</h3>
+            <h3>Pending Pickups</h3>
             <div id="documents-container"></div>
           </div>
 
           <!-- High Demand Seeds -->
           <div id="chart-container">
-            <h1>TOP 3 Requested Seeds</h1>
+            <h2>TOP 3 Requested Seeds</h2>
             <canvas id="mostRequestedChart"></canvas>
           </div>
         </div>
@@ -132,7 +132,7 @@
             <div class="manageData">
               <div class="button-container">
                 <img
-                  src="/Resources/image/pickUpReady.svg"
+                  src="/Resources/image/confirm-pickup.svg"
                   alt="Request Icon"
                   class="icon"
                   style="height: 64px; width: auto"
@@ -142,12 +142,18 @@
                   <p>
                     Confirm client pick-up codes, and update requests’ status.
                   </p>
-                  <button class="button">Add/Update Inventory</button>
+                  <button
+                    onclick="openFileById(`requests`)"
+                    class="button"
+                    style="background-color: #a7ffb5"
+                  >
+                    Confirm PickUp
+                  </button>
                 </div>
               </div>
               <div class="button-container">
                 <img
-                  src="/Resources/image/pickUpReady.svg"
+                  src="/Resources/image/manage-inventory.svg"
                   alt="Request Icon"
                   class="icon"
                   style="height: 64px; width: auto"
@@ -157,7 +163,13 @@
                   <p>
                     Confirm client pick-up codes, and update requests’ status.
                   </p>
-                  <button class="button">Add/Update Inventory</button>
+                  <button
+                    onclick="openFileById(`inventory`)"
+                    class="button"
+                    style="background-color: #ffde7b"
+                  >
+                    Add/Update Inventory
+                  </button>
                 </div>
               </div>
             </div>

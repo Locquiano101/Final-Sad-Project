@@ -59,7 +59,7 @@
             <p>Requests</p>
           </div>
         </a>
-        <a class="tablink">
+        <a class="tablink" onclick="openFileById(`inventory`)">
           <div class="dashboard-button">
             <img
               src="/Resources/image/side-nav-inventory.svg"
@@ -199,28 +199,18 @@
 
         <!-- Submit Button -->
         <div id="button-holder">
-          <button
-            id="ConfirmPickUp"
-            style="background-color: #ff8412"
-            onclick="showPopup()"
-          >
+          <button id="ConfirmPickUp" style="background-color: #ff8412">
             Confirm Pick Up
           </button>
         </div>
       </div>
     </div>
     <div id="overlay" onclick="closePopup()"></div>
-    >
     <div id="popup">
-      <h1>request #<span id="idNum"></span></h1>
-      <h3 id="detailsPopUp">Approved</h3>
-      <button
-        id="backTodashBoard"
-        style="visibility: hidden"
-        onclick="openFileById(`dashboard`)"
-      >
-        back to dashboard
-      </button>
+      <h4>Request Seedling ID: <span id="docuID"></span></h4>
+      <h2 id="detailsPopUp">Status: Pending for Approval</h2>
+
+      <button onclick="openFileById(`dashboard`)">CONFIRM</button>
     </div>
 
     <script src="/Resources/files/javascript-folder/navigation.js"></script>

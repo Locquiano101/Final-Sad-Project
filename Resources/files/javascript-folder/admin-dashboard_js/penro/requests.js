@@ -29,7 +29,7 @@ async function retrieveAllDocuments() {
     const tableBody = document.querySelector("#documentTable tbody");
     tableBody.innerHTML = ""; // Clear previous rows
 
-    let foundPendingDocuments = false; // Flag to track if any pending documents are found
+    let foundReadyDocuments = false; // Flag to track if any ready documents are found
 
     // Iterate through all users
     for (const userDoc of usersSnapshot.docs) {
@@ -58,7 +58,13 @@ async function retrieveAllDocuments() {
           return;
         }
 
-        // Mark that we found a pending document
+        // Filter for "Ready for Pick Up" status
+        if (status !== "Ready for Pick Up") {
+          return; // Skip this document if it doesn't match the required status
+        }
+
+        // Mark that we found a "Ready for Pick Up" document
+        foundReadyDocuments = true;
 
         // Convert the formattedDate if it's a Firestore Timestamp
         let displayDate = "N/A";
@@ -93,7 +99,13 @@ async function retrieveAllDocuments() {
       });
     }
 
-    console.log("All pending documents retrieved and displayed successfully!");
+    if (!foundReadyDocuments) {
+      console.log("No documents with status 'Ready for Pick Up' found!");
+    } else {
+      console.log(
+        "All 'Ready for Pick Up' documents retrieved and displayed successfully!"
+      );
+    }
   } catch (error) {
     console.error("Error retrieving documents:", error);
   }

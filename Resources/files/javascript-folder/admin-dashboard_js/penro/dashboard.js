@@ -84,16 +84,10 @@ async function fetchReadyForPickup() {
             <div>
               <p>Document Title: ${fileName}</p>
               <p>Status: ${status}</p>
-              <small>Time Stamp: ${displayDate}</small>
-            </div>
-            <button class="button" data-id="${doc.id}">
-              Confirm Pick-up
-            </button>
-        `;
 
-        div.querySelector(".button").addEventListener("click", () => {
-          openPopup(`Confirming pick-up for: ${fileName}`);
-        });
+            </div>
+
+        `;
 
         documentsContainer.appendChild(div);
         displayedCount++; // Increment the counter

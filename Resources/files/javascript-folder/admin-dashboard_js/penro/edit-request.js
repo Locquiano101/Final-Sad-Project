@@ -121,14 +121,12 @@ async function updateDocumentStatus(userID, documentID, newStatus, notes) {
 
 // Add event listeners to buttons
 document.addEventListener("click", async (event) => {
-  if (event.target.matches("#approve, #decline")) {
-    const button = event.target;
-    const condition =
-      button.id === "approve" ? "Ready for Pick Up" : "Declined";
-    const noteField = document.querySelector("textarea#Note");
-    const note = noteField ? noteField.value : "";
+  if (event.target.matches("#ConfirmPickUp")) {
+    // Define the status condition
+    const condition = "Completed"; // or any other status value you need
 
     try {
+      // Reference the user's Firestore document
       const userDocRef = firebaseDB.collection("users").doc(userID);
       const userDocSnapshot = await userDocRef.get();
 
@@ -136,6 +134,7 @@ document.addEventListener("click", async (event) => {
         throw new Error("User not found");
       }
 
+      // Reference the specific document in the "Documents" subcollection
       const userDocumentsRef = userDocRef.collection("Documents").doc(docID);
       const documentSnapshot = await userDocumentsRef.get();
 
@@ -143,17 +142,28 @@ document.addEventListener("click", async (event) => {
         throw new Error("Document not found");
       }
 
-      // Update document status in Firestore
+      // Update the document's status in Firestore
       await userDocumentsRef.update({
         status: condition,
-        notes: note,
       });
+      showPopup(docID, condition);
     } catch (error) {
       console.error("Error processing request:", error);
       alert(`Error: ${error.message}`);
     }
   }
 });
+
+function showPopup(docuIDValue, condition) {
+  document.getElementById("docuID").textContent = `Request ID:${docuIDValue}`;
+  document.getElementById("detailsPopUp").textContent = `status:${condition}`;
+  document.getElementById("popup").style.display = "flex";
+  document.getElementById("overlay").style.display = "block";
+}
+function closePopup() {
+  document.getElementById("overlay").style.display = "none"; // Hide the dim background
+  document.getElementById("popup").style.display = "none"; // Hide the pop-up
+}
 
 // Load request details
 loadRequestDetails(docID, userID);
