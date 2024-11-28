@@ -4,25 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tree Seedling Management</title>
-    <style>
-      .seedling-input-container {
-        display: grid;
-        grid-template-columns: auto auto auto auto;
-        border: 1px solid black;
-        gap: 1rem;
-      }
-      .tree-row {
-        border: 1px solid black;
-        display: flex;
-        flex-direction: column;
-        align-self: center;
-        justify-content: space-between;
-      }
-      input,
-      button {
-        padding: 1rem;
-      }
-    </style>
+    <style></style>
   </head>
   <body>
     <h1>Tree Seedling Management</h1>
@@ -39,106 +21,6 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyCPIdlzAlKkfZp3bu4YuI2fylSzxar1zA0",
-        authDomain: "penro-db.firebaseapp.com",
-        projectId: "penro-db",
-        storageBucket: "penro-db.appspot.com",
-        messagingSenderId: "25138598165",
-        appId: "1:25138598165:web:9c8136ef9898df7803591c",
-        measurementId: "G-8YBC8FE4XZ",
-      };
-      firebase.initializeApp(firebaseConfig);
-      const firebaseDB = firebase.firestore();
-
-      // Populate the container with all tree entries from the database
-      function populateTreeInputs(container) {
-        const treesCollection = firebaseDB.collection("trees");
-
-        treesCollection
-          .get()
-          .then((querySnapshot) => {
-            if (!querySnapshot.empty) {
-              // Clear previous content
-              container.innerHTML = "";
-
-              // Populate with tree data
-              querySnapshot.forEach((doc) => {
-                const tree = doc.data();
-                const treeRow = document.createElement("div");
-                treeRow.classList.add("tree-row");
-
-                treeRow.innerHTML = `
-                <p>Tree: ${tree.name}</p>
-                <input type="number" name="treeQuantity[]" data-tree-id="${doc.id}" />
-                <button class="resetButton" data-tree-id="${doc.id}">RESET</button>
-              `;
-                console.log(doc.id, tree.name);
-
-                // Append to the container
-                container.appendChild(treeRow);
-              });
-            } else {
-              container.innerHTML = "<p>No trees available</p>";
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching tree data:", error);
-            container.innerHTML = "<p>Error loading trees</p>";
-          });
-      }
-
-      // Attach reset functionality and initial population
-      document.addEventListener("DOMContentLoaded", () => {
-        const container = document.querySelector(".seedling-input-container");
-
-        // Populate the container with tree data
-        populateTreeInputs(container);
-
-        // Add event delegation for reset buttons
-        container.addEventListener("click", (event) => {
-          if (event.target.classList.contains("resetButton")) {
-            event.preventDefault();
-            const input = event.target.previousElementSibling;
-            input.value = 0; // Reset the quantity input to 0
-          }
-        });
-
-        // Add functionality for updating quantities
-        updateButton.addEventListener("click", () => {
-          const inputs = container.querySelectorAll(
-            'input[name="treeQuantity[]"]'
-          );
-          inputs.forEach((input) => {
-            const treeId = input.dataset.treeId.trim(); // Ensure no extra characters
-            const quantity = parseInt(input.value, 10);
-
-            if (!isNaN(quantity)) {
-              firebaseDB
-                .collection("trees")
-                .doc(treeId)
-                .update({ quantity })
-                .then(() => {
-                  console.log(
-                    `Tree ID ${treeId} updated to quantity ${quantity}`
-                  );
-                })
-                .catch((error) => {
-                  console.error(`Error updating Tree ID ${treeId}:`, error);
-                  alert(
-                    `Failed to update Tree ID: ${treeId}. It might not exist.`
-                  );
-                });
-            } else {
-              console.warn(
-                `Invalid quantity for Tree ID ${treeId}: ${input.value}`
-              );
-            }
-          });
-          alert("Quantities updated successfully!");
-        });
-      });
-    </script>
+    <script></script>
   </body>
 </html>

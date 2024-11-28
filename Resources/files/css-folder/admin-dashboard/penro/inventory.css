@@ -1,0 +1,59 @@
+.content {
+  padding-top: 3rem;
+}
+
+.inventory {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 2rem;
+}
+
+.inventory-container {
+  flex: 1;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+}
+
+#seedlingInputContainer,
+#newSeedlingInputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.seedling-input-group {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: #103635;
+  border-radius: 16px;
+}
+
+.button-holder {
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+
+  gap: 1rem;
+  display: flex;
+  padding: 0 2rem;
+}
+button {
+  padding: 1rem;
+  border: 3px solid white;
+  border-radius: 12px;
+  width: 100%;
+  background-color: transparent;
+  color: white;
+  font-weight: bold;
+}
+
+input[type="number"],
+input[type="text"],
+input[type="file"],
+select {
+  padding: 1rem;
+  border-radius: 16px;
+  width: 100%;
+}

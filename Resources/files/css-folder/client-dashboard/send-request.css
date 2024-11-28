@@ -25,18 +25,17 @@ select:focus-within {
   background-color: white; /* Color when dropdown is open */
   color: black; /* Text color in dropdown */
 }
-
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 .seedling-input-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
 .seedling-container {
   flex-direction: column;
   gap: 1rem;

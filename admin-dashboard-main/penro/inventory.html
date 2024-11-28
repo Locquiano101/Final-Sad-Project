@@ -15,6 +15,11 @@
       rel="stylesheet"
       href="/Resources/files/css-folder/admin-dashboard/main.css"
     />
+    <link
+      rel="stylesheet"
+      href="/Resources/files/css-folder/admin-dashboard/penro/inventory.css"
+    />
+    <style></style>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   </head>
@@ -94,7 +99,53 @@
       </div>
     </section>
 
-    <div class="content">this is inventory</div>
+    <div class="content">
+      <div class="button-holder">
+        <h1>INVENTORY MANAGEMENT</h1>
+        <button id="UpdateInventory" style="background-color: #cf4747">
+          UPDATE INVENTORY
+        </button>
+      </div>
+      <div class="inventory">
+        <div class="inventory-container">
+          <h2>Seedling Information</h2>
+          <div id="seedlingInputContainer">
+            <div class="seedling-input-group">
+              <h2>Seedling #1</h2>
+              <p>Type of Seedling</p>
+              <select id="treeSelect" name="treeSelect[]" required>
+                <option>Loading...</option>
+              </select>
+              <p>Quantity of seedlings</p>
+              <input type="number" name="number[]" required />
+            </div>
+          </div>
+          <div class="button-holder">
+            <button
+              type="button"
+              id="addButton"
+              style="background-color: #1976d2"
+            >
+              + Add Another Batch of Seedlings
+            </button>
+          </div>
+        </div>
+        <div class="inventory-container">
+          <h2>New Seedling</h2>
+          <div id="newSeedlingInputContainer"></div>
+          <div class="button-holder">
+            <button
+              type="button"
+              id="addnewTree"
+              style="background-color: #cf4747"
+            >
+              + Add New Batch of Seedlings
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/Resources/files/javascript-folder/admin-dashboard_js/penro/inventory.js"></script>
     <script src="/Resources/files/javascript-folder/navigation.js"></script>
   </body>
 </html>
