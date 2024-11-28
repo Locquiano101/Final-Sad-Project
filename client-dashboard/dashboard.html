@@ -182,27 +182,19 @@
           </div>
         </div>
       </div>
-      <div class="popup-overlay" id="popupOverlay" onclick="hidePopup()">
-        <div class="popup" onclick="event.stopPropagation()">
-          <h1 id="popupTitle">APPROVED - ISJD08</h1>
-          <div class="control-number" id="popupControlNumber">
-            00001 - Promissory Note
-          </div>
-          <h1 class="status" id="popupStatus">SEEDLINGS FOR PICKUP</h1>
-          <p id="popupMessage">
-            Your promissory note has been approved. You may now proceed to Basud
-            Nursery, Basud, Cam. Norte. Present to the nursery laborer/s the
-            control number and pick up seedlings.<br />
-            <br />
-            <strong>Thank you!</strong>
-          </p>
-          <button class="delete-btn" data-id="${notificationID}">
-            Delete Notif
-          </button>
-        </div>
-      </div>
     </div>
-
+    <div id="overlay" onclick="closePopup()"></div>
+    <div id="popup">
+      <h1>request #<span id="idNum"></span></h1>
+      <h3 id="detailsPopUp">Approved</h3>
+      <button
+        id="backTodashBoard"
+        style="visibility: hidden"
+        onclick="openFileById(`dashboard`)"
+      >
+        back to dashboard
+      </button>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/Resources/files/javascript-folder/navigation.js"></script>
     <script src="/Resources/files/javascript-folder/client-dashboard-js/dashboard.js"></script>

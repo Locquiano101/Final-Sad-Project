@@ -95,20 +95,27 @@
     <div class="content">
       <!-- Popup -->
       <div class="main-profile-holder">
-        <h1>Recipient</h1>
-        <h2 id="recipient">Loading...</h2>
-        <p id="recipientNum">Loading...</p>
-        <p id="recipientAddress">Loading...</p>
-        <h2>Download File Requests</h2>
-        <div>
-          <h2 id="fileName">Loading...</h2>
-          <button id="DownLoadFile" style="display: none">Download File</button>
+        <h1 style="color: #93ffde; font-size: 48px">Recipient</h1>
+        <div id="recipientProfile">
+          <div>
+            <img
+              src="/Resources/image/white-client-profile.svg"
+              alt="User Icon"
+              class="profile-icon"
+              height="128px"
+            />
+          </div>
+          <div>
+            <h2 id="recipient">Loading...</h2>
+            <p id="recipientNum">Loading...</p>
+            <p id="recipientAddress">Loading...</p>
+          </div>
         </div>
       </div>
       <div class="main-div">
         <!-- Seedling Information -->
         <div class="seedling-container">
-          <h2>Seedling Information</h2>
+          <h2 style="color: #93ffde; font-size: 32px">Seedling Information</h2>
           <div class="project-information-details">
             <p>
               Quantity of seedlings:
@@ -120,24 +127,26 @@
 
         <!-- Project Information -->
         <div class="project-information">
-          <h2>Project Information</h2>
+          <h2 style="color: #93ffde; font-size: 32px">Project Information</h2>
           <div class="project-information-details">
-            <h4>
+            <p>
               Location of Project/Planting Site:
               <span id="plantingSite">Loading...</span>
-            </h4>
-            <h4>
+            </p>
+            <p>
               Land Classification of the Property:
               <span id="landClassification">Loading...</span>
-            </h4>
+            </p>
           </div>
         </div>
 
         <!-- Activity Purpose -->
         <div class="activity-type-container">
-          <h3>Purpose/ Type of Activity:</h3>
+          <h3 style="color: #93ffde; font-size: 32px">
+            Purpose/ Type of Activity:
+          </h3>
           <div class="project-information-details">
-            <h4 id="activityPurpose">Loading...</h4>
+            <p id="activityPurpose">Loading...</p>
           </div>
         </div>
 
@@ -174,7 +183,7 @@
           </div>
         </div>
         <div class="activity-type-container">
-          <h3>Note:</h3>
+          <h3 style="color: #93ffde; font-size: 32px">Note:</h3>
           <textarea
             id="Note"
             name="Note"
@@ -184,26 +193,28 @@
             required
           ></textarea>
         </div>
+
         <!-- Submit Button -->
         <div id="button-holder">
-          <button id="approve">Approve Requests</button>
-          <button id="decline">Decline Requests</button>
-        </div>
-
-        <!-- Popup -->
-        <div class="overlay" onclick="closePopup()"></div>
-        <div class="popup" id="popup" style="display: none">
-          <h1>Request Submitted</h1>
-          <p>Request #<span>00001</span></p>
-          <p>Status: <span class="status">Pending</span></p>
-          <p>
-            Your request has been submitted and is now pending approval. Please
-            check your dashboard regularly for updates. Thank you!
-          </p>
-          <a href="#" onclick="closePopup()">Back To Dashboard</a>
+          <button id="approve" onclick="showPopup()">Approve Requests</button>
+          <button id="decline" onclick="showPopup()">Decline Requests</button>
         </div>
       </div>
     </div>
+    <div id="overlay" onclick="closePopup()"></div>
+    >
+    <div id="popup">
+      <h1>request #<span id="idNum"></span></h1>
+      <h3 id="detailsPopUp">Approved</h3>
+      <button
+        id="backTodashBoard"
+        style="visibility: hidden"
+        onclick="openFileById(`dashboard`)"
+      >
+        back to dashboard
+      </button>
+    </div>
+
     <script src="/Resources/files/javascript-folder/navigation.js"></script>
     <script src="/Resources/files/javascript-folder/admin-dashboard_js/governor/view-request.js"></script>
   </body>

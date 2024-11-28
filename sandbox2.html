@@ -3,24 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tree Seedling Management</title>
-    <style></style>
-  </head>
-  <body>
-    <h1>Tree Seedling Management</h1>
-    <div class="seedling-input-container">
-      <!-- Tree inputs will be dynamically inserted here -->
-    </div>
-    <div id="customAlert" style="display: none">
-      <p id="alertMessage"></p>
-      <button class="yesButton">Yes</button>
-      <button class="noButton">No</button>
-    </div>
-
-    <button id="updateButton">Update Quantities</button>
-
+    <title>Tree Selector</title>
+    <!-- Firebase CDN -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script></script>
+  </head>
+  <body>
+    <h1>Select a Tree</h1>
+    <label for="treeSelect">Choose a tree:</label>
+    <select id="treeSelect">
+      <option value="">Loading...</option>
+    </select>
+
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCPIdlzAlKkfZp3bu4YuI2fylSzxar1zA0",
+        authDomain: "penro-db.firebaseapp.com",
+        projectId: "penro-db",
+        storageBucket: "penro-db.appspot.com",
+        messagingSenderId: "25138598165",
+        appId: "1:25138598165:web:9c8136ef9898df7803591c",
+        measurementId: "G-8YBC8FE4XZ",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
+      // Reference to the "trees" collection
+      const treesCollection = db.collection("trees");
+
+      // Fetch tree data and populate the select element
+      const treeSelect = document.getElementById("treeSelect");
+
+      treesCollection
+        .get()
+        .then((querySnapshot) => {
+          if (!querySnapshot.empty) {
+            // Clear the loading option
+            treeSelect.innerHTML = '<option value="">Select a tree</option>';
+
+            // Populate the select options with tree names
+            querySnapshot.forEach((doc) => {
+              const tree = doc.data();
+              const option = document.createElement("option");
+              option.value = doc.id; // Use the document ID as the value
+              option.textContent = tree.name; // Display the tree name
+              treeSelect.appendChild(option);
+            });
+          } else {
+            treeSelect.innerHTML =
+              '<option value="">No trees available</option>';
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching tree data:", error);
+          treeSelect.innerHTML =
+            '<option value="">Error loading trees</option>';
+        });
+    </script>
   </body>
 </html>

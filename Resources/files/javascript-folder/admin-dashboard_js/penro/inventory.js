@@ -266,21 +266,52 @@ document
     };
 
     // Send email with the updated inventory
-    emailjs
-      .send("service_rihrhh4", "template_o8qznum", emailData)
-      .then((response) => {
-        console.log("Email sent successfully:", response);
-      })
-      .catch((error) => {
-        console.error("Error sending email:", error);
-      });
+    // emailjs
+    //   .send("service_rihrhh4", "template_o8qznum", emailData)
+    //   .then((response) => {
+    //     console.log("Email sent successfully:", response);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error sending email:", error);
+    //   });
 
     // Save inventory update in Firebase Firestore
+
+    const message = `
+        Update Existing Inventory:
+        ${await Promise.all(
+          existingInventory.map(async (item) => {
+            // Fetch the tree name using its ID (item.type)
+            const treeDocRef = firebaseDB.collection("trees").doc(item.type);
+            try {
+              const doc = await treeDocRef.get();
+              const treeName = doc.exists ? doc.data().name : "Unknown Tree";
+              return `Name: ${treeName}, Quantity: ${item.quantity}`;
+            } catch (error) {
+              console.error("Error fetching tree name:", error);
+              return `ID: ${item.id}, Type: Not Found, Quantity: ${item.quantity}`;
+            }
+          })
+        ).then((result) => result.join("\n"))}\n
+    
+        ${
+          newInventory.length > 0
+            ? `
+        \nNew Inventory:
+        ${newInventory
+          .map(
+            (item) =>
+              `Name: ${item.name}, Type: ${item.treeType}, Quantity: ${item.quantity}, Length: ${item.length}, Width: ${item.width}`
+          )
+          .join("\n")}`
+            : "\nNo new trees added."
+        }
+      `;
     firebaseDB
       .collection("notifications")
       .add({
         title: "Inventory Update",
-        message: emailData,
+        message: message,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(() => {

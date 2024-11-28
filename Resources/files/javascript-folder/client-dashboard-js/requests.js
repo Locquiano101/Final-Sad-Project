@@ -13,7 +13,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 // Initialize Firestore and other services
-const firebaseAuth = firebase.auth();
 const firebaseDB = firebase.firestore();
 
 // Get userID from local storage
@@ -116,7 +115,6 @@ function createDocumentRow(
     <td>${docTitle}</td>
     <td>${docTimeStamp}</td>
     <td style="color: ${conditionColor} !important;">${status}</td>
-    <td><button class="edit-button" onclick="deleteDocument('${docID}')">Delete</button></td>
   `;
 
   // Append the row to the table body

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Popup Example</title>
+    <style>
+      /* Basic styles */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #0f3d4c; /* Matches the background in your design */
+      }
+
+      /* Button style */
+      button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      /* Popup container styles */
+      .popup-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none; /* Hidden by default */
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Popup box styles */
+      .popup {
+        background-color: white;
+        padding: 20px;
+        width: 80%;
+        max-width: 400px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        text-align: center;
+      }
+
+      .popup h3 {
+        color: #006400;
+        margin: 0 0 10px;
+      }
+
+      .popup .status {
+        color: orange;
+        font-weight: bold;
+      }
+
+      .popup p {
+        margin: 10px 0;
+      }
+
+      .close-btn {
+        margin-top: 10px;
+        padding: 8px 15px;
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .close-btn:hover {
+        background-color: #d32f2f;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="openPopup">Click to Show Popup</button>
+
+    <div class="popup-container" id="popupContainer">
+      <div class="popup">
+        <h3>Request Submitted</h3>
+        <p>Request #<span>00001</span></p>
+        <p>Status: <span class="status">Pending</span></p>
+        <p>
+          Your request has been submitted and is now pending approval. Please
+          check your dashboard regularly for updates. Thank you!
+        </p>
+        <button class="close-btn" id="closePopup">Back To Dashboard</button>
+      </div>
+    </div>
+
+    <script>
+      // JavaScript for popup
+      const openPopup = document.getElementById("openPopup");
+      const closePopup = document.getElementById("closePopup");
+      const popupContainer = document.getElementById("popupContainer");
+
+      openPopup.addEventListener("click", () => {
+        popupContainer.style.display = "flex";
+      });
+
+      closePopup.addEventListener("click", () => {
+        popupContainer.style.display = "none";
+      });
+    </script>
+  </body>
+</html>

@@ -83,7 +83,6 @@ async function loadRequestDetails(docID, userID) {
 
       // Update DOM elements with document data
       document.getElementById("recipient").textContent = user;
-      document.getElementById("fileName").textContent = fileName;
       document.getElementById("recipientNum").textContent = userNumber;
       document.getElementById("recipientAddress").textContent = address;
       document.getElementById("seedlingQuantity").textContent = seedlingsNumber;
@@ -93,9 +92,6 @@ async function loadRequestDetails(docID, userID) {
         landClassification;
       document.getElementById("activityPurpose").textContent = activityType;
     });
-
-    // Show the download button only after the data is displayed
-    document.getElementById("DownLoadFile").style.display = "block";
   } catch (error) {
     console.error("Error retrieving request data:", error);
   }
@@ -113,7 +109,7 @@ async function updateDocumentStatus(userID, documentID, newStatus, notes) {
     await docRef.update({
       status: newStatus,
       notes: notes || "",
-      UpdateTime: w, //Optional: Add an updated timestamp
+      UpdateTime: firebase.firestore.FieldValue.serverTimestamp(), //Optional: Add an updated timestamp
     });
 
     console.log("Document status updated successfully!");
@@ -122,6 +118,7 @@ async function updateDocumentStatus(userID, documentID, newStatus, notes) {
     alert("Failed to update status.");
   }
 }
+
 // Add event listeners to buttons
 document.addEventListener("click", async (event) => {
   if (event.target.matches("#approve, #decline")) {
@@ -139,9 +136,6 @@ document.addEventListener("click", async (event) => {
         throw new Error("User not found");
       }
 
-      const userData = userDocSnapshot.data();
-      const userEmail = userData.email || "No Name";
-
       const userDocumentsRef = userDocRef.collection("Documents").doc(docID);
       const documentSnapshot = await userDocumentsRef.get();
 
@@ -149,53 +143,11 @@ document.addEventListener("click", async (event) => {
         throw new Error("Document not found");
       }
 
-      emailjs.init("CHysrc6RIJb6U2SkY"); // Replace with your actual EmailJS public key
-
-      // Send email notification
-      const emailResponse = await emailjs.send(
-        "service_rihrhh4",
-        "template_4fh1w57",
-        {
-          Seedling: seedlingsType,
-          seedling_quantity: seedlingsNumber,
-          Note: note,
-          user_name: userEmail,
-          Condition: condition,
-          user_email: userEmail,
-        }
-      );
-
-      console.log(
-        "Email sent successfully:",
-        emailResponse.status,
-        emailResponse.text
-      );
-
-      // Prepare notification details
-      const notificationDetails = {
-        title: `Request ${condition}`,
-        message: `Your request titled "${fileName}" has been ${condition}.`,
-        note: note || "No additional notes provided.",
-        condition: condition,
-        timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
-        emailStatus: "Sent", // Track email status
-      };
-
-      // Store notification using the document title as the ID
-      await firebaseDB
-        .collection("users")
-        .doc(userID)
-        .collection("Notifications")
-        .doc(fileName)
-        .set(notificationDetails);
-
       // Update document status in Firestore
       await userDocumentsRef.update({
         status: condition,
         notes: note,
       });
-
-      alert(`Request ${condition} and email notification sent.`);
     } catch (error) {
       console.error("Error processing request:", error);
       alert(`Error: ${error.message}`);
@@ -203,23 +155,5 @@ document.addEventListener("click", async (event) => {
   }
 });
 
-document.getElementById("DownLoadFile").addEventListener("click", () => {
-  const fileName = filenamefromFirebase; // Replace with your file's name
-  const fileUrl = `https://aliceblue-owl-540826.hostingersite.com//client-dashboard/uploads/documents/${fileName}`;
-
-  // Create an anchor element
-  const a = document.createElement("a");
-  a.href = fileUrl;
-  a.download = fileName;
-
-  // Append the anchor to the body
-  document.body.appendChild(a);
-
-  // Trigger a click event on the anchor
-  a.click();
-
-  // Remove the anchor from the body
-  document.body.removeChild(a);
-});
 // Load request details
 loadRequestDetails(docID, userID);

@@ -96,7 +96,9 @@
         >
           <!-- Seedling Information -->
           <div class="seedling-container">
-            <h2>Seedling Information</h2>
+            <h2 style="color: #93ffde; font-size: 36px">
+              Seedling Information
+            </h2>
             <div class="seedling-input-container">
               <div class="seedling-input-group">
                 <p>Quantity of seedlings</p>
@@ -112,7 +114,7 @@
 
           <!-- Project Information -->
           <div class="project-information">
-            <h2>Project Information</h2>
+            <h2 style="color: #93ffde; font-size: 36px">Project Information</h2>
             <h3>Location of Project/Planting Site:</h3>
             <input
               type="text"
@@ -160,7 +162,9 @@
 
           <!-- Activity Purpose -->
           <div class="activity-type-container">
-            <h3>Purpose/ Type of Activity:</h3>
+            <h3 style="color: #93ffde; font-size: 36px">
+              Purpose/ Type of Activity:
+            </h3>
             <textarea
               id="activity-type"
               name="activity-type"
@@ -173,7 +177,9 @@
 
           <!-- Location Map -->
           <div class="vicinity-map-holder">
-            <h3>Location / Vicinity Map of Planting Site:</h3>
+            <h3 style="color: #93ffde; font-size: 36px">
+              Location / Vicinity Map of Planting Site:
+            </h3>
             <div id="mapContainer"></div>
           </div>
 
@@ -226,21 +232,17 @@
           </div>
         </form>
 
-        <!-- Popup -->
-        <div class="overlay" onclick="closePopup()"></div>
-        <div class="popup" id="popup" style="display: none">
-          <h1>Request Submitted</h1>
-          <p>Request #<span>00001</span></p>
-          <p>Status: <span class="status">Pending</span></p>
-          <p>
-            Your request has been submitted and is now pending approval. Please
-            check your dashboard regularly for updates. Thank you!
-          </p>
-          <a href="#" onclick="closePopup()">Back To Dashboard</a>
-        </div>
-      </div>
     </div>
-
+    <div id="overlay" onclick="closePopup()"></div>
+    <div id="popup">
+      <h4>Request Seedling ID: <span id="docuID"></span></h4>
+      <h2 id="detailsPopUp">Status: Pending for Approval</h2>
+      <p>
+        Your request has been submitted and is now pending approval. Please
+        check your dashboard regularly for updates. Thank you!
+      </p>
+      <button onclick="openFileById(`dashboard`)">CONFIRM</button>
+    </div>
     <script src="/Resources/files/javascript-folder/navigation.js"></script>
     <script src="/Resources/files/javascript-folder/client-dashboard-js/send-requests.js"></script>
   </body>

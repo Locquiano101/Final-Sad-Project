@@ -8,6 +8,7 @@
   display: flex;
   flex-direction: column;
 }
+
 .request-panel {
   flex-direction: column;
   display: flex;
@@ -33,13 +34,25 @@
   gap: 1rem;
 }
 #requests-container {
-  width: 65%;
   display: flex;
+  flex: 2;
   flex-direction: column;
   gap: 1rem;
 }
-#requests-container button {
+#notifications-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+}
+#requests-container button,
+#notifications-container button {
   background-color: #1976d2;
+}
+.notifications {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 .latest-request {
   display: flex;
@@ -60,5 +73,57 @@
   border-radius: 16px;
 }
 .notification-container {
+  width: 100%;
   background-color: #103635;
+}
+.notification {
+  display: flex;
+  background-color: #103635;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+  border-radius: 16px;
+}
+.notification div {
+  display: flex;
+  flex-direction: column;
+  background-color: #103635;
+  padding: 1rem;
+  gap: 1rem;
+}
+#overlay {
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translate(-11, 1);
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  z-index: 1;
+}
+#popup {
+  position: fixed;
+  top: 50%;
+  display: none;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #103635;
+  border-radius: 16px;
+  z-index: 2;
+  align-items: center;
+  padding: 1rem;
+  gap: 2rem;
+}
+
+#popup button {
+  background-color: #1976d2;
+  border-style: none;
+  color: white;
+  border-radius: 16px;
+  font-size: 16px;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 2rem;
+  gap: 1rem;
 }

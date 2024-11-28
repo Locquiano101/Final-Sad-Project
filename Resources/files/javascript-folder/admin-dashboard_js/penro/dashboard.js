@@ -28,8 +28,11 @@ async function fetchReadyForPickup() {
     }
 
     let foundReadyDocuments = false;
+    let displayedCount = 0; // Counter to limit displayed documents
 
     for (const userDoc of usersSnapshot.docs) {
+      if (displayedCount >= 3) break; // Stop processing if limit reached
+
       const userID = userDoc.id;
       const userDocumentsRef = db
         .collection("users")
@@ -42,7 +45,9 @@ async function fetchReadyForPickup() {
         continue;
       }
 
-      documentsSnapshot.forEach((doc) => {
+      for (const doc of documentsSnapshot.docs) {
+        if (displayedCount >= 3) break; // Stop displaying if limit reached
+
         const docData = doc.data();
         console.log("Document data:", docData);
 
@@ -50,11 +55,11 @@ async function fetchReadyForPickup() {
 
         if (!fileName || !status) {
           console.log("Missing necessary fields in document:", doc.id);
-          return;
+          continue;
         }
 
         if (status !== "Ready for Pick Up") {
-          return;
+          continue;
         }
 
         foundReadyDocuments = true;
@@ -91,7 +96,8 @@ async function fetchReadyForPickup() {
         });
 
         documentsContainer.appendChild(div);
-      });
+        displayedCount++; // Increment the counter
+      }
     }
 
     if (!foundReadyDocuments) {

@@ -20,7 +20,15 @@ async function retrieveLatestRequests() {
     if (!requestsContainer) {
       console.error("The requests-container element is missing in the HTML.");
       return;
-    } // Clear previous content
+    }
+
+    // Clear previous content
+    requestsContainer.innerHTML = `
+      <h3>Latest Requests Received:</h3>
+      <button onclick="openFileById('requests')">View All Requests</button>
+    `;
+
+    let requestCount = 0; // Initialize counter to track the number of requests displayed
 
     if (!usersSnapshot.empty) {
       // Iterate over each user document
@@ -29,14 +37,16 @@ async function retrieveLatestRequests() {
         const userDocumentsRef = userDoc.ref
           .collection("Documents")
           .orderBy("formattedDate", "desc") // Sort by timestamp in descending order
-          .limit(4); // Limit to the latest 5 documents
+          .limit(4); // Limit to the latest 4 documents
 
         // Fetch the user's documents
         const userDocumentsSnapshot = await userDocumentsRef.get();
 
         if (!userDocumentsSnapshot.empty) {
           // Iterate over each document for the current user
-          userDocumentsSnapshot.forEach((doc) => {
+          for (const doc of userDocumentsSnapshot.docs) {
+            if (requestCount >= 3) break; // Stop if 5 requests are displayed
+
             const requestData = doc.data();
             const requestElement = document.createElement("div");
             requestElement.classList.add("latest-request");
@@ -55,25 +65,36 @@ async function retrieveLatestRequests() {
 
             // Format the request details
             requestElement.innerHTML = `
-              <img src="/Resources/image/notification-bell.svg" alt="Notification Icon" class="icon" style="height: 64px; width: auto" />
+              <img
+                src="/Resources/image/white-client-profile.svg"
+                alt="User Icon"
+                class="profile-icon"
+                height="64px"
+                width="auto"
+              />
               <div class="request-details">
                 <h2>Request from: ${requestData.user}</h2>
                 <p>
                   ${requestData.fileName} - 
                   <span>${requestData.formattedDate}</span>
                 </p>
-                </div>
+              </div>
             `;
 
             // Append the new request to the container
             requestsContainer.appendChild(requestElement);
+            requestCount++; // Increment the request counter
 
             // Optional: Log the request data for debugging
             console.log("Request Data:", requestData);
-          });
+          }
+
+          if (requestCount >= 5) break; // Exit loop if 5 requests are already added
         } else {
           console.log("No documents found for user:", userDoc.id);
         }
+
+        if (requestCount >= 5) break; // Exit outer loop if 5 requests are already added
       }
     } else {
       console.log("No users found in the database.");
@@ -97,7 +118,6 @@ async function retrieveAndCountDocuments() {
       const userDocumentsRef = userDoc.ref.collection("Documents");
 
       const querySnapshot = await userDocumentsRef.get();
-
       querySnapshot.forEach((doc) => {
         const status = doc.data().status;
 
@@ -119,6 +139,95 @@ async function retrieveAndCountDocuments() {
     console.error("Error retrieving documents:", error);
   }
 }
+function loadNotifications() {
+  const notificationsList = document.getElementById("notifications-list");
+  firebaseDB
+    .collection("notifications")
+    .orderBy("timestamp", "desc") // Optional: Order by timestamp to show the latest ones first
+    .get()
+    .then((querySnapshot) => {
+      // Clear the existing notifications
+      notificationsList.innerHTML = "";
+
+      // Loop through the notifications and display them
+      querySnapshot.forEach((doc) => {
+        const notificationData = doc.data();
+        const notificationTime = new Date(
+          notificationData.timestamp.seconds * 1000
+        ).toLocaleString();
+
+        // Create the notification element
+        const notificationElement = document.createElement("div");
+        notificationElement.classList.add("notification");
+
+        // Add notification content
+        notificationElement.innerHTML = `
+          <img
+            src="/Resources/image/notification-bell.svg"
+            alt="Notification Icon"
+            class="icon"
+            style="height: 64px; width: auto"
+          />
+          <div class="notification-details">
+            <h3>${notificationData.title}</h3>
+            <span id="notification-time-stamp">${notificationTime}</span>
+          </div>
+        `;
+
+        // Create and append the button programmatically
+        const button = document.createElement("button");
+        button.textContent = "View Notification Details";
+        button.addEventListener("click", () => {
+          showPopup(
+            notificationData.title,
+            notificationData.message,
+            notificationTime
+          );
+        });
+        notificationElement
+          .querySelector(".notification-details")
+          .appendChild(button);
+
+        // Append the notification to the container
+        notificationsList.appendChild(notificationElement);
+      });
+    })
+    .catch((error) => {
+      console.error("Error getting notifications: ", error);
+    });
+}
+
+function showPopup(title, message, time) {
+  // Populate the popup with the notification details
+  document.getElementById("popup").innerHTML = `
+    <div class="notification">
+      <img
+        src="/Resources/image/notification-bell.svg"
+        alt="Notification Icon"
+        class="icon"
+        style="height: 120px; width: auto"
+      />
+      <div class="notification-details">
+        <h1>${title}</h1>
+        <p>${message}</p>
+        <h3 id="notification-time-stamp">${time}</h3>
+        <button onclick="closePopUp()" style="background-color: #cf4747; border-style: none;">Close</button>
+      </div>
+    </div>
+  `;
+
+  // Show the popup and overlay
+  document.getElementById("overlay").style.display = "block"; // Show the dim background
+  document.getElementById("popup").style.display = "flex"; // Show the pop-up
+}
+
+function closePopUp() {
+  document.getElementById("overlay").style.display = "none"; // Hide the dim background
+  document.getElementById("popup").style.display = "none"; // Hide the pop-up
+}
+
+// Call the function to load notifications when the page loads
+loadNotifications();
 
 // Call the functions to display the latest requests and document counts
 retrieveLatestRequests();

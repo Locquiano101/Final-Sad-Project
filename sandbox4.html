@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Screenshot to Word</title>
+    <style>
+      /* Styles for the target div */
+      #target {
+        width: 300px;
+        height: 200px;
+        background-color: lightblue;
+        text-align: center;
+        line-height: 200px;
+        margin: 20px auto;
+        border: 2px solid blue;
+        font-size: 20px;
+        font-family: Arial, sans-serif;
+      }
+
+      /* Center the button */
+      .button {
+        display: block;
+        margin: 10px auto;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      /* Container for displaying the screenshot */
+      #result {
+        width: 300px;
+        margin: 20px auto;
+        border: 2px dashed gray;
+        padding: 10px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Div to be screenshotted -->
+    <div id="target">This is the target div!</div>
+
+    <!-- Button to trigger the screenshot -->
+    <button id="capture" class="button">Generate Word Document</button>
+
+    <!-- Div to display the screenshot -->
+    <div id="result">Screenshot will appear here</div>
+
+    <!-- Include html2canvas and docx.js libraries from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docx@7.1.0/build/index.min.js"></script>
+    <script>
+      const { Document, Packer, Paragraph, ImageRun } = docx;
+
+      document.getElementById("capture").addEventListener("click", function () {
+        const targetElement = document.getElementById("target");
+        const resultElement = document.getElementById("result");
+
+        // Capture the target div as a screenshot
+        html2canvas(targetElement).then((canvas) => {
+          // Convert the canvas to a data URL (base64 image)
+          const screenshotData = canvas.toDataURL("image/png");
+
+          // Display the screenshot in the result div
+          resultElement.innerHTML = `<img src="${screenshotData}" alt="Screenshot" style="max-width: 100%;">`;
+
+          // Decode the base64 image to binary data
+          const base64Image = screenshotData.split(",")[1];
+          const binaryImage = atob(base64Image);
+          const imageArray = new Uint8Array(binaryImage.length);
+          for (let i = 0; i < binaryImage.length; i++) {
+            imageArray[i] = binaryImage.charCodeAt(i);
+          }
+
+          // Create a Word document
+          const doc = new Document({
+            sections: [
+              {
+                children: [
+                  new Paragraph({
+                    children: [
+                      new ImageRun({
+                        data: imageArray,
+                        transformation: {
+                          width: 300,
+                          height: 200,
+                        },
+                      }),
+                    ],
+                  }),
+                ],
+              },
+            ],
+          });
+
+          // Generate and download the Word document
+          Packer.toBlob(doc).then((blob) => {
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "screenshot.docx";
+            link.click();
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

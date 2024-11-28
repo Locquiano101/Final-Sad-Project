@@ -142,7 +142,6 @@ document.querySelector("#documentTable").addEventListener("click", (event) => {
 function editDocument(userID, docID) {
   localStorage.setItem("docID", docID);
   localStorage.setItem("userID", userID);
-  alert(`Edit function called for User: ${userID}, Document: ${docID}`);
   window.open("view-requests.html", "_self");
 }
 

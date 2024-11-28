@@ -83,7 +83,6 @@ async function loadRequestDetails(docID, userID) {
 
       // Update DOM elements with document data
       document.getElementById("recipient").textContent = user;
-      document.getElementById("fileName").textContent = fileName;
       document.getElementById("recipientNum").textContent = userNumber;
       document.getElementById("recipientAddress").textContent = address;
       document.getElementById("seedlingQuantity").textContent = seedlingsNumber;
@@ -93,9 +92,6 @@ async function loadRequestDetails(docID, userID) {
         landClassification;
       document.getElementById("activityPurpose").textContent = activityType;
     });
-
-    // Show the download button only after the data is displayed
-    document.getElementById("DownLoadFile").style.display = "block";
   } catch (error) {
     console.error("Error retrieving request data:", error);
   }
@@ -113,7 +109,7 @@ async function updateDocumentStatus(userID, documentID, newStatus, notes) {
     await docRef.update({
       status: newStatus,
       notes: notes || "",
-      UpdateTime: w, //Optional: Add an updated timestamp
+      UpdateTime: firebase.firestore.FieldValue.serverTimestamp(), //Optional: Add an updated timestamp
     });
 
     console.log("Document status updated successfully!");
@@ -130,6 +126,10 @@ document.addEventListener("click", async (event) => {
       button.id === "approve" ? "Ready for Pick Up" : "Declined";
     const noteField = document.querySelector("textarea#Note");
     const note = noteField ? noteField.value : "";
+
+    // Disable all buttons while processing
+    const buttons = document.querySelectorAll("#approve, #decline");
+    buttons.forEach((btn) => (btn.disabled = true));
 
     try {
       const userDocRef = firebaseDB.collection("users").doc(userID);
@@ -148,6 +148,7 @@ document.addEventListener("click", async (event) => {
       if (!documentSnapshot.exists) {
         throw new Error("Document not found");
       }
+      // Now populate and display the popup with the relevant information
 
       emailjs.init("CHysrc6RIJb6U2SkY"); // Replace with your actual EmailJS public key
 
@@ -182,6 +183,12 @@ document.addEventListener("click", async (event) => {
       };
 
       // Store notification using the document title as the ID
+      document.getElementById("idNum").textContent = docID; // Set the document ID
+      document.getElementById("backTodashBoard").style.visibility = "visible";
+      document.getElementById(
+        "detailsPopUp"
+      ).textContent = `Request titled "${fileName}" has been ${condition}`; // Set the request condition (Approved/Declined)
+
       await firebaseDB
         .collection("users")
         .doc(userID)
@@ -195,31 +202,24 @@ document.addEventListener("click", async (event) => {
         notes: note,
       });
 
-      alert(`Request ${condition} and email notification sent.`);
+      showPopup();
     } catch (error) {
       console.error("Error processing request:", error);
-      alert(`Error: ${error.message}`);
+    } finally {
+      // Re-enable all buttons once processing is complete
+      buttons.forEach((btn) => (btn.disabled = false));
     }
   }
 });
 
-document.getElementById("DownLoadFile").addEventListener("click", () => {
-  const fileName = filenamefromFirebase; // Replace with your file's name
-  const fileUrl = `https://aliceblue-owl-540826.hostingersite.com//client-dashboard/uploads/documents/${fileName}`;
+function showPopup() {
+  document.getElementById("overlay").style.display = "block"; // Show the dim background
+  document.getElementById("popup").style.display = "flex"; // Show the pop-up
+}
 
-  // Create an anchor element
-  const a = document.createElement("a");
-  a.href = fileUrl;
-  a.download = fileName;
-
-  // Append the anchor to the body
-  document.body.appendChild(a);
-
-  // Trigger a click event on the anchor
-  a.click();
-
-  // Remove the anchor from the body
-  document.body.removeChild(a);
-});
+function closePopup() {
+  document.getElementById("overlay").style.display = "none"; // Hide the dim background
+  document.getElementById("popup").style.display = "none"; // Hide the pop-up
+}
 // Load request details
 loadRequestDetails(docID, userID);

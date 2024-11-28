@@ -160,14 +160,7 @@ landClassificationInputs.forEach((input) => {
     }
   });
 });
-function showPopup() {
-  document.getElementById("popup").style.display = "block";
-  document.querySelector(".overlay").style.display = "block";
-}
-function closePopup() {
-  document.getElementById("popup").style.display = "none";
-  document.querySelector(".overlay").style.display = "none";
-}
+
 //UPLOAD AND DOWNLOAD FILE
 let requestorSignature = null; // To store the uploaded image
 
@@ -183,6 +176,29 @@ function handleSignatureUpload(event) {
     reader.readAsArrayBuffer(file); // Read the file as ArrayBuffer
   }
 }
+
+async function displayUserData(userId) {
+  try {
+    const userRef = firebase.firestore().collection("users").doc(userId);
+    const userDoc = await userRef.get();
+
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+
+      userName = userData.name || "N/A";
+      userEmail = userData.email || "N/A";
+
+      document.getElementById("user").textContent = userName;
+      document.getElementById("email").textContent = userEmail;
+      console.log(userName, userEmail);
+    } else {
+      console.log("No user data found for this ID.");
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+}
+displayUserData(userID);
 
 async function generateTreeRequestDocument(params) {
   const {
@@ -433,11 +449,13 @@ async function generateTreeRequestDocument(params) {
 
   insertDocumentToFirestore(params, userID, fileName);
 
+  showPopup(fileName);
   // Create a link element to download the document
   const link = document.createElement("a");
   link.href = URL.createObjectURL(docBlob);
   link.download = fileName;
   link.click();
+
   docx.Packer.toBlob(doc).then((docBlob) => {
     const formData = new FormData();
     formData.append("file", docBlob, fileName);
@@ -462,15 +480,12 @@ async function generateTreeRequestDocument(params) {
       })
       .then((data) => {
         if (data.status === "success") {
-          alert(data.message);
         } else {
           console.error("Upload failed:", data.message);
-          alert("Error: " + data.message);
         }
       })
       .catch((error) => {
         console.error("Upload error:", error);
-        alert("An error occurred: " + error.message);
       });
   });
 }
@@ -576,7 +591,6 @@ document
 
         // Validate requested quantity
         if (isNaN(requestedQuantity) || requestedQuantity <= 0) {
-          alert("Invalid quantity entered. Please enter a valid number.");
           console.error("Invalid quantity entered:", requestedQuantity);
           return; // Stop further processing
         }
@@ -586,15 +600,11 @@ document
         // Fetch and validate stock in the same loop
         const treeDoc = await treesCollection.doc(treeId).get();
         if (!treeDoc.exists) {
-          alert(`Tree with ID "${treeId}" does not exist!`);
           return;
         }
 
         const availableQuantity = treeDoc.data().quantity || 0;
         if (requestedQuantity > availableQuantity) {
-          alert(
-            `Low on stocks: Cannot request ${requestedQuantity} for "${treeName}".`
-          );
           return; // Stop submission
         }
 
@@ -660,12 +670,16 @@ document
       generateTreeRequestDocument(params);
 
       // Show confirmation popup
-      showPopup();
     } catch (error) {
       console.error("Error collecting form data:", error);
     }
   });
 
+function showPopup(docuIDValue) {
+  document.getElementById("docuID").textContent = docuIDValue;
+  document.getElementById("popup").style.display = "flex";
+  document.getElementById("overlay").style.display = "block";
+}
 function displayMap() {
   // Initialize the platform object
   var platform = new H.service.Platform({
