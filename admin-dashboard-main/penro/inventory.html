@@ -15,10 +15,6 @@
       rel="stylesheet"
       href="/Resources/files/css-folder/admin-dashboard/main.css"
     />
-    <link
-      rel="stylesheet"
-      href="/Resources/files/css-folder/admin-dashboard/governor/dashboard.css"
-    />
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   </head>
@@ -64,7 +60,7 @@
             <p>Inventory</p>
           </div>
         </a>
-        <a class="tablink">
+        <a class="tablink" onclick="openFileById(`reports`)">
           <div class="dashboard-button">
             <img
               src="/Resources/image/reports.svg"
@@ -98,11 +94,7 @@
       </div>
     </section>
 
-    <div class="content">
-      <div id="dashboard-container">this is reports</div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <div class="content">this is inventory</div>
     <script src="/Resources/files/javascript-folder/navigation.js"></script>
   </body>
 </html>
