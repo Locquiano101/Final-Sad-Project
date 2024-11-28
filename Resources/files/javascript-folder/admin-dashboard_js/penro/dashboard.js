@@ -16,37 +16,142 @@ const db = firebase.firestore();
 // Fetch and display data
 const inventoryGrid = document.getElementById("inventoryGrid");
 
+async function fetchReadyForPickup() {
+  const documentsContainer = document.getElementById("documents-container");
+
+  try {
+    const usersSnapshot = await db.collection("users").get();
+
+    if (usersSnapshot.empty) {
+      documentsContainer.innerHTML = "<p>No users found!</p>";
+      return;
+    }
+
+    let foundReadyDocuments = false;
+
+    for (const userDoc of usersSnapshot.docs) {
+      const userID = userDoc.id;
+      const userDocumentsRef = db
+        .collection("users")
+        .doc(userID)
+        .collection("Documents");
+      const documentsSnapshot = await userDocumentsRef.get();
+
+      if (documentsSnapshot.empty) {
+        console.log(`No documents found for user: ${userID}`);
+        continue;
+      }
+
+      documentsSnapshot.forEach((doc) => {
+        const docData = doc.data();
+        console.log("Document data:", docData);
+
+        const { fileName, formattedDate, status } = docData;
+
+        if (!fileName || !status) {
+          console.log("Missing necessary fields in document:", doc.id);
+          return;
+        }
+
+        if (status !== "Ready for Pick Up") {
+          return;
+        }
+
+        foundReadyDocuments = true;
+
+        let displayDate = "N/A";
+        if (formattedDate instanceof firebase.firestore.Timestamp) {
+          displayDate = formattedDate.toDate().toLocaleDateString();
+        } else if (formattedDate) {
+          displayDate = formattedDate;
+        }
+
+        const div = document.createElement("div");
+        div.className = "stats";
+
+        div.innerHTML = `
+            <img
+              src="/Resources/image/pickUpReady.svg"
+              alt="Request Icon"
+              class="icon"
+              style="height: 48px; width: auto"
+            />
+            <div>
+              <p>Document Title: ${fileName}</p>
+              <p>Status: ${status}</p>
+              <small>Time Stamp: ${displayDate}</small>
+            </div>
+            <button class="button" data-id="${doc.id}">
+              Confirm Pick-up
+            </button>
+        `;
+
+        div.querySelector(".button").addEventListener("click", () => {
+          openPopup(`Confirming pick-up for: ${fileName}`);
+        });
+
+        documentsContainer.appendChild(div);
+      });
+    }
+
+    if (!foundReadyDocuments) {
+      documentsContainer.innerHTML = "<p>No documents ready for pick up.</p>";
+    }
+  } catch (error) {
+    console.error("Error fetching documents:", error);
+  }
+}
+
+function openPopup(requestId) {
+  const overlay = document.getElementById("overlay");
+  const popup = document.getElementById("popup");
+  const requestIdSpan = document.getElementById("request-id");
+  const statusSpan = document.getElementById("status");
+
+  // Set request ID and status dynamically
+  requestIdSpan.innerText = requestId;
+  statusSpan.innerText = "Pending"; // You can customize the status based on actual logic
+
+  overlay.style.display = "block"; // Show the overlay
+  popup.style.display = "block"; // Show the popup
+}
+
+function closePopup() {
+  const overlay = document.getElementById("overlay");
+  const popup = document.getElementById("popup");
+
+  overlay.style.display = "none"; // Hide the overlay
+  popup.style.display = "none"; // Hide the popup
+}
+
+fetchReadyForPickup();
+
 function fetchLowStocks() {
-  const lowStockThreshold = 10; // Define the threshold for "low stock"
-  const lowSeedType = document.getElementById("lowSeedType");
-  const lowSeedTypeQty = document.getElementById("lowSeedTypeQty");
+  const lowStockThreshold = 100; // Define the threshold for "low stock"
+  const lowSeedTypeQtyElement = document.getElementById("lowSeedTypeQty"); // Rename for clarity
 
   db.collection("trees")
     .where("quantity", "<", lowStockThreshold)
     .get()
     .then((querySnapshot) => {
       if (querySnapshot.empty) {
-        lowSeedType.innerText = "None";
-        lowSeedTypeQty.innerText = "0";
+        lowSeedTypeQtyElement.innerText = "None"; // Update the DOM
         return;
       }
 
-      let lowStockItems = [];
-      let totalLowQuantity = 0;
-
+      let lowSeedTypes = []; // Array to collect item names
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        lowStockItems.push(data.name); // Collect item names
-        totalLowQuantity += data.quantity; // Sum up the quantities
+        lowSeedTypes.push(data.name); // Collect item names
       });
 
-      // Update the DOM
-      lowSeedTypeQty.innerText = lowStockItems.join(", ");
+      // Update the DOM with the collected names
+      lowSeedTypeQtyElement.innerText = lowSeedTypes.join(", ");
     })
     .catch((error) => {
       console.error("Error fetching low stock data:", error);
-      lowSeedType.innerText = "Error";
-      lowSeedTypeQty.innerText = "N/A";
+      // Handle errors gracefully
+      lowSeedTypeQtyElement.innerText = "Error fetching data";
     });
 }
 function fetchOutOfStocks() {
@@ -197,16 +302,81 @@ function fetchTopRequestedSeedsAndSeedlings() {
             {
               label: "Most Requested Seedlings",
               data: seedlingQuantities,
-              backgroundColor: "white",
-              borderWidth: 1,
+              backgroundColor: [
+                "rgba(255, 179, 186, 0.65)", // Pastel pink
+                "rgba(255, 223, 186, 0.65)", // Pastel peach
+                "rgba(255, 255, 186, 0.65)", // Pastel yellow
+                "rgba(186, 255, 201, 0.65)", // Pastel green
+                "rgba(186, 225, 255, 0.65)", // Pastel blue
+              ],
+              borderColor: [
+                "rgba(255, 179, 186, 1)", // Darker pastel pink
+                "rgba(255, 223, 186, 1)", // Darker pastel peach
+                "rgba(255, 255, 186, 1)", // Darker pastel yellow
+                "rgba(186, 255, 201, 1)", // Darker pastel green
+                "rgba(186, 225, 255, 1)", // Darker pastel blue
+              ],
+              borderWidth: 2,
+              borderRadius: 5, // Rounds bar corners
+              barPercentage: 0.8, // Adjust bar width
             },
           ],
         },
         options: {
+          responsive: true, // Ensures chart adjusts to screen size
+          maintainAspectRatio: false, // Flexible height-to-width ratio
           scales: {
             y: {
               beginAtZero: true,
+              ticks: {
+                font: {
+                  size: 16, // Font size for Y-axis labels
+                  family: "Arial", // Font family
+                },
+                color: "#4A4A4A", // Darker text color
+              },
+              grid: {
+                color: "rgba(200, 200, 200, 0.3)", // Light gridlines
+              },
             },
+            x: {
+              ticks: {
+                font: {
+                  size: 16, // Font size for X-axis labels
+                  family: "Arial", // Font family
+                },
+                color: "#4A4A4A",
+              },
+              grid: {
+                display: false, // Hides gridlines for X-axis
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              display: true,
+              labels: {
+                font: {
+                  size: 18, // Font size for the legend
+                  family: "Arial", // Font family
+                },
+                color: "#4A4A4A",
+              },
+            },
+            tooltip: {
+              backgroundColor: "rgba(0,0,0,0.7)", // Dark tooltip background
+              titleFont: {
+                size: 16, // Tooltip title font size
+              },
+              bodyFont: {
+                size: 14, // Tooltip body font size
+              },
+              cornerRadius: 4, // Rounded corners for tooltips
+            },
+          },
+          animation: {
+            duration: 1000, // Smooth animation for rendering
+            easing: "easeInOutCubic", // Custom animation style
           },
         },
       });

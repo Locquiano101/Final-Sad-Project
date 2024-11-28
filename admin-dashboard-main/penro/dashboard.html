@@ -105,27 +105,7 @@
         <div id="firstPanel">
           <div id="readyforPickUps-div">
             <h3>5 Pending Pickups</h3>
-            <div class="stats">
-              <img
-                src="/Resources/image/pickUpReady.svg"
-                alt="Request Icon"
-                class="icon"
-                style="height: 48px; width: auto"
-              />
-              <p>[Pick up code] (quantity and type of seed)</p>
-              <button class="button">Confirm Pick-up</button>
-            </div>
-            <hr />
-            <div class="stats">
-              <img
-                src="/Resources/image/pickUpReady.svg"
-                alt="Request Icon"
-                class="icon"
-                style="height: 48px; width: auto"
-              />
-              <p>[Pick up code] (quantity and type of seed)</p>
-              <button class="button">Confirm Pick-up</button>
-            </div>
+            <div id="documents-container"></div>
           </div>
 
           <!-- High Demand Seeds -->
@@ -247,8 +227,40 @@
         </div>
       </div>
       <!-- Manage Inventory -->
+      <!-- Popup -->
+      <div class="overlay" id="overlay" onclick="closePopup()"></div>
+
+      <div class="popup" style="display: none">
+        <h1>Requestor's Name:<span id="docuID">Loading...</span></h1>
+        <p>
+          Requested Qty(tree):
+          <span class="status" id="seedlingCount">Count</span>
+        </p>
+        <p>
+          Your request has been submitted and is now pending approval. Please
+          check your dashboard regularly for updates. Thank you!
+        </p>
+        <a href="#" onclick="closePopup()">Back To Dashboard</a>
+      </div>
+
+      <div class="popup" id="popup2">
+        <h1>PICK UP CONFIRMED <span id="docuID">Loading...</span></h1>
+        <p>Status: <span id="status">Loading</span></p>
+        <p>
+          <strong> Seed Name:</strong> <span id="seedlingType">Loading...</span>
+        </p>
+        <p>
+          <strong>Quantity Received:</strong
+          ><span id="seedlingQty">Loading...</span>
+        </p>
+        <small
+          ><strong> Time Picked Up: </strong
+          ><span id="seedlingType">Loading...</span></small
+        >
+        <button href="#" onclick="closePopup()">CLOSE POP UP</button>
+      </div>
     </div>
     <script src="/Resources/files/javascript-folder/navigation.js"></script>
-    <script src="/Resources/files/javascript-folder/admin-dashboard_js/penro/dashboard.js"></script>
+    <!-- <script src="/Resources/files/javascript-folder/admin-dashboard_js/penro/dashboard.js"></script> -->
   </body>
 </html>

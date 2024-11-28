@@ -162,3 +162,64 @@ input {
   color: white;
   background-color: #cf4747 !important;
 }
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.popup {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  padding: 20px;
+  text-align: center;
+}
+.popup h1 {
+  color: #2c5a48;
+  margin: 0;
+  font-size: 24px;
+}
+.popup .control-number {
+  font-weight: bold;
+  margin: 10px 0;
+}
+.popup .status {
+  color: #d9790e;
+  font-weight: bold;
+  margin: 10px 0;
+}
+.popup p {
+  color: #333;
+  font-size: 14px;
+  margin: 10px 0;
+}
+.popup a {
+  display: block;
+  margin-top: 20px;
+  text-decoration: none;
+  color: #1a3c38;
+  font-weight: bold;
+}
+.popup a:hover {
+  text-decoration: underline;
+}
+.close-btn {
+  margin-top: 20px;
+  background-color: #1a3c38;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.close-btn:hover {
+  background-color: #145b4a;
+}

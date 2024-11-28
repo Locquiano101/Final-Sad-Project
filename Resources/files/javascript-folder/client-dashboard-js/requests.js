@@ -25,7 +25,7 @@ const userDocumentsRef = firebaseDB
   .doc(userID)
   .collection("Documents");
 
-// Export the instances and references
+// Function to display user data
 async function displayUserData(userId) {
   try {
     const userRef = firebase.firestore().collection("users").doc(userId);
@@ -33,13 +33,8 @@ async function displayUserData(userId) {
 
     if (userDoc.exists) {
       const userData = userDoc.data();
-
-      userName = userData.name || "N/A";
-      userEmail = userData.email || "N/A";
-
-      document.getElementById("user").textContent = userName;
-      document.getElementById("email").textContent = userEmail;
-      console.log(userName, userEmail);
+      document.getElementById("user").textContent = userData.name || "N/A";
+      document.getElementById("email").textContent = userData.email || "N/A";
     } else {
       console.log("No user data found for this ID.");
     }
@@ -47,14 +42,15 @@ async function displayUserData(userId) {
     console.error("Error fetching user data:", error);
   }
 }
+
+// Display user data on page load
 displayUserData(userID);
 
+// Function to retrieve and display documents
 async function retrieveDocuments() {
   try {
-    // Assuming userDocumentsRef is already defined as a reference to the Firestore sub-collection
     const querySnapshot = await userDocumentsRef.get();
 
-    // Check if the querySnapshot is empty
     if (querySnapshot.empty) {
       console.log("No documents found!");
       return;
@@ -62,69 +58,75 @@ async function retrieveDocuments() {
 
     querySnapshot.forEach((doc) => {
       const docData = doc.data();
+      const { fileName, status, formattedDate: docTimeStamp } = docData;
 
-      // Log the document data to check its structure
-      console.log("Document data:", docData);
-
-      // Check if the necessary fields exist inside documentData
-      if (!docData.fileName || !docData.status) {
+      if (!fileName || !status) {
         console.log("Missing fileName or status in document:", doc.id);
         return;
       }
 
-      // Access Document_Title and status from documentData
-      const docTimeStamp = docData.formattedDate;
-      const status = docData.status;
-      const docID = doc.id;
-      const docTitle = docData.fileName;
+      let conditionColor = getStatusColor(status);
 
-      let conditionColor;
-      if (status === "Pending for Approval") {
-        conditionColor = "white";
-      } else if (status === "Approved") {
-        conditionColor = "blue";
-      } else if (status === "Declined") {
-        conditionColor = "red";
-      } else if (status === "Ready for Pick Up") {
-        conditionColor = "yellow";
-      } else {
-        conditionColor = "white"; // Default color for any other condition
-      }
-
-      // If timestamp exists, process it
       if (docTimeStamp) {
-        // Create a new row for the table
-        const tableBody = document.querySelector("#documentTable tbody");
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-        <td>${docID}</td>
-        <td>${docTitle}</td>
-        
-          <td>${docTimeStamp}</td>
-          <td style="color: ${conditionColor} !important;">${status}</td>
-          <td><button class="edit-button" onclick="deleteDocument('${docID}')">Delete</button></td>
-        `;
-
-        // Append the row to the table body
-        tableBody.appendChild(row);
+        createDocumentRow(
+          doc.id,
+          fileName,
+          docTimeStamp,
+          conditionColor,
+          status
+        );
       } else {
-        console.log("Timestamp field does not exist for document:", docID);
-        return;
+        console.log("Timestamp field does not exist for document:", doc.id);
       }
     });
-
-    console.log("Documents retrieved and displayed successfully!");
   } catch (error) {
     console.error("Error retrieving documents:", error);
   }
 }
+
+// Helper function to get status color
+function getStatusColor(status) {
+  switch (status) {
+    case "Pending for Approval":
+      return "white";
+    case "Approved":
+      return "blue";
+    case "Declined":
+      return "red";
+    case "Ready for Pick Up":
+      return "yellow";
+    default:
+      return "white";
+  }
+}
+
+// Function to create and append document row
+function createDocumentRow(
+  docID,
+  docTitle,
+  docTimeStamp,
+  conditionColor,
+  status
+) {
+  const tableBody = document.querySelector("#documentTable tbody");
+  const row = document.createElement("tr");
+
+  row.innerHTML = `
+    <td>${docID}</td>
+    <td>${docTitle}</td>
+    <td>${docTimeStamp}</td>
+    <td style="color: ${conditionColor} !important;">${status}</td>
+    <td><button class="edit-button" onclick="deleteDocument('${docID}')">Delete</button></td>
+  `;
+
+  // Append the row to the table body
+  tableBody.appendChild(row);
+}
+
+// Function to delete a document
 async function deleteDocument(docID) {
   try {
-    // Reference to the document in Firestore
     const docRef = userDocumentsRef.doc(docID);
-
-    // Delete the document from Firestore
     await docRef.delete();
 
     // Remove the row from the table
@@ -138,4 +140,6 @@ async function deleteDocument(docID) {
     console.error("Error deleting document:", error);
   }
 }
+
+// Call retrieveDocuments on page load
 retrieveDocuments();

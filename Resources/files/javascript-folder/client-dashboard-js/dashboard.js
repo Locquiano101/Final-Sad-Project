@@ -184,40 +184,7 @@ async function displayUserData(userId) {
 }
 displayUserData(userID);
 
-// Update document counts
-async function retrieveAndCountDocuments() {
-  const userDocumentsRef = firebaseDB
-    .collection("users")
-    .doc(userID)
-    .collection("Documents");
-
-  try {
-    const querySnapshot = await userDocumentsRef.get();
-
-    let pendingCount = 0,
-      approvedCount = 0,
-      declinedCount = 0;
-
-    querySnapshot.forEach((doc) => {
-      const status = doc.data().status; // Use 'status' instead of 'Condition'
-
-      if (!status) return; // Skip if status is undefined or null
-
-      if (status === "Pending for Approval") pendingCount++;
-      else if (status === "Approved") approvedCount++;
-      else if (status === "Declined") declinedCount++;
-    });
-
-    document.getElementById("pending-count").innerText = pendingCount;
-    document.getElementById("approved-count").innerText = approvedCount;
-    document.getElementById("declined-count").innerText = declinedCount;
-  } catch (error) {
-    console.error("Error retrieving documents:", error);
-  }
-}
-
 async function calculateTopRequestedSeeds(userID) {
-  console.log("Calculating..");
   try {
     const userDocumentsRef = firebaseDB
       .collection("users")
@@ -341,20 +308,26 @@ const fetchAndDisplayNotifications = async (userID) => {
       return;
     }
 
-    // Get the container to append notifications
     const container = document.getElementById("notification-container");
     container.innerHTML = ""; // Clear existing notifications
 
-    // Loop through each notification document
     snapshot.forEach((doc) => {
       const notification = doc.data();
-      const notificationID = doc.id; // Get the document ID for deletion
+      const notificationID = doc.id; // Get the document ID
 
       // Create a new notification div
       const notificationDiv = document.createElement("div");
       notificationDiv.classList.add("notification");
 
-      // Set up the structure and content, adding a delete button
+      const formattedDateTime =
+        notification.timeStamp?.toDate().toLocaleString("en-US", {
+          day: "2-digit",
+          month: "long", // Full month name
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true, // Use 24-hour format
+        }) || "Unknown";
       notificationDiv.innerHTML = `
         <img
           src="/Resources/image/notification-bell.svg"
@@ -365,25 +338,60 @@ const fetchAndDisplayNotifications = async (userID) => {
         <div>
           <h2>${notification.title || "Untitled Notification"}</h2>
           <small>${notification.message || "No message provided."}</small>
-          <small>Timestamp: ${
-            notification.timestamp?.toDate() || "Unknown"
-          }</small>
+          <small>Timestamp: ${formattedDateTime}</small>
+          <button class="openPopUp">Open Notifications</button>
           <button class="delete-btn" data-id="${notificationID}">Delete</button>
         </div>
       `;
 
-      // Get the delete button and add event listener
+      // Add event listener for the popup
+      const openPopupButton = notificationDiv.querySelector(".openPopUp");
+      openPopupButton.addEventListener("click", () => {
+        updateAndShowPopup(notification);
+      });
+
+      // Add event listener for the delete button
       const deleteButton = notificationDiv.querySelector(".delete-btn");
       deleteButton.addEventListener("click", async () => {
         await deleteNotification(userID, notificationID);
       });
 
-      // Append the notification div to the container
       container.appendChild(notificationDiv);
     });
   } catch (error) {
     console.error("Error fetching notifications:", error);
   }
+};
+const updateAndShowPopup = (notification) => {
+  // Retrieve elements of the popup
+  const popupOverlay = document.getElementById("popupOverlay");
+  const popupTitle = document.getElementById("popupTitle");
+  const popupControlNumber = document.getElementById("popupControlNumber");
+  const popupStatus = document.getElementById("popupStatus");
+  const popupMessage = document.getElementById("popupMessage");
+
+  // Update the popup with notification details
+  popupTitle.textContent = notification.title || "Notification Title";
+  popupControlNumber.textContent =
+    notification.controlNumber || "Control Number not provided.";
+  popupStatus.textContent = notification.status || "No status available.";
+  popupMessage.innerHTML =
+    notification.message || "No additional information provided.";
+
+  // Show the popup
+  popupOverlay.style.display = "flex";
+
+  // Handle the delete button inside the popup
+  const deleteButton = popupOverlay.querySelector(".delete-btn");
+  deleteButton.setAttribute("data-id", notification.id); // Assuming the notification ID is passed
+  deleteButton.addEventListener("click", async () => {
+    await deleteNotification(notification.userID, notification.id);
+    hidePopup(); // Close the popup after deletion
+  });
+};
+
+const hidePopup = () => {
+  document.getElementById("popupOverlay").style.display = "none";
 };
 
 const deleteNotification = async (userID, notificationID) => {
@@ -405,7 +413,57 @@ const deleteNotification = async (userID, notificationID) => {
     console.error("Error deleting notification:", error);
   }
 };
+async function retrieveAndCountDocuments(userID) {
+  const userDocumentsRef = firebaseDB
+    .collection("users")
+    .doc(userID)
+    .collection("Documents");
 
+  try {
+    const querySnapshot = await userDocumentsRef.get();
+
+    if (querySnapshot.empty) {
+      console.log("No documents found for user.");
+      return;
+    }
+
+    let pendingCount = 0,
+      approvedCount = 0,
+      declinedCount = 0,
+      readyForPickUpCount = 0;
+
+    querySnapshot.forEach((doc) => {
+      const status = doc.data().status;
+
+      if (status === "Pending for Approval") pendingCount++;
+      else if (status === "Approved") approvedCount++;
+      else if (status === "Declined") declinedCount++;
+      else if (status === "Ready for Pick Up") readyForPickUpCount++;
+    });
+
+    // Update HTML elements with the counts
+    document.getElementById("pending-count").innerText = pendingCount;
+    document.getElementById("approved-count").innerText = approvedCount;
+    document.getElementById("declined-count").innerText = declinedCount;
+    document.getElementById("pick-up-ready-count").innerText =
+      readyForPickUpCount;
+
+    // Calculate and update total count
+    const totalCount =
+      pendingCount + approvedCount + declinedCount + readyForPickUpCount;
+    document.getElementById("total-count").innerText = totalCount;
+
+    console.log("Counts updated successfully:", {
+      pendingCount,
+      approvedCount,
+      declinedCount,
+      readyForPickUpCount,
+      totalCount,
+    });
+  } catch (error) {
+    console.error("Error retrieving documents:", error);
+  }
+}
+retrieveAndCountDocuments(userID);
 fetchAndDisplayNotifications(userID);
 calculateTopRequestedSeeds(userID);
-retrieveAndCountDocuments();

@@ -17,7 +17,7 @@
     />
     <link
       rel="stylesheet"
-      href="/Resources/files/css-folder/admin-dashboard/governor/dashboard.css"
+      href="/Resources/files/css-folder/admin-dashboard/penro/reports.css"
     />
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -99,10 +99,61 @@
     </section>
 
     <div class="content">
-      <div id="dashboard-container">this is reports</div>
+      <div id="grid-view">
+        <div class="card">
+          <img
+            src="/Resources/image/requests-status.svg"
+            alt="User Icon"
+            class="profile-icon"
+            style="height: 75px; width: auto"
+          />
+          <h3>Requests Status</h3>
+          <p>Overview of all requests, showing their current status.</p>
+          <button style="background-color: #a7ffb5">Generate Report</button>
+        </div>
+        <div class="card">
+          <img
+            src="/Resources/image/inventory-overview.svg"
+            alt="User Icon"
+            class="profile-icon"
+            style="height: 75px; width: auto"
+          />
+          <h3>Inventory Overview</h3>
+          <p>
+            Current inventory levels of each seedling type, including recent
+            stock additions or deletions.
+          </p>
+          <button style="background-color: #a7ffb5">Generate Report</button>
+        </div>
+        <div class="card">
+          <img
+            src="/Resources/image/seedlingDemand.svg"
+            alt="User Icon"
+            class="profile-icon"
+            style="height: 75px; width: auto"
+          />
+          <h3>Seedling Demand</h3>
+          <p>Demand trends for various seedling types.</p>
+          <button style="background-color: #a7ffb5">Generate Report</button>
+        </div>
+        <div class="card">
+          <img
+            src="/Resources/image/request-summary.svg"
+            alt="User Icon"
+            class="profile-icon"
+            style="height: 75px; width: auto"
+          />
+          <h3>Requests Summary</h3>
+          <p>
+            Total number of requests on a daily, weekly, monthly, and yearly
+            basis.
+          </p>
+          <button style="background-color: #a7ffb5">Generate Report</button>
+        </div>
+      </div>
+    </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <script src="/Resources/files/javascript-folder/navigation.js"></script>
   </body>
 </html>

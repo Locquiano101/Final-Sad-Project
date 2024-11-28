@@ -88,7 +88,7 @@ function populateTreeSelect(selectElement) {
     .then((querySnapshot) => {
       if (!querySnapshot.empty) {
         // Clear previous options
-        selectElement.innerHTML = '<option value="">Select a tree</option>';
+        selectElement.innerHTML = '<option value=""></option>';
 
         // Populate options with tree names
         querySnapshot.forEach((doc) => {
@@ -512,7 +512,7 @@ async function insertDocumentToFirestore(params, userID, fileName) {
     console.error("Error adding document to Firestore: ", error);
   }
 }
-async function updateTreeData(treeId, treeName, requestedQuantity) {
+async function updateTreeData(treeId, requestedQuantity) {
   try {
     await firebaseDB.runTransaction(async (transaction) => {
       const treeDocRef = treesCollection.doc(treeId);
@@ -526,25 +526,34 @@ async function updateTreeData(treeId, treeName, requestedQuantity) {
       const currentData = treeDoc.data();
       const availableQuantity = currentData.quantity || 0;
 
+      // Check if there is enough stock
       if (requestedQuantity > availableQuantity) {
         alert(
-          `Low on stocks: Cannot request ${requestedQuantity} for "${treeName}".`
+          `Low on stocks: Cannot request ${requestedQuantity}. Only ${availableQuantity} available.`
         );
         console.error(
-          `Low on stocks: Cannot request ${requestedQuantity} for "${treeName}".`
+          `Low on stocks: Cannot request ${requestedQuantity}. Only ${availableQuantity} available.`
         );
         return;
       }
 
+      // Update the tree data
       transaction.update(treeDocRef, {
-        quantity: availableQuantity - requestedQuantity, // Ensure both are numbers
-        request: (currentData.request || 0) + 1,
+        quantity: availableQuantity - requestedQuantity, // Subtract requested quantity
+        request: (currentData.request || 0) + 1, // Increment the request counter
       });
+
+      console.log(
+        `Successfully updated tree ID "${treeId}". Remaining quantity: ${
+          availableQuantity - requestedQuantity
+        }.`
+      );
     });
   } catch (error) {
     console.error(`Error updating tree data for ID "${treeId}":`, error);
   }
 }
+
 document
   .getElementById("projectForm")
   .addEventListener("submit", async (event) => {
@@ -552,83 +561,106 @@ document
 
     try {
       const formData = {};
+      const seedlings = [];
+      let totalRequestedQuantity = 0;
 
       // Collect Seedling Information
-      const seedlings = [];
-      document.querySelectorAll(".seedling-input-group").forEach((group) => {
-        const treeId = group.querySelector('select[name="treeSelect[]"]').value;
+      for (const group of document.querySelectorAll(".seedling-input-group")) {
+        const treeId = group
+          .querySelector('select[name="treeSelect[]"]')
+          .value.trim();
         const requestedQuantity = parseInt(
-          group.querySelector('input[name="number[]"]').value,
+          group.querySelector('input[name="number[]"]').value.trim(),
           10
         );
 
+        // Validate requested quantity
         if (isNaN(requestedQuantity) || requestedQuantity <= 0) {
+          alert("Invalid quantity entered. Please enter a valid number.");
           console.error("Invalid quantity entered:", requestedQuantity);
-          return; // Skip invalid entries
+          return; // Stop further processing
         }
 
-        const treeName = treeNameMap.get(treeId) || "Unknown Tree"; // Replace treeNameMap with actual mapping logic
+        const treeName = treeNameMap.get(treeId) || "Unknown Tree";
 
+        // Fetch and validate stock in the same loop
+        const treeDoc = await treesCollection.doc(treeId).get();
+        if (!treeDoc.exists) {
+          alert(`Tree with ID "${treeId}" does not exist!`);
+          return;
+        }
+
+        const availableQuantity = treeDoc.data().quantity || 0;
+        if (requestedQuantity > availableQuantity) {
+          alert(
+            `Low on stocks: Cannot request ${requestedQuantity} for "${treeName}".`
+          );
+          return; // Stop submission
+        }
+
+        // Add valid seedling data to the list
         seedlings.push({ treeId, requestedQuantity, treeName });
+        totalRequestedQuantity += requestedQuantity;
+      }
 
-        console.log(
-          `Submitting Tree ID: ${treeId}, Quantity: ${requestedQuantity}`
+      // Check total requested quantity limit
+      if (totalRequestedQuantity > 500) {
+        alert(
+          `Order limit exceeded! Total requested quantity (${totalRequestedQuantity}) exceeds the limit of 500 trees.`
         );
-        // Call updateTreeData with the correct quantity
-        updateTreeData(treeId, requestedQuantity); // Ensure this function is defined
-      });
+        return; // Stop submission
+      }
 
       // Populate formData with seedling details
       formData.seedlings = seedlings.map((seedling) => ({
         quantity: seedling.requestedQuantity,
-        type: seedling.treeName, // Use the name instead of ID
+        type: seedling.treeName,
       }));
 
-      // Collect Project Location
+      // Collect additional form data
       formData.projectLocation =
         document.getElementById("project-location").value;
-
-      // Collect Land Classification
-      const landClassification = document.querySelector(
-        'input[name="land-classification"]:checked'
-      );
-      formData.landClassification = landClassification
-        ? landClassification.value
-        : null;
-
-      // Collect Activity Type
+      formData.landClassification =
+        document.querySelector('input[name="land-classification"]:checked')
+          ?.value || null;
       formData.activityType = document.getElementById("activity-type").value;
-
-      // Collect Promissory Note Agreement
       formData.agreedToPromissoryNote =
         document.getElementById("agree-note").checked;
 
-      // Get the current date for document
-      const formattedDate = new Date().toISOString(); // Alternatively, use Firestore timestamp if required
+      // Get the current date for the document
+      const formattedDate = new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      // User information
+      const user = userName || "Anonymous User";
+      const userNum = userContactNumber || "Unknown Contact";
+      const address = completeAddress || "Unknown Address";
 
-      // Fetch the user's information
-      const user = userName || "Anonymous User"; // Replace with actual user data
-      const userNum = userContactNumber || "Unknown Contact"; // Replace with actual user contact number
-      const address = completeAddress || "Unknown Address"; // Replace with the user's address
-
-      // Parameters for generating the request document
+      // Prepare parameters for generating the request document
       const params = {
-        user: user,
-        userNum: userNum,
-        address: address,
+        user,
+        userNum,
+        address,
         projectLocation: formData.projectLocation,
         landClassification: formData.landClassification,
         activityType: formData.activityType,
         seedlingsNumber: formData.seedlings.map((s) => s.quantity).join(", "),
         seedlingsType: formData.seedlings.map((s) => s.type).join(", "),
-        formattedDate: formattedDate,
+        formattedDate,
       };
 
+      // Call `updateTreeData` for each seedling
+      for (const seedling of seedlings) {
+        await updateTreeData(seedling.treeId, seedling.requestedQuantity);
+      }
+
       // Generate the tree request document
-      generateTreeRequestDocument(params); // Ensure this function is defined
+      generateTreeRequestDocument(params);
 
       // Show confirmation popup
-      showPopup(); // Ensure this function is defined
+      showPopup();
     } catch (error) {
       console.error("Error collecting form data:", error);
     }
